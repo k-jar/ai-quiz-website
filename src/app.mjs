@@ -1,10 +1,6 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { generateQuiz } from './aiClient.mjs';
-import { join } from 'path';
-import sqlite3 from 'sqlite3';
-const { verbose } = sqlite3;
 
 const __dirname = import.meta.dirname;
 
@@ -13,22 +9,31 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-let db = new sqlite3.Database('./db/quizzes.db');
-db.run(`CREATE TABLE IF NOT EXISTS quizzes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    quiz TEXT,
-    paragraph TEXT
-)`);
+const resolveIndexByQuizId = (req, res, next) => {
+    const { params: { id } } = req;
+    const parsedId = parseInt(id);
+    if (isNaN(parsedId)) {
+        res.status(400).send("Invalid ID");
+        return;
+    }
+    const index = mockQuizzes.findIndex(quiz => quiz.id === parsedId);
+    if (index === -1) {
+        res.status(404).send("Quiz not found");
+        return;
+    }
+    req.quizIndex = index;
+    next();
+};
 
 let mockQuizzes;
 
 fs.readFile(path.join(__dirname, 'mockQuizzes.json'), 'utf8', (err, data) => {
     if (err) {
-      console.error('Error reading the mockQuizzes file:', err);
-      return;
+        console.error('Error reading the mockQuizzes file:', err);
+        return;
     }
     mockQuizzes = JSON.parse(data);
-  });
+});
 
 app.get("/", (req, res) => {
     res.send("Hello, world!");
@@ -36,10 +41,10 @@ app.get("/", (req, res) => {
 
 app.get("/api/quizzes", (req, res) => {
     const {
-        query: { filter, value},
+        query: { filter, value },
     } = req;
     if (filter && value) {
-        const filteredQuizzes = mockQuizzes.filter(quiz => 
+        const filteredQuizzes = mockQuizzes.filter(quiz =>
             quiz[filter].toLowerCase().includes(value.toLowerCase()));
         return res.send(filteredQuizzes);
     }
@@ -61,58 +66,22 @@ app.post("/api/quizzes", (req, res) => {
     res.status(201).send(newQuiz);
 });
 
-app.get("/api/quizzes/:id", (req, res) => {
-    const parsedId = parseInt(req.params.id);
-    if (isNaN(parsedId)) {
-        res.status(400).send("Invalid ID");
-        return;
-    }
-    const quiz = mockQuizzes.find(quiz => quiz.id === parsedId);
-    if (!quiz) {
-        res.status(404).send("Quiz not found");
-        return;
-    }
+app.get("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
+    const { quizIndex } = req;
+    const quiz = mockQuizzes[quizIndex];
     return res.send(quiz);
 });
 
-app.patch("/api/quizzes/:id", (req, res) => {
-    const parsedId = parseInt(req.params.id);
-    if (isNaN(parsedId)) {
-        res.status(400).send("Invalid ID");
-        return;
-    }
-    let quiz = mockQuizzes.find(quiz => quiz.id === parsedId);
-    if (!quiz) {
-        res.status(404).send("Quiz not found");
-        return;
-    }
-
-    // const { title, questions } = req.body;
-    // if (title) {
-    //     quiz.title = title;
-    // }
-    // if (questions) {
-    //     quiz.questions = questions;
-    // }
-
-    // Concise version of the above code
-    quiz = {...quiz, ...req.body};
-
+app.patch("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
+    const { quizIndex } = req;
+    let quiz = mockQuizzes[quizIndex];
+    quiz = { ...quiz, ...req.body };
     res.send(quiz);
 });
 
-app.delete("/api/quizzes/:id", (req, res) => {
-    const parsedId = parseInt(req.params.id);
-    if (isNaN(parsedId)) {
-        res.status(400).send("Invalid ID");
-        return;
-    }
-    const index = mockQuizzes.findIndex(quiz => quiz.id === parsedId);
-    if (index === -1) {
-        res.status(404).send("Quiz not found");
-        return;
-    }
-    mockQuizzes.splice(index, 1);
+app.delete("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
+    const { quizIndex } = req;
+    mockQuizzes.splice(quizIndex, 1);
     res.status(200).send("Quiz deleted successfully");
 });
 
