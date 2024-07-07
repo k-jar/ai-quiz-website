@@ -1,6 +1,14 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import {
+    query,
+    validationResult,
+    body,
+    matchedData,
+    checkSchema,
+} from 'express-validator';
+import { createQuizSchema } from './utils/validationSchemas.mjs';
 
 const __dirname = import.meta.dirname;
 
@@ -24,6 +32,31 @@ const resolveIndexByQuizId = (req, res, next) => {
     req.quizIndex = index;
     next();
 };
+
+/*
+mockQuizzes json structure:
+[
+    {
+        "id": int,
+        "title": string,
+        "reading": string,
+        "questions": [
+            {
+                "question": string,
+                "options": [
+                    string,
+                    string,
+                    string,
+                    string
+                ],
+                "answer": string from options
+            },
+            ... more questions
+        ]
+    }
+    ... more quizzes
+]
+*/
 
 let mockQuizzes;
 
@@ -51,20 +84,26 @@ app.get("/api/quizzes", (req, res) => {
     res.send(mockQuizzes);
 });
 
-app.post("/api/quizzes", (req, res) => {
-    const { title, questions } = req.body;
-    if (!title || !questions) {
-        res.status(400).send("Title and questions are required");
-        return;
+app.post(
+    "/api/quizzes",
+    checkSchema(createQuizSchema),
+    (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(400).json({ errors: errors.array() });
+            return;
+        }
+        const { title, reading, questions } = matchedData(req);
+        const newQuiz = {
+            id: mockQuizzes.length + 1,
+            title,
+            reading,
+            questions,
+        };
+        mockQuizzes.push(newQuiz);
+        res.status(201).send(newQuiz);
     }
-    const newQuiz = {
-        id: mockQuizzes.length + 1,
-        title,
-        questions,
-    };
-    mockQuizzes.push(newQuiz);
-    res.status(201).send(newQuiz);
-});
+);
 
 app.get("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
     const { quizIndex } = req;
