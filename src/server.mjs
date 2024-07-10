@@ -1,16 +1,16 @@
 import express from 'express';
 import quizzesRouter from './routes/quizzes.mjs';
 
-const app = express();
+const server = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use(quizzesRouter);
+server.use(express.json());
+server.use(quizzesRouter);
 
-app.get("/", (req, res) => {
+server.get("/", (req, res) => {
     res.send("Hello, world!");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Running on http://localhost:${PORT}`)
 });

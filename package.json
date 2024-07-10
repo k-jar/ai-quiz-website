@@ -2,10 +2,10 @@
   "name": "ai_quiz_website",
   "version": "1.0.0",
   "type": "module",
-  "main": "app.mjs",
+  "main": "server.mjs",
   "scripts": {
-    "devStart": "nodemon src/app.mjs",
-    "start": "node src/app.mjs"
+    "devStart": "nodemon src/server.mjs",
+    "start": "node src/server.mjs"
   },
   "keywords": [],
   "author": "",
