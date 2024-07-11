@@ -1,0 +1,13 @@
+<p>home works!</p>
+<section>
+    <form>
+      <input type="text" placeholder="Filter by name" #filter/>
+      <button class="primary" type="button" (click)="filterQuizzes(filter.value)">Search</button>
+    </form>
+  </section>
+  <section class="results">
+    <app-quiz 
+    *ngFor="let quiz of filteredQuizList"
+    [quiz]="quiz"
+    ></app-quiz>
+  </section>

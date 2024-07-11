@@ -1,9 +1,13 @@
 import express from 'express';
+import cors from 'cors';
 import quizzesRouter from './routes/quizzes.mjs';
 
 const server = express();
 const PORT = process.env.PORT || 3000;
 
+server.use(cors({
+    origin: 'http://localhost:4200'
+}));
 server.use(express.json());
 server.use(quizzesRouter);
 
