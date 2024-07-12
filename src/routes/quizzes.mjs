@@ -9,7 +9,8 @@ import {
 import { createQuizSchema } from '../utils/validationSchemas.mjs';
 import { mockQuizzes } from '../utils/constants.mjs';
 import { resolveIndexByQuizId } from '../utils/middlewares.mjs';
-
+import { generateQuiz } from '../utils/aiClient.mjs';
+// import axios from 'axios';
 
 const router = Router();
 
@@ -63,6 +64,30 @@ router.delete("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
     const { quizIndex } = req;
     mockQuizzes.splice(quizIndex, 1);
     res.status(200).send("Quiz deleted successfully");
+});
+
+// router.post("/api/generate-quiz", (req, res) => {
+//     const { text } = req.body;
+//     console.log("Text in post", req.body);
+//     generateQuiz(text).then(quiz => {
+//         req.body = quiz;
+//         axios.post('/api/quizzes', req.body)
+//             .then(response => {
+//                 res.status(200).json(response.data);
+//             })
+//             .catch(error => {
+//                 res.status(500).json({ error: error.toString() });
+//             });
+//     });
+// });
+
+router.post("/api/generate-quiz", (req, res) => {
+    const { text } = req.body;
+    generateQuiz(text).then(quiz => {
+        res.status(200).json(quiz);
+    }).catch(error => {
+        res.status(500).json({ error: error.toString() });
+    });
 });
 
 export default router;
