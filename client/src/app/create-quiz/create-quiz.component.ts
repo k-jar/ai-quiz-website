@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
+import { QuizService } from '../quiz.service';
 
 @Component({
   selector: 'app-create-quiz',
@@ -23,8 +24,9 @@ import { MatTooltip } from '@angular/material/tooltip';
   styleUrl: './create-quiz.component.css'
 })
 export class CreateQuizComponent {
-  constructor() {}
+  quizService: QuizService = inject(QuizService);  // This is used in the template (create-quiz.component.html
+  constructor() { }
   submitText(text: string) {
-    return 'Submit';
+    this.quizService.generateAndAddQuiz(text);
   }
 }

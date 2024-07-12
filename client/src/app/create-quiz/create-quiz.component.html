@@ -14,7 +14,7 @@
     <div class="input-container">
         <mat-form-field class="input-field">
             <mat-label>Input</mat-label>
-            <input matInput type="text" #input />
+            <textarea matInput #input></textarea>
         </mat-form-field>
         <button mat-flat-button (click)="submitText(input.value)">Submit</button>
     </div>
