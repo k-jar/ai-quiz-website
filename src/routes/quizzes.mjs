@@ -84,6 +84,7 @@ router.delete("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
 router.post("/api/generate-quiz", (req, res) => {
     const { text } = req.body;
     generateQuiz(text).then(quiz => {
+        quiz.reading = text;
         res.status(200).json(quiz);
     }).catch(error => {
         res.status(500).json({ error: error.toString() });

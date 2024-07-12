@@ -45,8 +45,8 @@ export class QuizService {
   }
 
   async generateAndAddQuiz(text: string): Promise<Quiz> {
-    console.log('Inside generateAndAddQuiz')
     const quiz = await this.generateQuiz(text);
+    console.log('Generated quiz:', quiz);
     return await this.addQuiz(quiz);
   }
 }

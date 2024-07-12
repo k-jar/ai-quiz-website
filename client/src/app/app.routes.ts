@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { DetailsComponent } from './details/details.component';
 import { HomeComponent } from './home/home.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { PlayQuizComponent } from './play-quiz/play-quiz.component';
 
 export const routes: Routes = [
     {
@@ -18,5 +19,10 @@ export const routes: Routes = [
         path: 'create-quiz',
         component: CreateQuizComponent,
         title: 'Create a quiz',
-    }
+    },
+    {
+        path: 'quiz/:id',
+        component: PlayQuizComponent,
+        title: 'Play a quiz',
+    },
 ];
