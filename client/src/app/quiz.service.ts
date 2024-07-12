@@ -11,7 +11,6 @@ export class QuizService {
   // Consider HttpClient instead of fetch
   async getAllQuizzes(): Promise<Quiz[]> {
     const data = await fetch(this.url);
-    console.log(data);
     return (await data.json()) ?? [];
   }
   async getQuizById(id: number): Promise<Quiz | undefined> {

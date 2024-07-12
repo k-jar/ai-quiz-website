@@ -1,13 +1,18 @@
-<p>home works!</p>
-<section>
-    <form>
-      <input type="text" placeholder="Filter by name" #filter/>
-      <button class="primary" type="button" (click)="filterQuizzes(filter.value)">Search</button>
-    </form>
-  </section>
-  <section class="results">
-    <app-quiz 
-    *ngFor="let quiz of filteredQuizList"
-    [quiz]="quiz"
-    ></app-quiz>
-  </section>
+<section class="search">
+    <mat-form-field class="search-field">
+      <mat-label>Search here</mat-label>
+      <input matInput type="text" #filter />
+    </mat-form-field>
+    <button mat-button class="search-button" type="button" (click)="filterQuizzes(filter.value)">
+      <mat-icon>search</mat-icon>
+    </button>
+</section>
+
+<section class="results">
+  <mat-card appearance="outlined">
+    <mat-card-header class="header">Quizzes</mat-card-header>
+    <div *ngFor="let quiz of quizList">
+      <app-quiz [quiz]="quiz"></app-quiz>
+    </div>
+  </mat-card>
+</section>

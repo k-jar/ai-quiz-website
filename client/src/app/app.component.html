@@ -1,7 +1,12 @@
 <main>
-  <a [routerLink]="['/']">
-    <h2>Quiz App</h2>
-  </a>
+  <mat-toolbar>
+    <button mat-button routerLink="/">
+      <h3>All Quizzes</h3>
+    </button>
+    <button mat-button routerLink="/add-quiz" class="top-margin">
+      <h3>Add quizzes</h3>
+    </button>
+  </mat-toolbar>
   <section class="content">
     <router-outlet></router-outlet>
   </section>

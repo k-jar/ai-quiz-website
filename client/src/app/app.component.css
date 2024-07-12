@@ -1,0 +1,9 @@
+.content{
+    padding: 1rem;
+}
+
+mat-toolbar{
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
