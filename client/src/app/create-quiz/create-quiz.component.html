@@ -1,0 +1,21 @@
+<section class="create-quiz">
+    <div class="model-controls">
+        <div class="button-group">
+            <button mat-flat-button>Load Model</button>
+            <button mat-flat-button disabled disabledInteractive matTooltip="No model is loaded">Unload Model</button>
+        </div>
+        <div class="options-container">
+            <button mat-icon-button matTooltip="Options">
+                <mat-icon>settings</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="input-container">
+        <mat-form-field class="input-field">
+            <mat-label>Input</mat-label>
+            <input matInput type="text" #input />
+        </mat-form-field>
+        <button mat-flat-button (click)="submitText(input.value)">Submit</button>
+    </div>
+</section>
