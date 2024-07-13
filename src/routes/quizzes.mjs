@@ -6,7 +6,7 @@ import {
     matchedData,
     checkSchema,
 } from 'express-validator';
-import { createQuizSchema } from '../utils/validationSchemas.mjs';
+import { addQuizSchema, generateQuizSchema } from '../utils/validationSchemas.mjs';
 import { mockQuizzes } from '../utils/constants.mjs';
 import { resolveIndexByQuizId } from '../utils/middlewares.mjs';
 import { generateQuiz } from '../utils/aiClient.mjs';
@@ -28,12 +28,11 @@ router.get("/api/quizzes", (req, res) => {
 
 router.post(
     "/api/quizzes",
-    checkSchema(createQuizSchema),
+    checkSchema(addQuizSchema),
     (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(400).json({ errors: errors.array() });
-            return;
+            return res.status(400).json({ errors: errors.array() });
         }
         const { title, reading, questions } = matchedData(req);
         const newQuiz = {
@@ -81,14 +80,17 @@ router.delete("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
 //     });
 // });
 
-router.post("/api/generate-quiz", (req, res) => {
-    const { text } = req.body;
-    generateQuiz(text).then(quiz => {
-        quiz.reading = text;
-        res.status(200).json(quiz);
-    }).catch(error => {
-        res.status(500).json({ error: error.toString() });
+router.post(
+    "/api/generate-quiz",
+    checkSchema(generateQuizSchema),
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        const { text, numQuestions, questionLanguage, answerLanguage } = matchedData(req);
+        const quiz = await generateQuiz(text, numQuestions, questionLanguage, answerLanguage);
+        res.json(quiz);
     });
-});
 
 export default router;

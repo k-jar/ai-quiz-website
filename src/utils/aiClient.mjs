@@ -33,14 +33,15 @@ async function getModel() {
     return await client.llm.get({});
 }
 
-async function predictQuiz(model, text) {
-    const prediction = model.respond(
+async function predictQuiz(model, text,
+    numQuestions,
+    questionLanguage,
+    answerLanguage) {
+    const prediction = await model.respond(
         [
             {
-                role: "system", content: "You take in text and output\
-             multiple choice quiz questions based on the text in JSON format.\
-              Include a suitable amount of detail and questions depending\
-               on the text. Also include a title. Tailor the quiz towards language learning. " },
+                role: "system", content: `You are an AI that generates multiple choice quiz questions from provided text, formatted in JSON. Each quiz should include a title and be tailored towards language learning. Ensure the number of questions and the level of detail are appropriate for the length and complexity of the text. Generate ${numQuestions} questions. The questions should be in ${questionLanguage}, and the answers should be in ${answerLanguage}.`
+            },
             { role: "user", content: text },
         ],
         {
@@ -63,9 +64,9 @@ async function parseQuiz(prediction) {
     }
 }
 
-async function generateQuiz(text) {
+async function generateQuiz(text, numQuestions = 5, questionLanguage = "jp", answerLanguage = "jp") {
     const model = await getModel();
-    const prediction = await predictQuiz(model, text);
+    const prediction = await predictQuiz(model, text, numQuestions, questionLanguage, answerLanguage);
     const quiz = await parseQuiz(prediction);
     return quiz;
 }

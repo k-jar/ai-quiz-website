@@ -1,4 +1,4 @@
-export const createQuizSchema = {
+export const addQuizSchema = {
     title: {
         isString: {
             errorMessage: 'Title must be a string',
@@ -63,3 +63,29 @@ export const createQuizSchema = {
         },
     },
 };
+
+export const generateQuizSchema = {
+    'text': {
+      isString: {
+        errorMessage: 'Text must be a string',
+      },
+    },
+    'numQuestions': {
+      isInt: {
+        options: { min: 1 },
+        errorMessage: 'numQuestions must be an integer and at least 1',
+      },
+    },
+    'questionLanguage': {
+      isIn: {
+        options: [['jp', 'en']],
+        errorMessage: 'questionLanguage must be "jp" or "en"',
+      },
+    },
+    'answerLanguage': {
+      isIn: {
+        options: [['jp', 'en']],
+        errorMessage: 'answerLanguage must be "jp" or "en"',
+      },
+    },
+  };
