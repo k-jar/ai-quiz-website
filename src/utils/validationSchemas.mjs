@@ -72,7 +72,7 @@ export const generateQuizSchema = {
     },
     'numQuestions': {
       isInt: {
-        options: { min: 1 },
+        options: { min: 1, max: 50 },
         errorMessage: 'numQuestions must be an integer and at least 1',
       },
     },

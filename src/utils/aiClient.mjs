@@ -40,12 +40,12 @@ async function predictQuiz(model, text,
     const prediction = await model.respond(
         [
             {
-                role: "system", content: `You are an AI that generates multiple choice quiz questions from provided text, formatted in JSON. Each quiz should include a title and be tailored towards language learning. Ensure the number of questions and the level of detail are appropriate for the length and complexity of the text. Generate ${numQuestions} questions. The questions should be in ${questionLanguage}, and the answers should be in ${answerLanguage}.`
+                role: "system", content: `You are an AI that generates multiple choice quiz questions (formatted in JSON) from provided text. Follow the provided schema, include title, questions, options, answer (should be present in options). Generate ${numQuestions} questions. The questions should be in ${questionLanguage} language, and the answers should be in ${answerLanguage} language.`
             },
             { role: "user", content: text },
         ],
         {
-            maxPredictedTokens: 1000,
+            maxPredictedTokens: 1500,
             structured: { type: 'json', jsonSchema: quizSchema },
         },
     );
@@ -55,6 +55,7 @@ async function predictQuiz(model, text,
 
 async function parseQuiz(prediction) {
     const result = await prediction;
+    console.log("Result is", result);
     try {
         const parsed = JSON.parse(result.content);
         console.info("The questions are", parsed.questions);

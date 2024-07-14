@@ -20,14 +20,14 @@ export class QuizService {
   }
 
   // Generate quiz
-  async generateQuiz(text: string): Promise<Quiz> {
+  async generateQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string): Promise<Quiz> {
     console.log('Generating quiz for text:', text);
     const response = await fetch(this.generateUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text })
+      body: JSON.stringify({ text, numQuestions, questionLanguage, answerLanguage })
     });
     return await response.json();
   }
@@ -44,8 +44,9 @@ export class QuizService {
     return await response.json();
   }
 
-  async generateAndAddQuiz(text: string): Promise<Quiz> {
-    const quiz = await this.generateQuiz(text);
+  async generateAndAddQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string): Promise<Quiz> {
+    console.log('Qlang:', questionLanguage, 'Alang:', answerLanguage, 'NumQ:', numQuestions);
+    const quiz = await this.generateQuiz(text, numQuestions, questionLanguage, answerLanguage);
     console.log('Generated quiz:', quiz);
     return await this.addQuiz(quiz);
   }

@@ -11,6 +11,26 @@
         </div>
     </div>
 
+    <div class="response-settings">
+        <mat-form-field>
+            <mat-label>Question language</mat-label>
+            <mat-select [(value)]="questionLanguage">
+                <mat-option value="en">English</mat-option>
+                <mat-option value="jp">Japanese</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Answer language</mat-label>
+            <mat-select [(value)]="answerLanguage">
+                <mat-option value="en">English</mat-option>
+                <mat-option value="jp">Japanese</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Number of questions</mat-label>
+            <input matInput [(ngModel)]="numQuestions" type="number" min="1" max="50">
+        </mat-form-field>
+    </div>
     <div class="input-container">
         <mat-form-field class="input-field">
             <mat-label>Input</mat-label>

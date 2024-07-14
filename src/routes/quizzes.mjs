@@ -90,6 +90,7 @@ router.post(
         }
         const { text, numQuestions, questionLanguage, answerLanguage } = matchedData(req);
         const quiz = await generateQuiz(text, numQuestions, questionLanguage, answerLanguage);
+        quiz.reading = text;
         res.json(quiz);
     });
 
