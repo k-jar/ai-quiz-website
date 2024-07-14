@@ -88,8 +88,9 @@ router.post(
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        const { text, numQuestions, questionLanguage, answerLanguage } = matchedData(req);
-        const quiz = await generateQuiz(text, numQuestions, questionLanguage, answerLanguage);
+        const { text, numQuestions, questionLanguage, answerLanguage, modelChoice } = matchedData(req);
+        console.log("modelchoice", modelChoice);
+        const quiz = await generateQuiz(text, numQuestions, questionLanguage, answerLanguage, modelChoice);
         quiz.reading = text;
         res.json(quiz);
     });

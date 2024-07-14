@@ -1,4 +1,14 @@
 <section class="create-quiz">
+    <div class="model-selection">
+        <mat-form-field>
+            <mat-label>Model</mat-label>
+            <mat-select [(value)]="modelChoice">
+                <mat-option value="lm">LM Studio</mat-option>
+                <mat-option value="openai">ChatGPT</mat-option>
+                <mat-option value="none">No Model (JSON)</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
     <div class="model-controls">
         <div class="button-group">
             <button mat-flat-button>Load Model</button>
@@ -12,6 +22,8 @@
     </div>
 
     <div class="response-settings">
+        Quiz Options
+        <br>
         <mat-form-field>
             <mat-label>Question language</mat-label>
             <mat-select [(value)]="questionLanguage">
@@ -31,6 +43,7 @@
             <input matInput [(ngModel)]="numQuestions" type="number" min="1" max="50">
         </mat-form-field>
     </div>
+    Model Input
     <div class="input-container">
         <mat-form-field class="input-field">
             <mat-label>Input</mat-label>

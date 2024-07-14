@@ -1,0 +1,5 @@
+.quiz-container, .reading, .questions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

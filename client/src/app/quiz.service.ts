@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, model } from '@angular/core';
 import { Quiz } from './quiz';
 
 @Injectable({
@@ -20,14 +20,14 @@ export class QuizService {
   }
 
   // Generate quiz
-  async generateQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string): Promise<Quiz> {
+  async generateQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string, modelChoice:string): Promise<Quiz> {
     console.log('Generating quiz for text:', text);
     const response = await fetch(this.generateUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text, numQuestions, questionLanguage, answerLanguage })
+      body: JSON.stringify({ text, numQuestions, questionLanguage, answerLanguage, modelChoice })
     });
     return await response.json();
   }
@@ -44,9 +44,8 @@ export class QuizService {
     return await response.json();
   }
 
-  async generateAndAddQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string): Promise<Quiz> {
-    console.log('Qlang:', questionLanguage, 'Alang:', answerLanguage, 'NumQ:', numQuestions);
-    const quiz = await this.generateQuiz(text, numQuestions, questionLanguage, answerLanguage);
+  async generateAndAddQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string, modelChoice:string): Promise<Quiz> {
+    const quiz = await this.generateQuiz(text, numQuestions, questionLanguage, answerLanguage, modelChoice);
     console.log('Generated quiz:', quiz);
     return await this.addQuiz(quiz);
   }

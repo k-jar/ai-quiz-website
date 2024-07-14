@@ -30,6 +30,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './create-quiz.component.css'
 })
 export class CreateQuizComponent {
+  modelChoice = 'lm';
   numQuestions = 10;
   questionLanguage = 'jp';
   answerLanguage = 'jp';
@@ -38,6 +39,7 @@ export class CreateQuizComponent {
   constructor() { }
 
   submitText(text: string) {
-    this.quizService.generateAndAddQuiz(text, this.numQuestions, this.questionLanguage, this.answerLanguage);
+    console.log('Text:', text, "NumQ:", this.numQuestions, "Qlang:", this.questionLanguage, "Alang:", this.answerLanguage, "Model:", this.modelChoice);
+    this.quizService.generateAndAddQuiz(text, this.numQuestions, this.questionLanguage, this.answerLanguage, this.modelChoice);
   }
 }

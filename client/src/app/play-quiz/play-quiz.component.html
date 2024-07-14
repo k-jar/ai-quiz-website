@@ -1,31 +1,33 @@
-<p>play-quiz works!</p>
-<section class="reading">
-<mat-accordion>
-    <mat-expansion-panel [expanded]="true">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Reading
-        </mat-panel-title>
-      </mat-expansion-panel-header>
+<section class="quiz-container">
+  <section class="reading">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="!showQuestions">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Reading
+          </mat-panel-title>
+        </mat-expansion-panel-header>
         <p>{{ quiz?.reading }}</p>
-    </mat-expansion-panel>
-  </mat-accordion>
-<button mat-raised-button color="primary" (click)="viewQuestions()">View Questions</button>
-</section>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <button mat-raised-button color="primary" (click)="viewQuestions()">View Questions</button>
+  </section>
 
-<section class="questions" *ngIf="showQuestions">
-  <mat-accordion>
-    <mat-expansion-panel *ngFor="let question of quiz?.questions">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{ question.question }}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-radio-group>
-        <mat-radio-button *ngFor="let option of question.options" [value]="option">
-          {{ option }}
-        </mat-radio-button>
-      </mat-radio-group>
-    </mat-expansion-panel>
-  </mat-accordion>
-  <button mat-raised-button color="accent" (click)="submitQuiz()">Submit Quiz</button>
+  <section class="questions" *ngIf="showQuestions">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let question of quiz?.questions">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ question.question }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-radio-group>
+          <mat-radio-button *ngFor="let option of question.options" [value]="option">
+            {{ option }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <button mat-raised-button color="accent" (click)="submitQuiz()">Submit Quiz</button>
+  </section>
+</section>

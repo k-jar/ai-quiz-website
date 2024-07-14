@@ -88,4 +88,10 @@ export const generateQuizSchema = {
         errorMessage: 'answerLanguage must be "jp" or "en"',
       },
     },
+    'modelChoice': {
+      isIn: {
+        options: [['lm', 'openai', 'none']],
+        errorMessage: 'modelChoice must be "lm", "openai", or "none"',
+      },
+    },
   };

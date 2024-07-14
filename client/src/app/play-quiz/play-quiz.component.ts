@@ -18,7 +18,7 @@ export class PlayQuizComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   quizService: QuizService = inject(QuizService);
   quiz: Quiz | undefined;
-  showQuestions: boolean = true;
+  showQuestions: boolean = false;
 
   constructor() {
     const quizId = parseInt(this.route.snapshot.params['id'], 10);
@@ -28,7 +28,7 @@ export class PlayQuizComponent {
   }
 
   viewQuestions() {
-
+    this.showQuestions = true;
   }
 
   submitQuiz() {
