@@ -10,7 +10,7 @@ const openai = new OpenAI({
 export async function generateQuizWithOpenAI(text, numQuestions, questionLanguage, answerLanguage) {
 try {
   const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: "gpt-4o-mini",
     messages: [
       {
         "role": "system",

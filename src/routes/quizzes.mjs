@@ -14,6 +14,7 @@ import { generateQuiz } from '../utils/aiClient.mjs';
 
 const router = Router();
 
+// Get all quizzes
 router.get("/api/quizzes", (req, res) => {
     const {
         query: { filter, value },
@@ -26,6 +27,7 @@ router.get("/api/quizzes", (req, res) => {
     res.send(mockQuizzes);
 });
 
+// Create a new quiz
 router.post(
     "/api/quizzes",
     checkSchema(addQuizSchema),
@@ -46,12 +48,14 @@ router.post(
     }
 );
 
+// Get a quiz by ID
 router.get("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
     const { quizIndex } = req;
     const quiz = mockQuizzes[quizIndex];
     return res.send(quiz);
 });
 
+// Update a quiz by ID
 router.patch("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
     const { quizIndex } = req;
     const quiz = mockQuizzes[quizIndex];
@@ -59,6 +63,7 @@ router.patch("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
     res.send(quiz);
 });
 
+// Delete a quiz by ID
 router.delete("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
     const { quizIndex } = req;
     mockQuizzes.splice(quizIndex, 1);
@@ -80,6 +85,7 @@ router.delete("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
 //     });
 // });
 
+// Generate a quiz
 router.post(
     "/api/generate-quiz",
     checkSchema(generateQuizSchema),
