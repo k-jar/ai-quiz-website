@@ -1,5 +1,5 @@
 export interface Quiz {
-    id: number;
+    _id: string;
     title: string;
     reading: string;
     questions: Question[];

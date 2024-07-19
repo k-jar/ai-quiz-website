@@ -17,7 +17,7 @@ export class DetailsComponent {
   quiz: Quiz | undefined;
 
   constructor() {
-    const quizId = parseInt(this.route.snapshot.params['id'], 10);
+    const quizId = this.route.snapshot.params['id'];
     this.quizService.getQuizById(quizId).then((quiz) => {
       this.quiz = quiz;
     });

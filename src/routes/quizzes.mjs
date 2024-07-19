@@ -7,83 +7,84 @@ import {
     checkSchema,
 } from 'express-validator';
 import { addQuizSchema, generateQuizSchema } from '../utils/validationSchemas.mjs';
-import { mockQuizzes } from '../utils/constants.mjs';
+// import { mockQuizzes } from '../utils/constants.mjs';
+import Quiz from '../models/quiz.mjs';
 import { resolveIndexByQuizId } from '../utils/middlewares.mjs';
 import { generateQuiz } from '../utils/aiClient.mjs';
+import mongoose from 'mongoose';
 // import axios from 'axios';
 
 const router = Router();
 
 // Get all quizzes
-router.get("/api/quizzes", (req, res) => {
+router.get("/api/quizzes", async (req, res) => {
     const {
         query: { filter, value },
     } = req;
     if (filter && value) {
-        const filteredQuizzes = mockQuizzes.filter(quiz =>
-            quiz[filter].toLowerCase().includes(value.toLowerCase()));
+        // Case-insensitive search
+        const filteredQuizzes = await Quiz.find({ [filter]: new RegExp(value, "i") });
         return res.send(filteredQuizzes);
     }
-    res.send(mockQuizzes);
+    res.send(await Quiz.find());
 });
 
 // Create a new quiz
 router.post(
     "/api/quizzes",
     checkSchema(addQuizSchema),
-    (req, res) => {
+    async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
         const { title, reading, questions } = matchedData(req);
-        const newQuiz = {
-            id: mockQuizzes.length + 1,
+        const newQuiz = new Quiz({
             title,
             reading,
             questions,
-        };
-        mockQuizzes.push(newQuiz);
+        });
+        await newQuiz.save();
         res.status(201).send(newQuiz);
     }
 );
 
 // Get a quiz by ID
-router.get("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
-    const { quizIndex } = req;
-    const quiz = mockQuizzes[quizIndex];
-    return res.send(quiz);
+router.get("/api/quizzes/:id", async (req, res) => {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send("Invalid ID format");
+    }
+    try {
+        const quiz = await Quiz.findById(id);
+        if (!quiz) {
+            return res.status(404).send("Quiz not found");
+        }
+        return res.send(quiz);
+    } catch (error) {
+        return res.status(404).send("Server error");
+    }
 });
 
 // Update a quiz by ID
-router.patch("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
-    const { quizIndex } = req;
-    const quiz = mockQuizzes[quizIndex];
-    mockQuizzes[quizIndex] = { ...quiz, ...req.body };
+router.patch("/api/quizzes/:id", async (req, res) => {
+    const { id } = req.params;
+    const quiz = await Quiz.findByIdAndUpdate(id, req.body, { new: true });
+    if (!quiz) {
+        return res.status(404).send("Quiz not found");
+    }
     res.send(quiz);
 });
 
 // Delete a quiz by ID
-router.delete("/api/quizzes/:id", resolveIndexByQuizId, (req, res) => {
-    const { quizIndex } = req;
-    mockQuizzes.splice(quizIndex, 1);
+router.delete("/api/quizzes/:id", async (req, res) => {
+    const { id } = req.params;
+    const quiz = await Quiz.findByIdAndDelete(id);
+    if (!quiz) {
+        return res.status(404).send("Quiz not found");
+    }
     res.status(200).send("Quiz deleted successfully");
 });
-
-// router.post("/api/generate-quiz", (req, res) => {
-//     const { text } = req.body;
-//     console.log("Text in post", req.body);
-//     generateQuiz(text).then(quiz => {
-//         req.body = quiz;
-//         axios.post('/api/quizzes', req.body)
-//             .then(response => {
-//                 res.status(200).json(response.data);
-//             })
-//             .catch(error => {
-//                 res.status(500).json({ error: error.toString() });
-//             });
-//     });
-// });
 
 // Generate a quiz
 router.post(

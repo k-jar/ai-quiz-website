@@ -15,13 +15,13 @@
 
   <section class="questions" *ngIf="showQuestions">
     <mat-accordion>
-      <mat-expansion-panel *ngFor="let question of quiz?.questions">
+      <mat-expansion-panel *ngFor="let question of quiz?.questions; let i = index">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{ question.question }}
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <mat-radio-group>
+        <mat-radio-group [(ngModel)]="userAnswers[i]">
           <mat-radio-button *ngFor="let option of question.options" [value]="option">
             {{ option }}
           </mat-radio-button>
@@ -29,5 +29,8 @@
       </mat-expansion-panel>
     </mat-accordion>
     <button mat-raised-button color="accent" (click)="submitQuiz()">Submit Quiz</button>
+    <div *ngIf="score !== undefined">
+      <p>Your score is: {{ score }} / {{ quiz?.questions?.length }}</p>
+    </div>
   </section>
 </section>

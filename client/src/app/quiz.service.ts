@@ -14,7 +14,7 @@ export class QuizService {
     const data = await fetch(this.url);
     return (await data.json()) ?? [];
   }
-  async getQuizById(id: number): Promise<Quiz | undefined> {
+  async getQuizById(id: string): Promise<Quiz | undefined> {
     const data = await fetch(`${this.url}/${id}`);
     return (await data.json()) ?? {};
   }
