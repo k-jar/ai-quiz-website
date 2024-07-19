@@ -4,6 +4,7 @@
   "type": "module",
   "main": "server.mjs",
   "scripts": {
+    "loadData": "node src/utils/InitialDataLoad.mjs",
     "devStart": "nodemon src/server.mjs",
     "start": "node src/server.mjs"
   },

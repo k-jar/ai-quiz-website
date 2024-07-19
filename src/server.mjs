@@ -14,7 +14,7 @@ server.use(cors({
 server.use(express.json());
 server.use(quizzesRouter);
 
-mongoose.connect(DATABASE_URL, {});
+mongoose.connect(DATABASE_URL);
 
 const db = mongoose.connection;
 
