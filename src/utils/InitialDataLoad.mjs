@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Quiz from '../models/quiz.mjs';
+import Quiz from '../models/Quiz.mjs';
 import { mockQuizzes } from './constants.mjs';
 import { config } from 'dotenv';
 config();

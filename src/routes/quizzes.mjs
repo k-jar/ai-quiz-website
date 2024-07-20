@@ -1,23 +1,19 @@
 import { Router } from 'express';
 import {
-    query,
     validationResult,
-    body,
     matchedData,
     checkSchema,
 } from 'express-validator';
 import { addQuizSchema, generateQuizSchema } from '../utils/validationSchemas.mjs';
-// import { mockQuizzes } from '../utils/constants.mjs';
-import Quiz from '../models/quiz.mjs';
-import { resolveIndexByQuizId } from '../utils/middlewares.mjs';
+import Quiz from '../models/Quiz.mjs';
 import { generateQuiz } from '../utils/aiClient.mjs';
 import mongoose from 'mongoose';
-// import axios from 'axios';
+import { verifyToken } from '../utils/middlewares.mjs';
 
 const router = Router();
 
 // Get all quizzes
-router.get("/api/quizzes", async (req, res) => {
+router.get("/quizzes", async (req, res) => {
     const {
         query: { filter, value },
     } = req;
@@ -31,7 +27,8 @@ router.get("/api/quizzes", async (req, res) => {
 
 // Create a new quiz
 router.post(
-    "/api/quizzes",
+    "/quizzes",
+    verifyToken,
     checkSchema(addQuizSchema),
     async (req, res) => {
         const errors = validationResult(req);
@@ -50,7 +47,7 @@ router.post(
 );
 
 // Get a quiz by ID
-router.get("/api/quizzes/:id", async (req, res) => {
+router.get("/quizzes/:id", async (req, res) => {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).send("Invalid ID format");
@@ -67,7 +64,7 @@ router.get("/api/quizzes/:id", async (req, res) => {
 });
 
 // Update a quiz by ID
-router.patch("/api/quizzes/:id", async (req, res) => {
+router.patch("/quizzes/:id", verifyToken, async (req, res) => {
     const { id } = req.params;
     const quiz = await Quiz.findByIdAndUpdate(id, req.body, { new: true });
     if (!quiz) {
@@ -77,7 +74,7 @@ router.patch("/api/quizzes/:id", async (req, res) => {
 });
 
 // Delete a quiz by ID
-router.delete("/api/quizzes/:id", async (req, res) => {
+router.delete("/quizzes/:id", verifyToken, async (req, res) => {
     const { id } = req.params;
     const quiz = await Quiz.findByIdAndDelete(id);
     if (!quiz) {
@@ -88,7 +85,8 @@ router.delete("/api/quizzes/:id", async (req, res) => {
 
 // Generate a quiz
 router.post(
-    "/api/generate-quiz",
+    "/generate-quiz",
+    verifyToken,
     checkSchema(generateQuizSchema),
     async (req, res) => {
         const errors = validationResult(req);

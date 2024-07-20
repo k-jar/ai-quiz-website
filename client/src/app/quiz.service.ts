@@ -1,4 +1,6 @@
-import { Injectable, model } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 import { Quiz } from './quiz';
 
 @Injectable({
@@ -9,39 +11,25 @@ export class QuizService {
   url = 'http://localhost:3000/api/quizzes';
   generateUrl = 'http://localhost:3000/api/generate-quiz';
 
-  // Consider HttpClient instead of fetch
+  constructor(private http: HttpClient) { }
+
   async getAllQuizzes(): Promise<Quiz[]> {
-    const data = await fetch(this.url);
-    return (await data.json()) ?? [];
+    return lastValueFrom(this.http.get<Quiz[]>(this.url));
   }
+
   async getQuizById(id: string): Promise<Quiz | undefined> {
-    const data = await fetch(`${this.url}/${id}`);
-    return (await data.json()) ?? {};
+    return lastValueFrom(this.http.get<Quiz>(`${this.url}/${id}`));
   }
 
   // Generate quiz
   async generateQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string, modelChoice:string): Promise<Quiz> {
     console.log('Generating quiz for text:', text);
-    const response = await fetch(this.generateUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text, numQuestions, questionLanguage, answerLanguage, modelChoice })
-    });
-    return await response.json();
+    return lastValueFrom(this.http.post<Quiz>(this.generateUrl, { text, numQuestions, questionLanguage, answerLanguage, modelChoice }));
   }
 
   // Add quiz
   async addQuiz(quiz: Quiz): Promise<Quiz> {
-    const response = await fetch(this.url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(quiz)
-    });
-    return await response.json();
+    return lastValueFrom(this.http.post<Quiz>(this.url, quiz));
   }
 
   async generateAndAddQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string, modelChoice:string): Promise<Quiz> {
