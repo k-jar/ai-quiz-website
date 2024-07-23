@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
@@ -9,6 +9,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthService {
   private url = 'http://localhost:3000/api/auth';
   private jwtHelper = new JwtHelperService();
+  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
   constructor(private http: HttpClient) {}
 
@@ -17,12 +18,19 @@ export class AuthService {
   }
 
   login(user: any): Observable<any> {
-    return this.http.post(`${this.url}/login`, user);
+    return this.http.post(`${this.url}/login`, user).pipe(
+      tap((response: any) => {
+        if (response.token) {
+          localStorage.setItem('token', response.token);
+          this.loggedIn.next(true);
+        }
+        return response;
+      })
+    );
   }
 
-  isLoggedIn(): boolean {
-    const token = localStorage.getItem('token');
-    return token ? !this.jwtHelper.isTokenExpired(token) : false;
+  get isLoggedIn(): Observable<boolean> {
+    return this.loggedIn.asObservable();
   }
 
   getToken(): string | null {
@@ -31,5 +39,13 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    this.loggedIn.next(false);
+  }
+
+  private hasToken(): boolean {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return !!localStorage.getItem('token');
+    }
+    return false;
   }
 }

@@ -1,22 +1,44 @@
-mat-card {
+.auth-card {
     max-width: 400px;
-    margin: 2em auto;
-    text-align: center;
+    margin: 20px auto;
+    padding: 20px;
 }
 
-mat-form-field {
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.full-width {
     width: 100%;
-    margin-top: 1em;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.success-message {
+    color: green;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+mat-card-content {
+    padding: 24px;
 }
 
 button {
-    margin-top: 1em;
+    margin-top: 16px;
 }
 
-@media (max-width: 600px) {
-    mat-card {
-        margin: 0;
-        width: 100%;
-        max-width: none;
-    }
+mat-form-field {
+    margin-bottom: 16px;
 }

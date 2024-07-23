@@ -1,10 +1,14 @@
-.content{
+.content {
     padding: 1rem;
     margin: 1rem;
 }
 
-mat-toolbar{
+mat-toolbar {
     position: relative;
     z-index: 10;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.right-side {
+    margin-left: auto;
 }

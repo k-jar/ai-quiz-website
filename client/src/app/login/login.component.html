@@ -1,17 +1,37 @@
-<mat-card>
+<mat-card class="auth-card">
     <mat-card-title>Login</mat-card-title>
     <mat-card-content>
-        <form (ngSubmit)="login()">
-            <mat-form-field appearance="fill">
-                <mat-label>Username</mat-label>
-                <input matInput type="text" [(ngModel)]="username" name="username" required>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Password</mat-label>
-                <input matInput type="password" [(ngModel)]="password" name="password" required>
-            </mat-form-field>
-            <button mat-raised-button color="primary" type="submit">Login</button>
-        </form>
-        <button mat-button color="accent" routerLink="/register">Register</button>
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" />
+            <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+              Username is required
+            </mat-error>
+            <mat-error *ngIf="loginForm.get('username')?.hasError('minlength')">
+              Username must be at least 3 characters long
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password" />
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+              Password is required
+            </mat-error>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+              Password must be at least 6 characters long
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="button-group">
+          <button mat-button color="accent" routerLink="/register">Register</button>
+          <button mat-raised-button color="primary" type="submit">Login</button>
+        </div>
+        <mat-error *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </mat-error>
+      </form>
     </mat-card-content>
-</mat-card>
+  </mat-card>
+  

@@ -5,31 +5,57 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterModule],
+  imports: [CommonModule,
+    FormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    RouterModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   username: string = '';
   password: string = '';
+  successMessage: string = '';
+  errorMessage: string = '';
+  registerForm: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
+    this.registerForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
 
   register(): void {
-    this.authService.register({ username: this.username, password: this.password }).subscribe(
+    if (this.registerForm.invalid) {
+      return;
+    }
+
+    this.authService.register(this.registerForm.value).subscribe(
       (response) => {
-        if (response.token) {
-          localStorage.setItem('token', response.token);
-          this.router.navigate(['/quizzes']);
-        }
+        this.successMessage = response.message;
+        this.errorMessage = '';
+        this.registerForm.reset();
       },
       (error) => {
         console.error('Register error:', error);
+        if (error.status === 409) {
+          this.errorMessage = 'Username already exists. Please choose another one.';
+        } else {
+          this.errorMessage = 'Registration failed. Please try again.';
+        }
+        this.successMessage = '';
       }
     );
   }

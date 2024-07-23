@@ -95,3 +95,24 @@ export const generateQuizSchema = {
       },
     },
   };
+
+export const registerSchema = {
+    username: {
+        isString: {
+            errorMessage: 'Username must be a string',
+        },
+        isLength: {
+            errorMessage: 'Username must be at least 1 character long',
+            options: { min: 1 },
+        },
+    },
+    password: {
+        isString: {
+            errorMessage: 'Password must be a string',
+        },
+        isLength: {
+            errorMessage: 'Password must be at least 6 characters long',
+            options: { min: 6 },
+        },
+    },
+};

@@ -6,9 +6,14 @@
     <button mat-button routerLink="/create-quiz" class="top-margin">
       <h3>Create Quizzes</h3>
     </button>
-    <button mat-button routerLink="/login" class="top-margin">
-      <h3>Login</h3>
-    </button>
+    <div class="right-side">
+      <button mat-button *ngIf="isLoggedIn" (click)="logout()">
+        <h3>Logout</h3>
+      </button>
+      <button mat-button *ngIf="!isLoggedIn" routerLink="/login">
+        <h3>Login</h3>
+      </button>
+    </div>
   </mat-toolbar>
   <section class="content">
     <router-outlet></router-outlet>

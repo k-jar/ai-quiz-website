@@ -6,11 +6,11 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { AuthService } from './auth.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { tokenInterceptor } from './token.interceptor';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
   provideRouter(routes), provideClientHydration(),
-  provideAnimationsAsync(), provideProtractorTestingSupport(), provideHttpClient(),
-    AuthService, { provide: HTTP_INTERCEPTORS, useValue: tokenInterceptor, multi: true }],
+  provideAnimationsAsync(), provideProtractorTestingSupport(), provideHttpClient(withFetch()),
+    AuthService, { provide: HTTP_INTERCEPTORS, useValue: tokenInterceptor, multi: true }, provideAnimationsAsync()],
 };
