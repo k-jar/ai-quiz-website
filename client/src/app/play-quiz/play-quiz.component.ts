@@ -7,6 +7,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-play-quiz',
@@ -23,7 +25,7 @@ export class PlayQuizComponent {
   userAnswers: string[] = [];
   score: number = 0;
 
-  constructor() {};
+  constructor(public dialog: MatDialog) {};
   
   ngOnInit() {
     const quizId = this.route.snapshot.params['id'];
@@ -46,5 +48,14 @@ export class PlayQuizComponent {
     const correctAnswers = this.quiz.questions.map(q => q.answer);
     this.score = this.userAnswers.filter((answer, index) => answer === correctAnswers[index]).length;
   }
+
+  openConfirmationDialog() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.submitQuiz();
+      }
+    });
 }
- 
+}

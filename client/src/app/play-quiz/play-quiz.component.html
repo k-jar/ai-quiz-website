@@ -28,7 +28,7 @@
         </mat-radio-group>
       </mat-expansion-panel>
     </mat-accordion>
-    <button mat-raised-button color="accent" (click)="submitQuiz()">Submit Quiz</button>
+    <button mat-raised-button color="accent" (click)="openConfirmationDialog()">Submit Quiz</button>
     <div *ngIf="score !== undefined">
       <p>Your score is: {{ score }} / {{ quiz?.questions?.length }}</p>
     </div>
