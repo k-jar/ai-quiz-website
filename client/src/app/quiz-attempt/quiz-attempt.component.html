@@ -1,0 +1,12 @@
+<div>
+    <h2>Quiz Attempts</h2>
+    <mat-card *ngFor="let attempt of attempts">
+        <mat-card-header>
+            <mat-card-title>{{ attempt.quizData?.title }}</mat-card-title>
+            <mat-card-subtitle class="date">Score: {{ attempt.score }} | Date: {{ attempt.attemptDate | date }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <button mat-button [routerLink]="['/quiz', attempt.quiz]">Go to Quiz</button>
+        </mat-card-content>
+    </mat-card>
+</div>

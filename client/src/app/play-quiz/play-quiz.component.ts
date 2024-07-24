@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { MatCardModule } from '@angular/material/card';
+import { QuizAttemptService } from '../quiz-attempt.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-play-quiz',
@@ -21,18 +23,21 @@ import { MatCardModule } from '@angular/material/card';
 export class PlayQuizComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   quizService: QuizService = inject(QuizService);
+  quizAttemptService: QuizAttemptService = inject(QuizAttemptService);
   quiz: Quiz | undefined;
   showQuestions: boolean = false;
   userAnswers: string[] = [];
   score: number = 0;
   questionResults: boolean[] = [];
   quizSubmitted: boolean = false;
+  userId: string = '';
+  quizId: string = '';
 
-  constructor(public dialog: MatDialog) { };
+  constructor(public dialog: MatDialog, private authService: AuthService) { };
 
   ngOnInit() {
-    const quizId = this.route.snapshot.params['id'];
-    this.quizService.getQuizById(quizId).then((quiz) => {
+    this.quizId = this.route.snapshot.params['id'];
+    this.quizService.getQuizById(this.quizId).then((quiz) => {
       this.quiz = quiz;
       if (quiz) {
         this.userAnswers = new Array(quiz.questions.length).fill('');
@@ -52,7 +57,28 @@ export class PlayQuizComponent {
     const correctAnswers = this.quiz.questions.map(q => q.answer);
     this.questionResults = this.userAnswers.map((answer, index) => answer === correctAnswers[index]);
     this.score = this.userAnswers.filter((answer, index) => answer === correctAnswers[index]).length;
+
+    this.submitQuizAttempt();
   }
+
+  submitQuizAttempt() {
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      this.userId = user.userId;
+    }
+    const attempt = {
+      userId: this.userId,
+      quizId: this.quizId,
+      score: this.score,
+    };
+
+    this.quizAttemptService.createAttempt(attempt).subscribe(response => {
+      console.log('Quiz attempt saved', response);
+    }, error => {
+      console.error('Error saving quiz attempt', error);
+    });
+  }
+
 
   openConfirmationDialog() {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent);

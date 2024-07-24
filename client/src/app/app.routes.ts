@@ -6,6 +6,7 @@ import { PlayQuizComponent } from './play-quiz/play-quiz.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { authGuard } from './auth.guard';
+import { QuizAttemptComponent } from './quiz-attempt/quiz-attempt.component';
 
 export const routes: Routes = [
     {
@@ -41,4 +42,9 @@ export const routes: Routes = [
         component: RegisterComponent,
         title: 'Register page',
     },
+    {
+        path: 'quiz-attempts',
+        component: QuizAttemptComponent,
+        title: 'Quiz attempts',
+    }
 ];

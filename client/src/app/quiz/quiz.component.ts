@@ -5,6 +5,8 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { QuizAttemptService } from '../quiz-attempt.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-quiz',
@@ -16,4 +18,18 @@ import { MatGridListModule } from '@angular/material/grid-list';
 })
 export class QuizComponent {
   @Input() quiz!: Quiz;
+  attempt: any = null;
+
+  constructor(private authService: AuthService, private quizAttemptService: QuizAttemptService) { }
+
+  ngOnInit() {
+    this.getLatestAttempt();
+  }
+
+  getLatestAttempt() {
+    const userId = this.authService.getCurrentUser()?.userId;
+    this.quizAttemptService.getLatestAttempt(this.quiz._id, userId).subscribe(attempt => {
+      this.attempt = attempt; // Assign the entire attempt to attempt
+    });
+  }
 }

@@ -1,8 +1,11 @@
 import express from 'express';
 import cors from 'cors';
+import mongoose from 'mongoose';
+
 import quizzesRouter from './routes/quizzes.mjs';
 import authRouter from './routes/auth.mjs';
-import mongoose from 'mongoose';
+import quizAttemptRouter from './routes/quizAttempt.mjs';
+
 import { config } from 'dotenv';
 config();
 
@@ -17,6 +20,7 @@ server.use(express.json());
 
 server.use("/api", quizzesRouter);
 server.use("/api/auth", authRouter);
+server.use("/api/quiz-attempts", quizAttemptRouter);
 
 mongoose.connect(DATABASE_URL);
 const db = mongoose.connection;

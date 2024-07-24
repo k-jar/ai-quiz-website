@@ -37,6 +37,15 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+  getCurrentUser(): any {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken;
+    }
+    return null;
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     this.loggedIn.next(false);
