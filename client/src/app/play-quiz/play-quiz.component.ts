@@ -9,11 +9,12 @@ import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-play-quiz',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, MatButtonModule, MatRadioModule, FormsModule],
+  imports: [CommonModule, MatExpansionModule, MatButtonModule, MatRadioModule, FormsModule, MatCardModule],
   templateUrl: './play-quiz.component.html',
   styleUrl: './play-quiz.component.css'
 })
@@ -24,9 +25,11 @@ export class PlayQuizComponent {
   showQuestions: boolean = false;
   userAnswers: string[] = [];
   score: number = 0;
+  questionResults: boolean[] = [];
+  quizSubmitted: boolean = false;
 
-  constructor(public dialog: MatDialog) {};
-  
+  constructor(public dialog: MatDialog) { };
+
   ngOnInit() {
     const quizId = this.route.snapshot.params['id'];
     this.quizService.getQuizById(quizId).then((quiz) => {
@@ -45,7 +48,9 @@ export class PlayQuizComponent {
     if (!this.quiz) {
       return;
     }
+    this.quizSubmitted = true;
     const correctAnswers = this.quiz.questions.map(q => q.answer);
+    this.questionResults = this.userAnswers.map((answer, index) => answer === correctAnswers[index]);
     this.score = this.userAnswers.filter((answer, index) => answer === correctAnswers[index]).length;
   }
 
@@ -57,5 +62,13 @@ export class PlayQuizComponent {
         this.submitQuiz();
       }
     });
-}
+  }
+
+  resetQuiz() {
+    this.userAnswers = Array(this.quiz?.questions?.length).fill(null);
+    this.questionResults = [];
+    this.score = 0;
+    this.quizSubmitted = false;
+  }
+
 }

@@ -1,5 +1,20 @@
-.quiz-container, .reading, .questions {
+.quiz-container,
+.reading,
+.questions {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.correct {
+    background-color: lightgreen;
+}
+
+.incorrect {
+    background-color: lightcoral;
+}
+
+.reading,
+.questions {
+  margin-bottom: 20px;
 }

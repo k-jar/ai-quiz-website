@@ -10,27 +10,36 @@
         <p>{{ quiz?.reading }}</p>
       </mat-expansion-panel>
     </mat-accordion>
-    <button mat-raised-button color="primary" (click)="viewQuestions()">View Questions</button>
+    <button mat-raised-button color="primary" (click)="viewQuestions()" *ngIf="!showQuestions">View Questions</button>
   </section>
 
   <section class="questions" *ngIf="showQuestions">
     <mat-accordion>
-      <mat-expansion-panel *ngFor="let question of quiz?.questions; let i = index">
+      <mat-expansion-panel *ngFor="let question of quiz?.questions; let i = index"
+        [ngClass]="quizSubmitted ? {'correct': questionResults[i], 'incorrect': userAnswers[i] && !questionResults[i]} : {}">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{ question.question }}
           </mat-panel-title>
+          <mat-panel-description> {{ userAnswers[i] ? 'Answered' : 'Not answered' }}</mat-panel-description>
         </mat-expansion-panel-header>
-        <mat-radio-group [(ngModel)]="userAnswers[i]">
+        <mat-radio-group [(ngModel)]="userAnswers[i]" [disabled]="quizSubmitted">
           <mat-radio-button *ngFor="let option of question.options" [value]="option">
             {{ option }}
           </mat-radio-button>
         </mat-radio-group>
       </mat-expansion-panel>
     </mat-accordion>
-    <button mat-raised-button color="accent" (click)="openConfirmationDialog()">Submit Quiz</button>
-    <div *ngIf="score !== undefined">
-      <p>Your score is: {{ score }} / {{ quiz?.questions?.length }}</p>
-    </div>
+    <button mat-raised-button color="accent" (click)="openConfirmationDialog()" *ngIf="!quizSubmitted">Submit
+      Quiz</button>
+  </section>
+
+  <section class="results">
+    <mat-card *ngIf="quizSubmitted">
+      <mat-card-content>
+        <p>You answered {{ score }} out of {{ quiz?.questions?.length }} questions correctly.</p>
+        <button mat-raised-button color="primary" (click)="resetQuiz()">Retry</button>
+      </mat-card-content>
+    </mat-card>
   </section>
 </section>
