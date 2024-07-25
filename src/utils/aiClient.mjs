@@ -22,7 +22,7 @@ function parseQuizOpenAI(prediction) {
 }
 
 async function generateQuiz(text, numQuestions = 5, questionLanguage = "jp", answerLanguage = "jp", modelChoice = "lm") {
-    switch(modelChoice) {
+    switch (modelChoice) {
         case "lm":
             console.log("LM model");
             return parseQuizLM(await generateQuizWithLM(text, numQuestions, questionLanguage, answerLanguage));
@@ -30,12 +30,13 @@ async function generateQuiz(text, numQuestions = 5, questionLanguage = "jp", ans
             console.log("OpenAI model");
             return parseQuizOpenAI(await generateQuizWithOpenAI(text, numQuestions, questionLanguage, answerLanguage));
         case "none":
-            // Change to directly inputting JSON
-            return parseQuizLM(await generateQuizWithLM(text, numQuestions, questionLanguage, answerLanguage));
+            // Directly take user's input as JSON
+            const userQuiz = JSON.parse(text);
+            return userQuiz;
         default:
             return parseQuizLM(await generateQuizWithLM(text, numQuestions, questionLanguage, answerLanguage));
-        
-        }
+
+    }
 }
 
 export { generateQuiz };
