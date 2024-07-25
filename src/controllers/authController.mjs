@@ -1,16 +1,12 @@
-import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.mjs';
-import { checkSchema, validationResult, matchedData } from 'express-validator';
+import { validationResult, matchedData } from 'express-validator';
 import { registerSchema } from '../utils/validationSchemas.mjs';
 import { config } from 'dotenv';
 config();
 
-const router = Router();
-
-// Register a new user
-router.post('/register', checkSchema(registerSchema), async (req, res) => {
+export const register = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -23,16 +19,14 @@ router.post('/register', checkSchema(registerSchema), async (req, res) => {
         await newUser.save();
         res.status(201).json({ message: 'Registration successful. Please log in.' });
     } catch (error) {
-        // Handle duplicate key error
-        if (error.code === 11000) {  
+        if (error.code === 11000) {  // Handle duplicate key error
             return res.status(409).json({ error: 'Username already exists' });
-          }
-          res.status(500).json({ error: error.message });
+        }
+        res.status(500).json({ error: error.message });
     }
-});
+};
 
-// Login
-router.post('/login', async (req, res) => {
+export const login = async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username });
@@ -48,16 +42,13 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
+};
 
-// Get users
-router.get('/users', async (req, res) => {
+export const getUsers = async (req, res) => {
     try {
         const users = await User.find();
         res.json(users);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
-
-export default router;
+};

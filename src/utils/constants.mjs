@@ -349,3 +349,10 @@ export const mockQuizzes = [
         ]
     }
 ]
+
+export const mockUsers = [
+    {
+        "username": "admin",
+        "password": "password",
+    },
+]

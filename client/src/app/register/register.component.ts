@@ -42,6 +42,7 @@ export class RegisterComponent {
       return;
     }
 
+    console.log('Register form:', this.registerForm.value);
     this.authService.register(this.registerForm.value).subscribe(
       (response) => {
         this.successMessage = response.message;

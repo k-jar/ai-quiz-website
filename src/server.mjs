@@ -2,9 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
-import quizzesRouter from './routes/quizzes.mjs';
-import authRouter from './routes/auth.mjs';
-import quizAttemptRouter from './routes/quizAttempt.mjs';
+import quizzesRouter from './routes/quizRoutes.mjs';
+import authRouter from './routes/authRoutes.mjs';
+import quizAttemptRouter from './routes/quizAttemptRoutes.mjs';
 
 import { config } from 'dotenv';
 config();
