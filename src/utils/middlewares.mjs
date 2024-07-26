@@ -1,4 +1,5 @@
 import { mockQuizzes } from "./constants.mjs";
+import jwt from "jsonwebtoken";
 
 export const resolveIndexByQuizId = (req, res, next) => {
     const { params: { id } } = req;
@@ -18,16 +19,21 @@ export const resolveIndexByQuizId = (req, res, next) => {
 
 // Verify jwt token
 export const verifyToken = (req, res, next) => {
-    const token = req.headers.authorization;
-    if (!token) {
-        res.status(401).send("No token provided");
-        return;
+    // Extract the token from the Authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).send("No token provided");
     }
+
+    // The token is usually sent in the format: "Bearer <token>"
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
+
     jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
         if (error) {
-            res.status(401).send("Token is invalid");
-            return;
+            return res.status(401).send("Token is invalid");
         }
+
+        // Attach the decoded user ID to the request object
         req.userId = decoded.userId;
         next();
     });

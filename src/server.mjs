@@ -13,9 +13,7 @@ const server = express();
 const PORT = process.env.PORT || 3000;
 const DATABASE_URL = process.env.DATABASE_URL;
 
-server.use(cors({
-    origin: 'http://localhost:4200'
-}));
+server.use(cors());
 server.use(express.json());
 
 server.use("/api", quizzesRouter);

@@ -22,11 +22,11 @@ try {
       }
     ],
     temperature: 0.7,
-    max_tokens: 500,
+    max_tokens: 1500,
     top_p: 1,
     response_format: { type: "json_object" },
   });
-    console.log(response)
+    console.log("OpenAI response:", response);
     return response.choices[0].message.content;
 } catch (error) {
     console.error('Error calling OpenAI API:', error);

@@ -20,7 +20,7 @@ export class AuthService {
   login(user: any): Observable<any> {
     return this.http.post(`${this.url}/login`, user).pipe(
       tap((response: any) => {
-        if (response.token) {
+        if (response.token && typeof window !== 'undefined' && window.localStorage) {
           localStorage.setItem('token', response.token);
           this.loggedIn.next(true);
         }
@@ -34,7 +34,10 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
   getCurrentUser(): any {
@@ -47,8 +50,10 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    this.loggedIn.next(false);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem('token');
+      this.loggedIn.next(false);
+    }
   }
 
   private hasToken(): boolean {

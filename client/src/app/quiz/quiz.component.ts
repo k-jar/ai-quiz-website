@@ -12,24 +12,34 @@ import { AuthService } from '../auth.service';
   selector: 'app-quiz',
   standalone: true,
   imports: [CommonModule, RouterLink, RouterOutlet,
-     MatCardModule, MatButtonModule],
+    MatCardModule, MatButtonModule],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.css'
 })
 export class QuizComponent {
   @Input() quiz!: Quiz;
   attempt: any = null;
+  loggedIn = false;
 
   constructor(private authService: AuthService, private quizAttemptService: QuizAttemptService) { }
 
-  ngOnInit() {
-    this.getLatestAttempt();
+  ngOnInit(): void {
+    this.authService.isLoggedIn.subscribe((loggedIn) => {
+      this.loggedIn = loggedIn;
+      if (loggedIn) {
+        this.getLatestAttempt();
+      }
+    });
   }
 
   getLatestAttempt() {
-    const userId = this.authService.getCurrentUser()?.userId;
-    this.quizAttemptService.getLatestAttempt(this.quiz._id, userId).subscribe(attempt => {
-      this.attempt = attempt; // Assign the entire attempt to attempt
-    });
+    this.quizAttemptService.getLatestAttempt(this.quiz._id).subscribe(
+      attempt => {
+        this.attempt = attempt; // Assign the entire attempt to attempt
+      },
+      error => {
+        console.error(error);
+      }
+    );
   }
 }

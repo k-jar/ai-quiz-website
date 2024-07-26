@@ -19,10 +19,12 @@ export async function createQuiz(req, res) {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { title, reading, questions } = matchedData(req);
+  const { title, reading, questions, createdBy } = matchedData(req);
+  console.log("matchedData", matchedData(req));
   const newQuiz = new Quiz({
     title,
     reading,
+    createdBy,
     questions,
   });
   await newQuiz.save();
@@ -70,6 +72,7 @@ export async function generateQuizRoute(req, res) {
   }
   const { text, numQuestions, questionLanguage, answerLanguage, modelChoice } = matchedData(req);
   const quiz = await generateQuiz(text, numQuestions, questionLanguage, answerLanguage, modelChoice);
+  console.log("Generated quiz", quiz);
   quiz.reading = text;
   res.json(quiz);
 }

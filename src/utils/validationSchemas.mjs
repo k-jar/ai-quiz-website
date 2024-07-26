@@ -17,6 +17,9 @@ export const addQuizSchema = {
             options: { min: 1 },
         },
     },
+    createdBy: {
+        exists: true,
+    },
     questions: {
         isArray: {
             options: { min: 1 },
