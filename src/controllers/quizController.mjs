@@ -24,8 +24,8 @@ export async function createQuiz(req, res) {
   const newQuiz = new Quiz({
     title,
     reading,
-    createdBy,
     questions,
+    createdBy
   });
   await newQuiz.save();
   res.status(201).send(newQuiz);
@@ -72,7 +72,5 @@ export async function generateQuizRoute(req, res) {
   }
   const { text, numQuestions, questionLanguage, answerLanguage, modelChoice } = matchedData(req);
   const quiz = await generateQuiz(text, numQuestions, questionLanguage, answerLanguage, modelChoice);
-  console.log("Generated quiz", quiz);
-  quiz.reading = text;
   res.json(quiz);
 }

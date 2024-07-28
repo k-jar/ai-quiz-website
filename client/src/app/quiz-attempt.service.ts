@@ -30,7 +30,6 @@ export class QuizAttemptService {
   // Get latest attempt for a quiz by a user
   getLatestAttempt(quizId: string): Observable<any> {
     const userId = this.authService.getCurrentUser()?.userId;
-    console.log("userid", userId);
     if (!userId) {
       return throwError(() => new Error('User not logged in'));
     }

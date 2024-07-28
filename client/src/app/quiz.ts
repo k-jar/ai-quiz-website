@@ -1,4 +1,5 @@
 export interface Quiz {
+    createdBy: any;
     _id: string;
     title: string;
     reading: string;

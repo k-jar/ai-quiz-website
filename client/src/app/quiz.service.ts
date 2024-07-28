@@ -40,9 +40,6 @@ export class QuizService {
 
     const headers = this.createAuthHeaders();
 
-    const createdBy = this.authService.getCurrentUser().userId;
-    console.log('Created by:', createdBy);
-
     // Body of the request
     const body = {
       text,
@@ -50,7 +47,6 @@ export class QuizService {
       questionLanguage,
       answerLanguage,
       modelChoice,
-      createdBy
     };
 
     return lastValueFrom(this.http.post<Quiz>(this.generateUrl, body, { headers }));
@@ -65,7 +61,11 @@ export class QuizService {
   // Generate and add quiz
   async generateAndAddQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string, modelChoice: string): Promise<Quiz> {
     const quiz = await this.generateQuiz(text, numQuestions, questionLanguage, answerLanguage, modelChoice);
-    console.log('Generated quiz:', quiz);
+    
+    const createdBy = this.authService.getCurrentUser().userId;
+    quiz.createdBy = createdBy;
+    console.log(quiz.createdBy);
+
     return await this.addQuiz(quiz);
   }
 }
