@@ -81,14 +81,14 @@ export const generateQuizSchema = {
     },
     'questionLanguage': {
       isIn: {
-        options: [['jp', 'en']],
-        errorMessage: 'questionLanguage must be "jp" or "en"',
+        options: [['Japanese', 'English']],
+        errorMessage: 'questionLanguage must be "Japanese" or "English"',
       },
     },
     'answerLanguage': {
       isIn: {
-        options: [['jp', 'en']],
-        errorMessage: 'answerLanguage must be "jp" or "en"',
+        options: [['Japanese', 'English']],
+        errorMessage: 'answerLanguage must be "Japanese" or "English"',
       },
     },
     'modelChoice': {

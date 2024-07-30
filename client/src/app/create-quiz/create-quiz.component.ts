@@ -10,11 +10,14 @@ import { QuizService } from '../quiz.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-create-quiz',
   standalone: true,
   imports: [
+    CommonModule,
     MatCardModule,
     MatListModule,
     MatGridListModule,
@@ -24,19 +27,45 @@ import { FormsModule } from '@angular/forms';
     MatTooltip,
     MatSelectModule,
     MatSliderModule,
-    FormsModule
+    FormsModule,
+    ClipboardModule
   ],
   templateUrl: './create-quiz.component.html',
   styleUrl: './create-quiz.component.css'
 })
 export class CreateQuizComponent {
-  modelChoice = 'lm';
-  numQuestions = 10;
-  questionLanguage = 'jp';
-  answerLanguage = 'jp';
+  modelChoice = 'none'; // Options: 'none', 'lm', 'openai'
+  numQuestions = 5;
+  questionLanguage = 'Japanese';
+  answerLanguage = 'Japanese';
   quizService: QuizService = inject(QuizService);  // This is used in the template (create-quiz.component.html
+  public prompt: string = '';
+  public reading: string = '';
+  public quizTemplate: string = `{
+    "title": "",
+    "reading": "",
+    "questions": [
+      {
+        "question": "",
+        "options": ["", "", "", ""],
+        "answer": ""
+      }
+    ]
+  }`;
 
   constructor() { }
+
+  ngOnInit() {
+    this.prompt = `Generate ${this.numQuestions} multiple choice quiz questions in ${this.questionLanguage} (options should be in ${this.answerLanguage}) from the provided text, formatted in JSON with title, questions, options, and answers. The JSON schema should be as follows: ${this.quizTemplate}`;
+  }
+
+  updatePrompt() {
+    this.prompt = `Generate ${this.numQuestions} multiple choice quiz questions in ${this.questionLanguage} (answers in ${this.answerLanguage}) from the provided text: ${this.reading}, formatted in JSON with title, questions, options, and answers. The JSON schema should be as follows: ${this.quizTemplate}`;
+  }
+
+  onSettingsChange() {
+    this.updatePrompt();
+  }
 
   submitText(text: string) {
     console.log('Text:', text, "NumQ:", this.numQuestions, "Qlang:", this.questionLanguage, "Alang:", this.answerLanguage, "Model:", this.modelChoice);
