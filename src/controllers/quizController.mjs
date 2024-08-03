@@ -41,7 +41,7 @@ export async function getQuizById(req, res) {
     if (!quiz) {
       return res.status(404).send("Quiz not found");
     }
-    return res.send(quiz);
+    return res.status(200).send(quiz.toObject());
   } catch (error) {
     return res.status(404).send("Server error");
   }
@@ -53,7 +53,7 @@ export async function updateQuiz(req, res) {
   if (!quiz) {
     return res.status(404).send("Quiz not found");
   }
-  res.send(quiz);
+  res.send(quiz.toObject());
 }
 
 export async function deleteQuiz(req, res) {
