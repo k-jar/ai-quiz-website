@@ -28,7 +28,7 @@ export async function createQuiz(req, res) {
     createdBy
   });
   await newQuiz.save();
-  res.status(201).send(newQuiz);
+  res.status(201).send(newQuiz.toObject());
 }
 
 export async function getQuizById(req, res) {
@@ -72,5 +72,5 @@ export async function generateQuizRoute(req, res) {
   }
   const { text, numQuestions, questionLanguage, answerLanguage, modelChoice } = matchedData(req);
   const quiz = await generateQuiz(text, numQuestions, questionLanguage, answerLanguage, modelChoice);
-  res.json(quiz);
+  res.status(200).json(quiz);
 }

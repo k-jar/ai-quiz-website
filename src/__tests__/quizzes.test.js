@@ -1,13 +1,17 @@
 import { getUsers } from '../controllers/authController';
-import { getQuizById } from '../controllers/quizController';
-import { getAllQuizzes } from '../controllers/quizController';
+import { getQuizById, getAllQuizzes, createQuiz, updateQuiz, deleteQuiz, generateQuizRoute } from '../controllers/quizController';
 import User from '../models/User';
 import Quiz from '../models/Quiz';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { mockQuizzes } from '../utils/constants.mjs';
+import { validationResult, matchedData } from 'express-validator';
+import { generateQuiz } from '../utils/aiClient.mjs';
 
 let mongoServer;
+
+jest.mock('express-validator');
+jest.mock('../utils/aiClient.mjs');
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
@@ -249,4 +253,330 @@ describe('get quizzes', () => {
     expect(mockResponse.send).toHaveBeenCalledWith([]);
   }
   );
+});
+
+describe('create quiz', () => {
+  it('should create a quiz when given valid data', async () => {
+    // Arrange
+    const user = new User({ username: 'test', password: 'test' });
+    await user.save();
+    
+    const mockRequest = {
+      body: {
+        title: 'Test Quiz',
+        reading: 'Test reading',
+        questions: [
+          {
+            question: 'Test question',
+            options: ['A', 'B', 'C'],
+            answer: 'A'
+          }
+        ],
+        createdBy: user._id
+      }
+    };
+    const mockResponse = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    };
+
+    validationResult.mockReturnValue({ isEmpty: () => true });
+    matchedData.mockReturnValue(mockRequest.body);
+
+    // Act
+    await createQuiz(mockRequest, mockResponse);
+
+    // Assert
+    const quiz = await Quiz.findOne({ title: 'Test Quiz' }).lean();
+    
+    expect(quiz).toMatchObject({
+      title: 'Test Quiz',
+      reading: 'Test reading',
+      questions: [
+        {
+          question: 'Test question',
+          options: ['A', 'B', 'C'],
+          answer: 'A'
+        }
+      ],
+      createdBy: user._id
+    });
+  }
+  );
+
+  it('should return 400 if the data is invalid', async () => {
+    // Arrange
+    const user = new User({ username: 'test', password: 'test' });
+    await user.save();
+
+    const mockRequest = {
+      body: {
+        title: 'Test Quiz',
+        reading: 'Test reading',
+        questions: [
+          {
+            question: 'Test question',
+            options: ['A', 'B', 'C'],
+            answer: 'A'
+          }
+        ],
+        createdBy: user._id
+      }
+    };
+
+    const mockResponse = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    };
+
+    validationResult.mockReturnValue({ isEmpty: () => false, array: () => [{ msg: 'Invalid data' }] });
+
+    // Act
+    await createQuiz(mockRequest, mockResponse);
+
+    // Assert
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+  }
+  );
+});
+
+describe('update quiz', () => {
+  it('should update a quiz when given valid data', async () => {
+    // Arrange
+    const user = new User({ username: 'test', password: 'test' });
+    await user.save();
+
+    const quiz = new Quiz({
+      title: 'Test Quiz',
+      reading: 'Test reading',
+      questions: [
+        {
+          question: 'Test question',
+          options: ['A', 'B', 'C'],
+          answer: 'A'
+        }
+      ],
+      createdBy: user._id
+    });
+    await quiz.save();
+
+    const mockRequest = {
+      params: { id: quiz._id.toString() },
+      body: {
+        title: 'Updated Quiz',
+        reading: 'Updated reading',
+        questions: [
+          {
+            question: 'Updated question',
+            options: ['A', 'B', 'C'],
+            answer: 'A'
+          }
+        ]
+      }
+    };
+    const mockResponse = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    };
+
+    // Act
+    await updateQuiz(mockRequest, mockResponse);
+    
+    // Assert
+    const updatedQuiz = await Quiz.findById(quiz._id).lean();
+
+    expect(updatedQuiz).toMatchObject({
+      title: 'Updated Quiz',
+      reading: 'Updated reading',
+      questions: [
+        {
+          question: 'Updated question',
+          options: ['A', 'B', 'C'],
+          answer: 'A'
+        }
+      ],
+      createdBy: user._id
+    });
+  }
+  );
+
+  it('should return 404 if the quiz is not found', async () => {
+    // Arrange
+    const mockRequest = {
+      params: { id: new mongoose.Types.ObjectId().toString() },
+      body: {
+        title: 'Updated Quiz',
+        reading: 'Updated reading',
+        questions: [
+          {
+            question: 'Updated question',
+            options: ['A', 'B', 'C'],
+            answer: 'A'
+          }
+        ]
+      }
+    };
+    const mockResponse = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    };
+
+    // Mock the Quiz model to return null
+    const mockFindByIdAndUpdate = jest.spyOn(Quiz, 'findByIdAndUpdate').mockResolvedValue(null);
+
+    // Act
+    await updateQuiz(mockRequest, mockResponse);
+
+    // Assert
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
+    expect(mockResponse.send).toHaveBeenCalledWith('Quiz not found');
+
+    // Cleanup
+    mockFindByIdAndUpdate.mockRestore();
+  }
+  );
+});
+
+describe('delete quiz', () => {
+  it('should delete a quiz when given a valid id', async () => {
+    // Arrange
+    const user = new User({ username: 'test', password: 'test' });
+    await user.save();
+
+    const quiz = new Quiz({
+      title: 'Test Quiz',
+      reading: 'Test reading',
+      questions: [
+        {
+          question: 'Test question',
+          options: ['A', 'B', 'C'],
+          answer: 'A'
+        }
+      ],
+      createdBy: user._id
+    });
+    await quiz.save();
+
+    const mockRequest = {
+      params: { id: quiz._id.toString() }
+    };
+    const mockResponse = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    };
+
+    // Act
+    await deleteQuiz(mockRequest, mockResponse);
+
+    // Assert
+    const deletedQuiz = await Quiz.findById(quiz._id);
+    
+    expect(deletedQuiz).toBeNull();
+  }
+  );
+
+  it('should return 404 if the quiz is not found', async () => {
+    // Arrange
+    const mockRequest = {
+      params: { id: new mongoose.Types.ObjectId().toString() }
+    };
+    const mockResponse = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    };
+
+    // Mock the Quiz model to return null
+    const mockFindByIdAndDelete = jest.spyOn(Quiz, 'findByIdAndDelete').mockResolvedValue(null);
+
+    // Act
+    await deleteQuiz(mockRequest, mockResponse);
+
+    // Assert
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
+    expect(mockResponse.send).toHaveBeenCalledWith('Quiz not found');
+
+    // Cleanup
+    mockFindByIdAndDelete.mockRestore();
+  }
+  );
+});
+
+describe('generateQuizRoute', () => {
+  it('should generate a quiz when given valid data', async () => {
+    // Arrange
+    const mockQuiz = { questions: [{ question: 'Test question', answer: 'A' }] };
+    
+    validationResult.mockReturnValue({ isEmpty: () => true });
+    matchedData.mockReturnValue({
+      text: 'Sample text',
+      numQuestions: 1,
+      questionLanguage: 'en',
+      answerLanguage: 'en',
+      modelChoice: 'default'
+    });
+    generateQuiz.mockResolvedValue(mockQuiz);
+
+    const mockRequest = {
+      body: {
+        text: 'Sample text',
+        numQuestions: 1,
+        questionLanguage: 'en',
+        answerLanguage: 'en',
+        modelChoice: 'default'
+      }
+    };
+    const mockResponse = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    };
+
+    // Act
+    await generateQuizRoute(mockRequest, mockResponse);
+
+    // Assert
+    expect(validationResult).toHaveBeenCalledWith(mockRequest);
+    expect(matchedData).toHaveBeenCalledWith(mockRequest);
+    expect(generateQuiz).toHaveBeenCalledWith(
+      'Sample text',
+      1,
+      'en',
+      'en',
+      'default'
+    );
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith(mockQuiz);
+  });
+
+  it('should return 400 if the data is invalid', async () => {
+    // Arrange
+    validationResult.mockReturnValue({ isEmpty: () => false, array: () => [{ msg: 'Invalid data' }] });
+
+    const mockRequest = {
+      body: {
+        text: 'Sample text',
+        numQuestions: 1,
+        questionLanguage: 'en',
+        answerLanguage: 'en',
+        modelChoice: 'default'
+      }
+    };
+    const mockResponse = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    };
+
+    // Act
+    await generateQuizRoute(mockRequest, mockResponse);
+
+    // Assert
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+  });
 });
