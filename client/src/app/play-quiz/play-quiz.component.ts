@@ -37,7 +37,7 @@ export class PlayQuizComponent {
 
   ngOnInit() {
     this.quizId = this.route.snapshot.params['id'];
-    this.quizService.getQuizById(this.quizId).then((quiz) => {
+    this.quizService.getQuizById(this.quizId).subscribe((quiz) => {
       this.quiz = quiz;
       if (quiz) {
         this.userAnswers = new Array(quiz.questions.length).fill('');

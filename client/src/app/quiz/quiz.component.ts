@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { QuizAttemptService } from '../quiz-attempt.service';
 import { AuthService } from '../auth.service';
 

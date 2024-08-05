@@ -29,15 +29,22 @@ export class HomeComponent {
   filteredQuizList: Quiz[] = [];
   user: any = this.authService.getCurrentUser();
 
-  constructor() {
-    this.quizService.getAllQuizzes().then((quizList: Quiz[]) => {
-      this.originalQuizList = quizList;
-      if (this.user) {
-        this.myQuizList = quizList.filter(quiz => quiz.createdBy === this.user.userId);
-        this.otherQuizList = quizList.filter(quiz => quiz.createdBy !== this.user.userId);
-      } else {
-        this.otherQuizList = quizList;
-      }
+  ngOnInit() {
+    this.quizService.getAllQuizzes().subscribe((quizList: Quiz[]) => {
+      const userIds = quizList.map(quiz => quiz.createdBy);
+      this.quizService.getUsernames(userIds).subscribe(users => {
+        const userMap = new Map(users.map(user => [user._id, user.username]));
+
+        const quizzesWithUsernames = quizList.map(quiz => ({
+          ...quiz,
+          username: userMap.get(quiz.createdBy)
+        }));
+
+        if (this.user) {
+          this.myQuizList = quizzesWithUsernames.filter(quiz => quiz.createdBy === this.user.userId);
+          this.otherQuizList = quizzesWithUsernames.filter(quiz => quiz.createdBy !== this.user.userId);
+        }
+      });
     });
   }
 

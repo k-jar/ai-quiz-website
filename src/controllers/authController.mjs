@@ -52,3 +52,14 @@ export const getUsers = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+// Fetch usernames for ids in batch
+export const getUsernames = async (req, res) => {
+    const { userIds } = req.body;
+    try {
+      const users = await User.find({ _id: { $in: userIds } }, '_id username');
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };

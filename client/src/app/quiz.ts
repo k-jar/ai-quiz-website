@@ -4,6 +4,7 @@ export interface Quiz {
     title: string;
     reading: string;
     questions: Question[];
+    username: string;
 }
 
 interface Question {

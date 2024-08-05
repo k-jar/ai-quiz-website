@@ -5,6 +5,7 @@
           <mat-card-title>{{ quiz.title }}</mat-card-title>
           <div *ngIf="loggedIn; else notLoggedIn">
             <mat-card-subtitle>{{ quiz.questions.length }} questions</mat-card-subtitle>
+            <mat-card-subtitle>Created by: {{ quiz.username }}</mat-card-subtitle>
             <mat-card-subtitle>
               Last Attempt:
               <span *ngIf="attempt; else notAttempted">{{ attempt.attemptDate | date }} | Last Score: {{ attempt.score }}</span>
@@ -13,6 +14,7 @@
           </div>
           <ng-template #notLoggedIn>
             <mat-card-subtitle>{{ quiz.questions.length }} questions</mat-card-subtitle>
+            <mat-card-subtitle>Created by: {{ quiz.username }}</mat-card-subtitle>
           </ng-template>
         </mat-card-title-group>
       </mat-card-header>

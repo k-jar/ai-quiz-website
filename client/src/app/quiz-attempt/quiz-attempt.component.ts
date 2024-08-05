@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { QuizService } from '../quiz.service';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { forkJoin, tap } from 'rxjs';
 
 @Component({
   selector: 'app-quiz-attempt',
@@ -28,14 +29,15 @@ export class QuizAttemptComponent {
     }
   }
 
-getAttempts() {
-  this.quizAttemptService.getAttemptsByUserId(this.userId).subscribe((attempts: any[]) => {
-    this.attempts = attempts;
-    this.attempts.forEach(attempt => {
-      this.quizService.getQuizById(attempt.quiz).then(quiz => {
-        attempt.quizData = quiz;
-      });
+  getAttempts() {
+    this.quizAttemptService.getAttemptsByUserId(this.userId).subscribe((attempts: any[]) => {
+      const quizObservables = attempts.map(attempt => 
+        this.quizService.getQuizById(attempt.quiz).pipe(
+          tap(quiz => attempt.quizData = quiz)
+        )
+      );
+  
+      forkJoin(quizObservables).subscribe();
     });
-  });
-}
+  }
 }
