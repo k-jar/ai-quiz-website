@@ -1,18 +1,46 @@
 <h2>All Quizzes</h2>
 <section class="search">
+  <form (submit)="filterQuizzes(filter.value); $event.preventDefault()">
     <mat-form-field class="search-field">
       <mat-label>Search Quizzes</mat-label>
       <input matInput type="text" #filter />
     </mat-form-field>
-    <button mat-button class="search-button" type="button" (click)="filterQuizzes(filter.value)">
+    <button mat-button class="search-button" type="submit">
       <mat-icon>search</mat-icon>
     </button>
+  </form>
 </section>
 
-<section class="results">
-  <mat-card appearance="outlined">
-    <div *ngFor="let quiz of quizList">
-      <app-quiz [quiz]="quiz"></app-quiz>
-    </div>
-  </mat-card>
-</section>
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Quizzes Created by Me <span class="quiz-count">{{myQuizList.length}}</span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <section class="results">
+      <mat-card appearance="outlined">
+        <div *ngFor="let quiz of myQuizList">
+          <app-quiz [quiz]="quiz"></app-quiz>
+        </div>
+      </mat-card>
+    </section>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Quizzes Created by Others <span class="quiz-count">{{otherQuizList.length}}</span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <section class="results">
+      <mat-card appearance="outlined">
+        <div *ngFor="let quiz of otherQuizList">
+          <app-quiz [quiz]="quiz"></app-quiz>
+        </div>
+      </mat-card>
+    </section>
+  </mat-expansion-panel>
+</mat-accordion>

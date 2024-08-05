@@ -9,35 +9,53 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../auth.service';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, QuizComponent, MatCardModule, MatListModule, 
-    MatGridListModule, MatInputModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, QuizComponent, MatCardModule, MatListModule,
+    MatGridListModule, MatInputModule, MatButtonModule, MatIconModule, MatExpansionModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  quizList: Quiz[] = [];
+  originalQuizList: Quiz[] = [];
+  myQuizList: Quiz[] = [];
+  otherQuizList: Quiz[] = [];
   quizService: QuizService = inject(QuizService);
+  authService: AuthService = inject(AuthService);
   filteredQuizList: Quiz[] = [];
+  user: any = this.authService.getCurrentUser();
 
   constructor() {
     this.quizService.getAllQuizzes().then((quizList: Quiz[]) => {
-      this.quizList = quizList;
-      this.filteredQuizList = quizList;  // This is iterated over in the template
+      this.originalQuizList = quizList;
+      if (this.user) {
+        this.myQuizList = quizList.filter(quiz => quiz.createdBy === this.user.userId);
+        this.otherQuizList = quizList.filter(quiz => quiz.createdBy !== this.user.userId);
+      } else {
+        this.otherQuizList = quizList;
+      }
     });
   }
 
   filterQuizzes(searchTerm: string) {
+    let filteredQuizList = [];
     if (!searchTerm) {
-      this.filteredQuizList = this.quizList;
-      return;
+      filteredQuizList = [...this.originalQuizList];
+    } else {
+      filteredQuizList = this.originalQuizList.filter((quiz) => {
+        return quiz.title.toLowerCase().includes(searchTerm.toLowerCase());
+      });
     }
 
-    this.filteredQuizList = this.quizList.filter((quiz) => {
-      return quiz.title.toLowerCase().includes(searchTerm.toLowerCase());
-    });
+    if (this.user) {
+      this.myQuizList = filteredQuizList.filter(quiz => quiz.createdBy === this.user.userId);
+      this.otherQuizList = filteredQuizList.filter(quiz => quiz.createdBy !== this.user.userId);
+    } else {
+      this.otherQuizList = filteredQuizList;
+    }
   }
 }

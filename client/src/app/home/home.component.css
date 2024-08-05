@@ -3,12 +3,35 @@ h2 {
     font-size: 1.5rem;
 }
 
-.search{
+.search {
+    margin-bottom: 16px;
+}
+
+.search form {
+    display: flex;
     align-items: center;
 }
 
-.header{
+.search-field {
+    flex-grow: 1;
+}
+
+.search-button {
+    margin-left: 8px;
+}
+
+.header {
     display: flex;
     margin-bottom: 20px;
     font-size: x-large;
+}
+
+.quiz-count {
+    font-weight: normal;
+    margin-left: 8px;
+    color: #666;
+}
+
+.results {
+    margin-top: 16px;
 }
