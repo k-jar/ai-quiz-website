@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class QuizService {
 
-  url = 'http://localhost:3000/api/quizzes';
+  quizUrl = 'http://localhost:3000/api/quizzes';
   generateUrl = 'http://localhost:3000/api/generate-quiz';
   authUrl = 'http://localhost:3000/api/auth';
 
@@ -29,11 +29,11 @@ export class QuizService {
   }
 
   getAllQuizzes(): Observable<Quiz[]> {
-    return this.http.get<Quiz[]>(this.url);
+    return this.http.get<Quiz[]>(this.quizUrl);
   }
 
   getQuizById(id: string): Observable<Quiz> {
-    return this.http.get<Quiz>(`${this.url}/${id}`);
+    return this.http.get<Quiz>(`${this.quizUrl}/${id}`);
   }
 
   getUsernames(userIds : string[]): Observable<any[]> {
@@ -61,7 +61,7 @@ export class QuizService {
   // Add quiz
   addQuiz(quiz: Quiz): Observable<Quiz> {
     const headers = this.createAuthHeaders();
-    return this.http.post<Quiz>(this.url, quiz, { headers });
+    return this.http.post<Quiz>(this.quizUrl, quiz, { headers });
   }
 
   // Generate and add quiz
@@ -74,5 +74,19 @@ export class QuizService {
         return this.addQuiz(quiz);
       })
     );
+  }
+
+  deleteQuiz(quizId: string, token: string): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    };
+
+    return this.http.delete(`${this.quizUrl}/${quizId}`, httpOptions);
+  }
+
+  updateQuiz(quizId: string, quizData: Partial<Quiz>): Observable<any> {
+    return this.http.patch(`${this.quizUrl}/${quizId}`, quizData);
   }
 }
