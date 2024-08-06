@@ -4,7 +4,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { PlayQuizComponent } from './play-quiz/play-quiz.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { authGuard } from './auth.guard';
+import { AuthGuard } from './auth.guard';
 import { QuizAttemptComponent } from './quiz-attempt/quiz-attempt.component';
 
 export const routes: Routes = [
@@ -38,7 +38,7 @@ export const routes: Routes = [
     },
     {
         path: 'quiz-attempts',
-        component: QuizAttemptComponent,
+        component: QuizAttemptComponent, canActivate: [AuthGuard],
         title: 'Quiz attempts',
     }
 ];

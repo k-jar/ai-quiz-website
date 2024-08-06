@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="userId; else notLoggedIn">
     <h2>Quiz Attempts</h2>
     <mat-card *ngFor="let attempt of attempts">
         <mat-card-header>
@@ -10,3 +10,9 @@
         </mat-card-content>
     </mat-card>
 </div>
+
+<ng-template #notLoggedIn>
+    <div>
+        <h2>You need to login to see quiz attempts</h2>
+    </div>
+</ng-template>

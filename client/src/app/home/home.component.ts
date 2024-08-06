@@ -43,6 +43,8 @@ export class HomeComponent {
         if (this.user) {
           this.myQuizList = quizzesWithUsernames.filter(quiz => quiz.createdBy === this.user.userId);
           this.otherQuizList = quizzesWithUsernames.filter(quiz => quiz.createdBy !== this.user.userId);
+        } else {
+          this.otherQuizList = quizzesWithUsernames;
         }
       });
     });
