@@ -28,17 +28,17 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     MatSelectModule,
     MatSliderModule,
     FormsModule,
-    ClipboardModule
+    ClipboardModule,
   ],
   templateUrl: './create-quiz.component.html',
-  styleUrl: './create-quiz.component.css'
+  styleUrl: './create-quiz.component.css',
 })
 export class CreateQuizComponent {
   modelChoice = 'none'; // Options: 'none', 'lm', 'openai'
   numQuestions = 5;
   questionLanguage = 'Japanese';
   answerLanguage = 'Japanese';
-  quizService: QuizService = inject(QuizService);  // This is used in the template (create-quiz.component.html
+  quizService: QuizService = inject(QuizService);
   public prompt: string = '';
   public reading: string = '';
   public quizTemplate: string = `{
@@ -48,12 +48,12 @@ export class CreateQuizComponent {
       {
         "question": "",
         "options": ["", "", "", ""],
-        "answer": ""
+        "answer": number // index of correct answer in options
       }
     ]
   }`;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.prompt = `Generate ${this.numQuestions} multiple choice quiz questions in ${this.questionLanguage} (options should be in ${this.answerLanguage}) from the provided text, formatted in JSON with title, questions, options, and answers. The JSON schema should be as follows: ${this.quizTemplate}`;
@@ -68,7 +68,33 @@ export class CreateQuizComponent {
   }
 
   submitText(text: string) {
-    console.log('Text:', text, "NumQ:", this.numQuestions, "Qlang:", this.questionLanguage, "Alang:", this.answerLanguage, "Model:", this.modelChoice);
-    this.quizService.generateAndAddQuiz(text, this.numQuestions, this.questionLanguage, this.answerLanguage, this.modelChoice);
+    console.log(
+      'Text:',
+      text,
+      'NumQ:',
+      this.numQuestions,
+      'Qlang:',
+      this.questionLanguage,
+      'Alang:',
+      this.answerLanguage,
+      'Model:',
+      this.modelChoice
+    );
+    this.quizService
+      .generateAndAddQuiz(
+        text,
+        this.numQuestions,
+        this.questionLanguage,
+        this.answerLanguage,
+        this.modelChoice
+      )
+      .subscribe(
+        (quiz) => {
+          console.log('Quiz added:', quiz);
+        },
+        (error) => {
+          console.error('Error:', error);
+        }
+      );
   }
 }

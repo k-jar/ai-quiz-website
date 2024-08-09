@@ -42,8 +42,6 @@ export class QuizService {
 
   // Generate quiz
   generateQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string, modelChoice: string): Observable<Quiz> {
-    console.log('Generating quiz for text:', text);
-
     const headers = this.createAuthHeaders();
 
     // Body of the request
@@ -70,23 +68,20 @@ export class QuizService {
       switchMap(quiz => {
         const createdBy = this.authService.getCurrentUser().userId;
         quiz.createdBy = createdBy;
-        console.log(quiz.createdBy);
         return this.addQuiz(quiz);
       })
     );
   }
 
   deleteQuiz(quizId: string, token: string): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ${token}`
-      })
-    };
+    const headers = this.createAuthHeaders();
 
-    return this.http.delete(`${this.quizUrl}/${quizId}`, httpOptions);
+    return this.http.delete(`${this.quizUrl}/${quizId}`, { headers });
   }
 
   updateQuiz(quizId: string, quizData: Partial<Quiz>): Observable<any> {
-    return this.http.patch(`${this.quizUrl}/${quizId}`, quizData);
+    const headers = this.createAuthHeaders();
+
+    return this.http.patch(`${this.quizUrl}/${quizId}`, quizData, { headers });
   }
 }

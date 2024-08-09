@@ -25,7 +25,7 @@
           <mat-panel-description> {{ userAnswers[i] ? 'Answered' : 'Not answered' }}</mat-panel-description>
         </mat-expansion-panel-header>
         <mat-radio-group [(ngModel)]="userAnswers[i]" [disabled]="quizSubmitted">
-          <mat-radio-button *ngFor="let option of question.options" [value]="option">
+          <mat-radio-button *ngFor="let option of question.options; let j = index" [value]="j">
             {{ option }}
           </mat-radio-button>
         </mat-radio-group>

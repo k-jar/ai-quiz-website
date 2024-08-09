@@ -26,7 +26,7 @@ export class PlayQuizComponent {
   quizAttemptService: QuizAttemptService = inject(QuizAttemptService);
   quiz: Quiz | undefined;
   showQuestions: boolean = false;
-  userAnswers: string[] = [];
+  userAnswers: number[] = [];
   score: number = 0;
   questionResults: boolean[] = [];
   quizSubmitted: boolean = false;
@@ -40,7 +40,7 @@ export class PlayQuizComponent {
     this.quizService.getQuizById(this.quizId).subscribe((quiz) => {
       this.quiz = quiz;
       if (quiz) {
-        this.userAnswers = new Array(quiz.questions.length).fill('');
+        this.userAnswers = new Array(quiz.questions.length).fill(-1);
       }
     });
   }
@@ -56,7 +56,7 @@ export class PlayQuizComponent {
     this.quizSubmitted = true;
     const correctAnswers = this.quiz.questions.map(q => q.answer);
     this.questionResults = this.userAnswers.map((answer, index) => answer === correctAnswers[index]);
-    this.score = this.userAnswers.filter((answer, index) => answer === correctAnswers[index]).length;
+    this.score = this.questionResults.filter(result => result).length;
 
     this.submitQuizAttempt();
   }

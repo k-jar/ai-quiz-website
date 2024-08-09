@@ -10,5 +10,5 @@ export interface Quiz {
 interface Question {
     question: string;
     options: string[];
-    answer: string;
+    answer: number;
 }

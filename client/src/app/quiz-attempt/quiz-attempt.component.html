@@ -1,5 +1,5 @@
 <div *ngIf="userId; else notLoggedIn">
-    <h2>Quiz Attempts</h2>
+    <h1>Quiz Attempts</h1>
     <mat-card *ngFor="let attempt of attempts">
         <mat-card-header>
             <mat-card-title>{{ attempt.quizData?.title }}</mat-card-title>

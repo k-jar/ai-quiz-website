@@ -1,14 +1,16 @@
-import Quiz from '../models/Quiz.mjs';
-import mongoose from 'mongoose';
-import { validationResult, matchedData } from 'express-validator';
-import { generateQuiz } from '../utils/aiClient.mjs';
+import Quiz from "../models/Quiz.mjs";
+import mongoose from "mongoose";
+import { validationResult, matchedData } from "express-validator";
+import { generateQuiz } from "../utils/aiClient.mjs";
 
 export async function getAllQuizzes(req, res) {
   const {
     query: { filter, value },
   } = req;
   if (filter && value) {
-    const filteredQuizzes = await Quiz.find({ [filter]: new RegExp(value, "i") });
+    const filteredQuizzes = await Quiz.find({
+      [filter]: new RegExp(value, "i"),
+    });
     return res.send(filteredQuizzes);
   }
   res.send(await Quiz.find());
@@ -20,12 +22,11 @@ export async function createQuiz(req, res) {
     return res.status(400).json({ errors: errors.array() });
   }
   const { title, reading, questions, createdBy } = matchedData(req);
-  console.log("matchedData", matchedData(req));
   const newQuiz = new Quiz({
     title,
     reading,
     questions,
-    createdBy
+    createdBy,
   });
   await newQuiz.save();
   res.status(201).send(newQuiz.toObject());
@@ -58,11 +59,12 @@ export async function updateQuiz(req, res) {
 
 export async function deleteQuiz(req, res) {
   const { id } = req.params;
-  const quiz = await Quiz.findByIdAndDelete(id);
+  const quiz = await Quiz.findById(id);
   if (!quiz) {
-    return res.status(404).send("Quiz not found");
+    return res.status(404).json({ message: "Quiz not found" });
   }
-  res.status(200).send("Quiz deleted successfully");
+  await Quiz.findByIdAndDelete(id);
+  res.status(200).json({ message: "Quiz deleted successfully" });
 }
 
 export async function generateQuizRoute(req, res) {
@@ -70,7 +72,14 @@ export async function generateQuizRoute(req, res) {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { text, numQuestions, questionLanguage, answerLanguage, modelChoice } = matchedData(req);
-  const quiz = await generateQuiz(text, numQuestions, questionLanguage, answerLanguage, modelChoice);
+  const { text, numQuestions, questionLanguage, answerLanguage, modelChoice } =
+    matchedData(req);
+  const quiz = await generateQuiz(
+    text,
+    numQuestions,
+    questionLanguage,
+    answerLanguage,
+    modelChoice
+  );
   res.status(200).json(quiz);
 }

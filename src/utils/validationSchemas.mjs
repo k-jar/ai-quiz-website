@@ -57,8 +57,8 @@ export const addQuizSchema = {
         exists: {
             errorMessage: 'Answer is required',
         },
-        isString: {
-            errorMessage: 'Answer must be a string',
+        isInt: {
+            errorMessage: 'Answer must be an integer',
         },
         isLength: {
             options: { min: 1 },

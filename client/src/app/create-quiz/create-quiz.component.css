@@ -9,11 +9,6 @@
     padding: 10px;
 }
 
-h2 {
-    margin-top: 20px;
-    font-size: 1.5rem;
-}
-
 .input-container {
     display: flex;
     flex-direction: column;

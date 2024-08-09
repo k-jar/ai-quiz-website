@@ -41,7 +41,7 @@ so it is not included in the quizSchema.
 //                         type: "array",
 //                         items: { type: "string" }
 //                     },
-//                     answer: { type: "string" }
+//                     answer: { type: "number" } // Index of the correct answer in the options array
 //                 },
 //                 required: ["question", "options", "answer"]
 //             },
@@ -57,408 +57,130 @@ type QuizSchema = {
     questions: {
         question: string;
         options: string[];
-        answer: string;
+        answer: number; // Index of the correct answer in the options array
     }[];
 };
 `;
 
 export const mockQuizzes = [
     {
-        "id": 1,
-        "title": "General Knowledge Quiz",
-        "reading": "Placeholder reading extract",
+        "title": "Test Quiz",
+        "reading": "Test reading",
         "questions": [
-            {
-                "question": "What is the capital of France?",
-                "options": [
-                    "Paris",
-                    "London",
-                    "Berlin",
-                    "Madrid"
-                ],
-                "answer": "Paris"
-            },
-            {
-                "question": "Which planet is known as the Red Planet?",
-                "options": [
-                    "Earth",
-                    "Mars",
-                    "Jupiter",
-                    "Saturn"
-                ],
-                "answer": "Mars"
-            },
-            {
-                "question": "Who wrote 'To Kill a Mockingbird'?",
-                "options": [
-                    "Harper Lee",
-                    "Mark Twain",
-                    "Ernest Hemingway",
-                    "F. Scott Fitzgerald"
-                ],
-                "answer": "Harper Lee"
-            },
-            {
-                "question": "What is the largest mammal in the world?",
-                "options": [
-                    "Elephant",
-                    "Blue Whale",
-                    "Great White Shark",
-                    "Giraffe"
-                ],
-                "answer": "Blue Whale"
-            },
-            {
-                "question": "Which element has the chemical symbol 'O'?",
-                "options": [
-                    "Oxygen",
-                    "Gold",
-                    "Osmium",
-                    "Oxide"
-                ],
-                "answer": "Oxygen"
-            }
-        ]
+          {
+            "question": "Test question",
+            "options": ["A", "B", "C"],
+            "answer": 0
+          }
+        ],
+      },
+    {
+      "title": "General Knowledge Quiz",
+      "reading": "Placeholder reading",
+      "questions": [
+        {
+          "question": "What is the capital of France?",
+          "options": ["Paris", "London", "Berlin", "Madrid"],
+          "answer": 0
+        },
+        {
+          "question": "Which planet is known as the Red Planet?",
+          "options": ["Earth", "Mars", "Jupiter", "Venus"],
+          "answer": 1
+        },
+        {
+          "question": "Who wrote 'Romeo and Juliet'?",
+          "options": ["William Shakespeare", "Charles Dickens", "J.K. Rowling", "Ernest Hemingway"],
+          "answer": 0
+        }
+      ]
     },
     {
-        "id": 2,
-        "title": "Science Quiz",
-        "reading": "Placeholder reading extract",
-        "questions": [
-            {
-                "question": "What is the chemical formula for water?",
-                "options": [
-                    "H2O",
-                    "CO2",
-                    "O2",
-                    "H2"
-                ],
-                "answer": "H2O"
-            },
-            {
-                "question": "What force keeps us on the ground?",
-                "options": [
-                    "Magnetism",
-                    "Friction",
-                    "Gravity",
-                    "Inertia"
-                ],
-                "answer": "Gravity"
-            },
-            {
-                "question": "What is the speed of light?",
-                "options": [
-                    "299,792 km/s",
-                    "150,000 km/s",
-                    "1,080,000 km/h",
-                    "300,000 km/h"
-                ],
-                "answer": "299,792 km/s"
-            },
-            {
-                "question": "Who developed the theory of relativity?",
-                "options": [
-                    "Isaac Newton",
-                    "Albert Einstein",
-                    "Galileo Galilei",
-                    "Nikola Tesla"
-                ],
-                "answer": "Albert Einstein"
-            },
-            {
-                "question": "What is the main gas found in the air we breathe?",
-                "options": [
-                    "Oxygen",
-                    "Hydrogen",
-                    "Nitrogen",
-                    "Carbon Dioxide"
-                ],
-                "answer": "Nitrogen"
-            }
-        ]
+      "title": "Science Quiz",
+      "reading": "Placeholder reading",
+      "questions": [
+        {
+          "question": "What is the chemical symbol for water?",
+          "options": ["H2O", "O2", "CO2", "NaCl"],
+          "answer": 0
+        },
+        {
+          "question": "What planet is known as the Earth's twin?",
+          "options": ["Mars", "Venus", "Jupiter", "Saturn"],
+          "answer": 1
+        },
+        {
+          "question": "What gas do plants absorb from the atmosphere?",
+          "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+          "answer": 2
+        }
+      ]
     },
     {
-        "id": 3,
-        "title": "History Quiz",
-        "reading": "Placeholder reading extract",
-        "questions": [
-            {
-                "question": "Who was the first President of the United States?",
-                "options": [
-                    "George Washington",
-                    "Abraham Lincoln",
-                    "Thomas Jefferson",
-                    "John Adams"
-                ],
-                "answer": "George Washington"
-            },
-            {
-                "question": "In what year did World War II end?",
-                "options": [
-                    "1940",
-                    "1942",
-                    "1945",
-                    "1948"
-                ],
-                "answer": "1945"
-            },
-            {
-                "question": "Which empire was known as the 'Empire on which the sun never sets'?",
-                "options": [
-                    "Roman Empire",
-                    "British Empire",
-                    "Ottoman Empire",
-                    "Mongol Empire"
-                ],
-                "answer": "British Empire"
-            },
-            {
-                "question": "Who was known as the 'Mad Monk' of Russia?",
-                "options": [
-                    "Ivan the Terrible",
-                    "Rasputin",
-                    "Peter the Great",
-                    "Vladimir Lenin"
-                ],
-                "answer": "Rasputin"
-            },
-            {
-                "question": "Which ancient civilization built the Machu Picchu?",
-                "options": [
-                    "Maya",
-                    "Inca",
-                    "Aztec",
-                    "Olmec"
-                ],
-                "answer": "Inca"
-            }
-        ]
+      "title": "History Quiz",
+      "reading": "Placeholder reading",
+      "questions": [
+        {
+          "question": "Who was the first President of the United States?",
+          "options": ["George Washington", "Abraham Lincoln", "Thomas Jefferson", "John Adams"],
+          "answer": 0
+        },
+        {
+          "question": "In which year did World War II end?",
+          "options": ["1945", "1939", "1965", "1918"],
+          "answer": 0
+        },
+        {
+          "question": "What ancient civilization built the pyramids?",
+          "options": ["Romans", "Greeks", "Egyptians", "Mayans"],
+          "answer": 2
+        }
+      ]
     },
     {
-        "id": 4,
-        "title": "Literature Quiz",
-        "reading": "Placeholder reading extract",
-        "questions": [
-            {
-                "question": "Who wrote 'Pride and Prejudice'?",
-                "options": [
-                    "Jane Austen",
-                    "Charlotte Bronte",
-                    "Emily Dickinson",
-                    "Mary Shelley"
-                ],
-                "answer": "Jane Austen"
-            },
-            {
-                "question": "What is the name of the wizarding school in 'Harry Potter'?",
-                "options": [
-                    "Hogwarts",
-                    "Beauxbatons",
-                    "Durmstrang",
-                    "Ilvermorny"
-                ],
-                "answer": "Hogwarts"
-            },
-            {
-                "question": "In which novel would you find the character 'Atticus Finch'?",
-                "options": [
-                    "To Kill a Mockingbird",
-                    "The Great Gatsby",
-                    "1984",
-                    "Moby-Dick"
-                ],
-                "answer": "To Kill a Mockingbird"
-            },
-            {
-                "question": "Who is the author of '1984' and 'Animal Farm'?",
-                "options": [
-                    "George Orwell",
-                    "Aldous Huxley",
-                    "Ray Bradbury",
-                    "Jules Verne"
-                ],
-                "answer": "George Orwell"
-            },
-            {
-                "question": "Which Shakespeare play features the character 'Prospero'?",
-                "options": [
-                    "Hamlet",
-                    "The Tempest",
-                    "Macbeth",
-                    "Othello"
-                ],
-                "answer": "The Tempest"
-            }
-        ]
+      "title": "Math Quiz",
+      "reading": "Placeholder reading",
+      "questions": [
+        {
+          "question": "What is the value of Pi (π) rounded to two decimal places?",
+          "options": ["3.14", "2.72", "1.62", "1.41"],
+          "answer": 0
+        },
+        {
+          "question": "What is 9 multiplied by 8?",
+          "options": ["72", "64", "81", "56"],
+          "answer": 0
+        },
+        {
+          "question": "What is the square root of 144?",
+          "options": ["10", "12", "14", "16"],
+          "answer": 1
+        }
+      ]
     },
     {
-        "id": 5,
-        "title": "Geography Quiz",
-        "reading": "Placeholder reading extract",
-        "questions": [
-            {
-                "question": "What is the longest river in the world?",
-                "options": [
-                    "Amazon River",
-                    "Nile River",
-                    "Yangtze River",
-                    "Mississippi River"
-                ],
-                "answer": "Nile River"
-            },
-            {
-                "question": "Which country has the most natural lakes?",
-                "options": [
-                    "Canada",
-                    "Brazil",
-                    "Russia",
-                    "USA"
-                ],
-                "answer": "Canada"
-            },
-            {
-                "question": "What is the capital city of Japan?",
-                "options": [
-                    "Tokyo",
-                    "Kyoto",
-                    "Osaka",
-                    "Nagoya"
-                ],
-                "answer": "Tokyo"
-            },
-            {
-                "question": "Mount Everest is located in which mountain range?",
-                "options": [
-                    "Andes",
-                    "Rockies",
-                    "Himalayas",
-                    "Alps"
-                ],
-                "answer": "Himalayas"
-            },
-            {
-                "question": "Which desert is the largest in the world?",
-                "options": [
-                    "Sahara Desert",
-                    "Gobi Desert",
-                    "Kalahari Desert",
-                    "Arctic Desert"
-                ],
-                "answer": "Sahara Desert"
-            }
-        ]
+      "title": "Geography Quiz",
+      "reading": "Placeholder reading",
+      "questions": [
+        {
+          "question": "Which is the longest river in the world?",
+          "options": ["Amazon", "Nile", "Yangtze", "Mississippi"],
+          "answer": 1
+        },
+        {
+          "question": "Which continent is the Sahara Desert located in?",
+          "options": ["Asia", "Africa", "Australia", "North America"],
+          "answer": 1
+        },
+        {
+          "question": "What is the largest ocean on Earth?",
+          "options": ["Atlantic", "Indian", "Arctic", "Pacific"],
+          "answer": 3
+        }
+      ]
     }
-]
-
-export const mockQuizzes2 = [
-    {
-        "title": "フードバンクに関するクイズ",
-        "reading": "Sample",
-        "questions": [
-            {
-                "question": "フードバンクの主な目的は何ですか？",
-                "options": [
-                    "食べ物を売ること",
-                    "食べ物を無料で渡すこと",
-                    "食べ物を廃棄すること",
-                    "食べ物を調理すること"
-                ],
-                "answer": "食べ物を無料で渡すこと"
-            },
-            {
-                "question": "フードバンク仙台が行った調査は何に関するものですか？",
-                "options": [
-                    "寄付の量",
-                    "スタッフの数",
-                    "利用者の年齢",
-                    "地域の特産品"
-                ],
-                "answer": "寄付の量"
-            },
-            {
-                "question": "フードバンクに寄付しているのはどのようなところからですか？",
-                "options": [
-                    "学校と病院",
-                    "会社と家庭",
-                    "レストランとカフェ",
-                    "公園と街頭"
-                ],
-                "answer": "会社と家庭"
-            },
-            {
-                "question": "フードバンクが「食べ物の寄付が少なくなった」と答えた割合はどれくらいですか？",
-                "options": [
-                    "30%",
-                    "40%",
-                    "50%",
-                    "60%以上"
-                ],
-                "answer": "60%以上"
-            },
-            {
-                "question": "フードバンク仙台はどのような問題を抱えていると言っていますか？",
-                "options": [
-                    "食べ物が多すぎる",
-                    "寄付が足りない",
-                    "スタッフが足りない",
-                    "利用者が多すぎる"
-                ],
-                "answer": "寄付が足りない"
-            },
-            {
-                "question": "夏休みの間に困る家庭はどのような家庭ですか？",
-                "options": [
-                    "給食がない家庭",
-                    "給食が豊富な家庭",
-                    "遠足に行く家庭",
-                    "旅行に行く家庭"
-                ],
-                "answer": "給食がない家庭"
-            },
-            {
-                "question": "フードバンクは誰に食べ物を渡していますか？",
-                "options": [
-                    "寄付者",
-                    "生活に困っている人",
-                    "ボランティア",
-                    "企業"
-                ],
-                "answer": "生活に困っている人"
-            },
-            {
-                "question": "フードバンク仙台は寄付をどう呼びかけていますか？",
-                "options": [
-                    "寄付をやめてください",
-                    "寄付を歓迎します",
-                    "寄付をお願いします",
-                    "寄付を強制します"
-                ],
-                "answer": "寄付をお願いします"
-            },
-            {
-                "question": "物の値段が上がって困っているのは誰ですか？",
-                "options": [
-                    "寄付者",
-                    "フードバンクのスタッフ",
-                    "困っている人",
-                    "ボランティア"
-                ],
-                "answer": "困っている人"
-            },
-            {
-                "question": "フードバンクが渡す食べ物はどのようにして集められますか？",
-                "options": [
-                    "フードバンク自身が作る",
-                    "企業や家庭からの寄付",
-                    "政府からの支給",
-                    "外国からの輸入"
-                ],
-                "answer": "企業や家庭からの寄付"
-            }
-        ]
-    }
-]
-
+  ]
+  
 export const mockUsers = [
     {
         "username": "admin",

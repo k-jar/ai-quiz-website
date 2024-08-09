@@ -1,0 +1,23 @@
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.title-and-reading mat-form-field {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.option-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
