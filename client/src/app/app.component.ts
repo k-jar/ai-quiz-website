@@ -8,6 +8,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from './auth.service';
+import { SnackbarService } from './snackbar.service';
 
 @Component({
   selector: 'app-root',
@@ -29,15 +30,24 @@ export class AppComponent {
   title = 'quizzes';
   isOpened = true;
   isLoggedIn = false;
+  authService: AuthService = inject(AuthService);
+  router: Router = inject(Router);
+  snackbarService: SnackbarService = inject(SnackbarService);
 
-  constructor(private authService: AuthService, private router: Router) {
+  ngOnInit(): void {
     this.authService.isLoggedIn.subscribe(
       (status) => (this.isLoggedIn = status)
     );
   }
 
   logout(): void {
-    this.authService.logout();
-    this.isLoggedIn = false;
+    try {
+      this.authService.logout();
+      this.isLoggedIn = false;
+      this.snackbarService.show('Logged out successfully');
+    } catch (error) {
+      console.error('Failed to logout:', error);
+      this.snackbarService.show('Failed to logout');
+    }
   }
 }

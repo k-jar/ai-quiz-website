@@ -74,12 +74,17 @@ export async function generateQuizRoute(req, res) {
   }
   const { text, numQuestions, questionLanguage, answerLanguage, modelChoice } =
     matchedData(req);
-  const quiz = await generateQuiz(
-    text,
-    numQuestions,
-    questionLanguage,
-    answerLanguage,
-    modelChoice
-  );
-  res.status(200).json(quiz);
+  try {
+    const quiz = await generateQuiz(
+      text,
+      numQuestions,
+      questionLanguage,
+      answerLanguage,
+      modelChoice
+    );
+    res.status(200).json(quiz);
+  } catch (error) {
+    console.error("Failed to generate quiz:", error);
+    res.status(500).json({ message: "Failed to generate quiz" });
+  }
 }

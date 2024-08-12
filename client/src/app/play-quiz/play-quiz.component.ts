@@ -12,6 +12,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 import { MatCardModule } from '@angular/material/card';
 import { QuizAttemptService } from '../quiz-attempt.service';
 import { AuthService } from '../auth.service';
+import { SnackbarService } from '../snackbar.service';
 
 @Component({
   selector: 'app-play-quiz',
@@ -24,6 +25,7 @@ export class PlayQuizComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   quizService: QuizService = inject(QuizService);
   quizAttemptService: QuizAttemptService = inject(QuizAttemptService);
+  snackbarService: SnackbarService = inject(SnackbarService);
   quiz: Quiz | undefined;
   showQuestions: boolean = false;
   userAnswers: number[] = [];
@@ -73,12 +75,12 @@ export class PlayQuizComponent {
     };
 
     this.quizAttemptService.createAttempt(attempt).subscribe(response => {
-      console.log('Quiz attempt saved', response);
+      this.snackbarService.show('Quiz attempt saved successfully');
     }, error => {
       console.error('Error saving quiz attempt', error);
+      this.snackbarService.show('Failed to save quiz attempt');
     });
   }
-
 
   openConfirmationDialog() {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent);

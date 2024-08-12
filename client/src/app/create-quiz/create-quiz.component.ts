@@ -16,6 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { QuizFormComponent } from '../quiz-form/quiz-form.component';
 import { Router } from '@angular/router';
 import { Quiz } from '../quiz';
+import { SnackbarService } from '../snackbar.service';
 
 @Component({
   selector: 'app-create-quiz',
@@ -47,6 +48,7 @@ export class CreateQuizComponent {
   answerLanguage = 'Japanese';
   quizService: QuizService = inject(QuizService);
   router: Router = inject(Router);
+  snackbarService: SnackbarService = inject(SnackbarService);
   public prompt: string = '';
   public reading: string = '';
   public quizTemplate: string = `{
@@ -83,12 +85,12 @@ export class CreateQuizComponent {
   onSubmitQuiz(formValue: Quiz) {
     this.quizService.addQuiz(formValue).subscribe(
       () => {
-        alert('Quiz created successfully');
+        this.snackbarService.show('Quiz created successfully');
         this.router.navigate(['/']);
       },
       (error) => {
         console.error('Failed to create quiz:', error);
-        alert('Failed to create quiz');
+        this.snackbarService.show('Failed to create quiz');
       }
     );
   }
@@ -118,9 +120,11 @@ export class CreateQuizComponent {
       .subscribe(
         (quiz) => {
           console.log('Quiz added:', quiz);
+          this.snackbarService.show('Quiz created successfully');
         },
         (error) => {
           console.error('Error:', error);
+          this.snackbarService.show('Failed to create quiz');
         }
       );
   }

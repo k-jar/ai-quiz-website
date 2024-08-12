@@ -6,25 +6,24 @@ import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class QuizService {
-
   quizUrl = 'http://localhost:3000/api/quizzes';
   generateUrl = 'http://localhost:3000/api/generate-quiz';
   authUrl = 'http://localhost:3000/api/auth';
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   private createAuthHeaders(): HttpHeaders {
     // Retrieve token from local storage
     const token = this.authService.getToken();
-  
+
     // Create headers with the token
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
-  
+
     return headers;
   }
 
@@ -36,12 +35,18 @@ export class QuizService {
     return this.http.get<Quiz>(`${this.quizUrl}/${id}`);
   }
 
-  getUsernames(userIds : string[]): Observable<any[]> {
+  getUsernames(userIds: string[]): Observable<any[]> {
     return this.http.post<any[]>(`${this.authUrl}/usernames`, { userIds });
   }
 
   // Generate quiz
-  generateQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string, modelChoice: string): Observable<Quiz> {
+  generateQuiz(
+    text: string,
+    numQuestions: number,
+    questionLanguage: string,
+    answerLanguage: string,
+    modelChoice: string
+  ): Observable<Quiz> {
     const headers = this.createAuthHeaders();
 
     // Body of the request
@@ -62,21 +67,32 @@ export class QuizService {
     if (!this.authService.getCurrentUser()) {
       throw new Error('User not logged in');
     }
-    quiz.createdBy = this.authService.getCurrentUser().userId;;
+    quiz.createdBy = this.authService.getCurrentUser().userId;
     return this.http.post<Quiz>(this.quizUrl, quiz, { headers });
   }
 
   // Generate and add quiz
-  generateAndAddQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string, modelChoice: string): Observable<Quiz> {
-    return this.generateQuiz(text, numQuestions, questionLanguage, answerLanguage, modelChoice).pipe(
-      switchMap(quiz => {
-
+  generateAndAddQuiz(
+    text: string,
+    numQuestions: number,
+    questionLanguage: string,
+    answerLanguage: string,
+    modelChoice: string
+  ): Observable<Quiz> {
+    return this.generateQuiz(
+      text,
+      numQuestions,
+      questionLanguage,
+      answerLanguage,
+      modelChoice
+    ).pipe(
+      switchMap((quiz) => {
         return this.addQuiz(quiz);
       })
     );
   }
 
-  deleteQuiz(quizId: string, token: string): Observable<any> {
+  deleteQuiz(quizId: string): Observable<any> {
     const headers = this.createAuthHeaders();
 
     return this.http.delete(`${this.quizUrl}/${quizId}`, { headers });

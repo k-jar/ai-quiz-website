@@ -46,29 +46,27 @@ export class LoginComponent {
       this.reason = params['reason'];
     });
     if (this.reason) {
-      this.showSnackbar();
+      this.snackbarService.show(this.reason);
     }
   }
 
   login(): void {
     if (this.loginForm.invalid) {
+      this.snackbarService.show('Please enter a valid username and password');
       return; // Prevent submission if form is invalid
     }
 
     this.authService.login(this.loginForm.value).subscribe(
       (response) => {
         if (response.token) {
+          this.snackbarService.show('Logged in successfully');
           this.router.navigate(['/']);
         }
       },
       (error) => {
         console.error('Login error:', error);
-        this.errorMessage = 'Login failed. Please check your username and password.';
+        this.snackbarService.show('Login failed. Please check your username and password.');
       }
     );
-  }
-
-  showSnackbar() {
-    this.snackbarService.show(this.reason);
   }
 }

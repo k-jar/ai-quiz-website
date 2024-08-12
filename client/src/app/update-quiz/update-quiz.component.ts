@@ -4,6 +4,7 @@ import { QuizService } from '../quiz.service';
 import { Quiz } from '../quiz';
 import { CommonModule } from '@angular/common';
 import { QuizFormComponent } from '../quiz-form/quiz-form.component';
+import { SnackbarService } from '../snackbar.service';
 
 @Component({
   selector: 'app-update-quiz',
@@ -21,6 +22,7 @@ export class UpdateQuizComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   quizService: QuizService = inject(QuizService);
   router: Router = inject(Router);
+  snackbarService: SnackbarService = inject(SnackbarService);
 
   ngOnInit(): void {
     this.quizId = this.route.snapshot.paramMap.get('id') || '';
@@ -44,12 +46,12 @@ export class UpdateQuizComponent {
   onSubmitQuiz(formValue: Quiz) {
     this.quizService.updateQuiz(this.quizId, formValue).subscribe(
       () => {
-        alert('Quiz updated successfully');
+        this.snackbarService.show('Quiz updated successfully');
         this.router.navigate(['/']);
       },
       (error) => {
         console.error('Failed to update quiz:', error);
-        alert('Failed to update quiz');
+        this.snackbarService.show('Failed to update quiz');
       }
     );
   }

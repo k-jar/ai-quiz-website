@@ -8,6 +8,7 @@ import { QuizAttemptService } from '../quiz-attempt.service';
 import { AuthService } from '../auth.service';
 import { QuizService } from '../quiz.service';
 import { QuizEventsService } from '../quiz-events.service';
+import { SnackbarService } from '../snackbar.service';
 
 @Component({
   selector: 'app-quiz',
@@ -26,6 +27,7 @@ export class QuizComponent {
   quizService: QuizService = inject(QuizService);
   quizAttemptService: QuizAttemptService = inject(QuizAttemptService);
   quizEventsService: QuizEventsService = inject(QuizEventsService);
+  snackbarService: SnackbarService = inject(SnackbarService);
   router: Router = inject(Router);
 
   ngOnInit(): void {
@@ -55,18 +57,14 @@ export class QuizComponent {
   deleteQuiz(quizId: string) {
     if (confirm('Are you sure you want to delete this quiz?')) {
       const token = this.authService.getToken();
-      if (!token) {
-        alert('You must be logged in to delete a quiz');
-        return;
-      }
-      this.quizService.deleteQuiz(quizId, token).subscribe(
+      this.quizService.deleteQuiz(quizId).subscribe(
         () => {
-          alert('Quiz deleted successfully');
           this.quizEventsService.notifyQuizDeleted();
+          this.snackbarService.show('Quiz deleted successfully');
         },
         error => {
           console.error(error);
-          alert('Failed to delete quiz');
+          this.snackbarService.show('Failed to delete quiz');
         }
       );
     }
