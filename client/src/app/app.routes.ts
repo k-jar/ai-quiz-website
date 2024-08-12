@@ -16,7 +16,7 @@ export const routes: Routes = [
     },
     {
         path: 'create-quiz',
-        component: CreateQuizComponent,
+        component: CreateQuizComponent, canActivate: [AuthGuard],
         title: 'Create a quiz',
     },
     {

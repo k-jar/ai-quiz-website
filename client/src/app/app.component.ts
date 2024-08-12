@@ -12,9 +12,18 @@ import { AuthService } from './auth.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, QuizComponent, CommonModule, RouterModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatButtonModule], 
+  imports: [
+    RouterOutlet,
+    QuizComponent,
+    CommonModule,
+    RouterModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'quizzes';
@@ -22,7 +31,9 @@ export class AppComponent {
   isLoggedIn = false;
 
   constructor(private authService: AuthService, private router: Router) {
-    this.authService.isLoggedIn.subscribe(status => this.isLoggedIn = status);
+    this.authService.isLoggedIn.subscribe(
+      (status) => (this.isLoggedIn = status)
+    );
   }
 
   logout(): void {
