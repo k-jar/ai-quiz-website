@@ -25,13 +25,13 @@
           </mat-form-field>
         </div>
         <div class="button-group">
-          <button mat-button color="accent" routerLink="/register">Register</button>
           <button mat-raised-button color="primary" type="submit">Login</button>
         </div>
         <mat-error *ngIf="errorMessage" class="error-message">
           {{ errorMessage }}
         </mat-error>
       </form>
+      <button mat-button color="accent" routerLink="/register">Register a new account</button>
     </mat-card-content>
   </mat-card>
   

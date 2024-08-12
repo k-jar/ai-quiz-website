@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../auth.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { QuizEventsService } from '../quiz-events.service';
+import { SnackbarService } from '../snackbar.service';
 
 @Component({
   selector: 'app-home',
@@ -28,6 +29,7 @@ export class HomeComponent {
   quizService: QuizService = inject(QuizService);
   authService: AuthService = inject(AuthService);
   quizEventsService: any = inject(QuizEventsService);
+  snackService: SnackbarService = inject(SnackbarService);
   filteredQuizList: Quiz[] = [];
   user: any = this.authService.getCurrentUser();
 
@@ -64,13 +66,12 @@ export class HomeComponent {
           },
           error => {
             console.error('Failed to fetch usernames:', error);
-            alert('Failed to load quizzes');
           }
         );
       },
       error => {
+        this.snackService.show('Failed to fetch quizzes');
         console.error('Failed to fetch quizzes:', error);
-        alert('Failed to load quizzes');
       }
     );
   }

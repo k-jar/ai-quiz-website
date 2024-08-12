@@ -37,7 +37,7 @@ export class UpdateQuizComponent {
         },
         (error) => {
           console.error('Failed to load quiz:', error);
-          alert('Failed to load quiz');
+          this.snackbarService.show('Failed to load quiz');
         }
       );
     }

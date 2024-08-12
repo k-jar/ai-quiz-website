@@ -1,7 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,17 +19,18 @@ import { SnackbarService } from '../snackbar.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     FormsModule,
     MatCardModule,
     MatInputModule,
     MatButtonModule,
     MatFormField,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   username: string = '';
@@ -40,7 +47,7 @@ export class LoginComponent {
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
     this.route.queryParams.subscribe((params) => {
       this.reason = params['reason'];
@@ -65,7 +72,9 @@ export class LoginComponent {
       },
       (error) => {
         console.error('Login error:', error);
-        this.snackbarService.show('Login failed. Please check your username and password.');
+        this.snackbarService.show(
+          'Login failed. Please check your username and password.'
+        );
       }
     );
   }
