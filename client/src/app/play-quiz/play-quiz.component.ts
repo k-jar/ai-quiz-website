@@ -42,7 +42,7 @@ export class PlayQuizComponent {
     this.quizService.getQuizById(this.quizId).subscribe((quiz) => {
       this.quiz = quiz;
       if (quiz) {
-        this.userAnswers = new Array(quiz.questions.length).fill(-1);
+        this.userAnswers = new Array(quiz.questions.length).fill(null);
       }
     });
   }
