@@ -49,6 +49,7 @@
                       matSuffix
                       mat-icon-button
                       color="warn"
+                      type="button"
                       (click)="removeOption(qIndex, oIndex)"
                     >
                       <mat-icon>delete</mat-icon>
@@ -66,6 +67,7 @@
                 <button
                   mat-raised-button
                   color="warn"
+                  type="button"
                   (click)="removeQuestion(qIndex)"
                 >
                   Delete Question
@@ -84,6 +86,9 @@
                   >
                     Option {{ oIndex + 1 }}
                   </mat-radio-button>
+                  <mat-error *ngIf="questions.at(qIndex).get('answer')?.hasError('required')">
+                    You must select a correct answer.
+                  </mat-error>
                 </mat-radio-group>
               </div>
             </mat-card-content>
