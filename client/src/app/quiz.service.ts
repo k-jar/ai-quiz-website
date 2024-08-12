@@ -59,6 +59,10 @@ export class QuizService {
   // Add quiz
   addQuiz(quiz: Quiz): Observable<Quiz> {
     const headers = this.createAuthHeaders();
+    if (!this.authService.getCurrentUser()) {
+      throw new Error('User not logged in');
+    }
+    quiz.createdBy = this.authService.getCurrentUser().userId;;
     return this.http.post<Quiz>(this.quizUrl, quiz, { headers });
   }
 
@@ -66,8 +70,7 @@ export class QuizService {
   generateAndAddQuiz(text: string, numQuestions: number, questionLanguage: string, answerLanguage: string, modelChoice: string): Observable<Quiz> {
     return this.generateQuiz(text, numQuestions, questionLanguage, answerLanguage, modelChoice).pipe(
       switchMap(quiz => {
-        const createdBy = this.authService.getCurrentUser().userId;
-        quiz.createdBy = createdBy;
+
         return this.addQuiz(quiz);
       })
     );

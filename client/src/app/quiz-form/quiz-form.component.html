@@ -1,0 +1,106 @@
+<form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+  <mat-card>
+    <mat-card-content>
+      <div class="title-and-reading">
+        <mat-form-field appearance="fill">
+          <mat-label>Title</mat-label>
+          <input matInput id="title" formControlName="title" type="text" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Reading</mat-label>
+          <textarea matInput id="reading" formControlName="reading"></textarea>
+        </mat-form-field>
+      </div>
+
+      <ng-container formArrayName="questions">
+        <div
+          *ngFor="let question of questions.controls; let qIndex = index"
+          [formGroupName]="qIndex"
+        >
+          <mat-card class="question-card">
+            <mat-card-header>
+              <mat-card-title>Question {{ qIndex + 1 }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Question</mat-label>
+                <input
+                  matInput
+                  id="question"
+                  formControlName="question"
+                  type="text"
+                />
+              </mat-form-field>
+
+              <div formArrayName="options">
+                <div
+                  *ngFor="
+                    let option of getOptions(qIndex).controls;
+                    let oIndex = index
+                  "
+                  class="option-item"
+                >
+                  <div class="option-container">
+                    <mat-form-field appearance="outline" class="full-width">
+                      <mat-label>Option {{ oIndex + 1 }}</mat-label>
+                      <input matInput [formControlName]="oIndex" type="text" />
+                    </mat-form-field>
+                    <button
+                      matSuffix
+                      mat-icon-button
+                      color="warn"
+                      (click)="removeOption(qIndex, oIndex)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  type="button"
+                  (click)="addOption(qIndex)"
+                >
+                  Add Option
+                </button>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  (click)="removeQuestion(qIndex)"
+                >
+                  Delete Question
+                </button>
+              </div>
+
+              <div class="answer-selection">
+                <mat-label>Correct Answer</mat-label>
+                <mat-radio-group formControlName="answer">
+                  <mat-radio-button
+                    *ngFor="
+                      let option of getOptions(qIndex).controls;
+                      let oIndex = index
+                    "
+                    [value]="oIndex"
+                  >
+                    Option {{ oIndex + 1 }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </ng-container>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="addQuestion()"
+      >
+        Add Question
+      </button>
+      <button mat-raised-button color="accent" type="submit">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

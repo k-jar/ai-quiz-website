@@ -2,82 +2,92 @@
     <h1>Create a Quiz</h1>
     <mat-card>
         <mat-card-content>
-    <div class="model-selection">
-        <h2>Model Choice</h2>
-        <mat-form-field appearance="outline">
-            <mat-label>Model</mat-label>
-            <mat-select [(value)]="modelChoice">
-                <mat-option value="lm">LM Studio</mat-option>
-                <mat-option value="openai">ChatGPT</mat-option>
-                <mat-option value="none">No Model (JSON)</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-
-    <div class="response-settings">
-        <h2>Quiz Options</h2>
-        <mat-form-field appearance="outline">
-            <mat-label>Question language</mat-label>
-            <mat-select [(value)]="questionLanguage" (selectionChange)="onSettingsChange()">
-                <mat-option value="English">English</mat-option>
-                <mat-option value="Japanese">Japanese</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Answer language</mat-label>
-            <mat-select [(value)]="answerLanguage" (selectionChange)="onSettingsChange()">
-                <mat-option value="English">English</mat-option>
-                <mat-option value="Japanese">Japanese</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Number of questions</mat-label>
-            <input matInput [(ngModel)]="numQuestions" (input)="onSettingsChange()" type="number" min="1" max="50">
-        </mat-form-field>
-
-        <div class="model-info">
-            <ng-container *ngIf="modelChoice === 'lm'">
-                <mat-card>
-                    Make sure you have a LM Studio server running before submitting.
-                </mat-card>
-            </ng-container>
-            <ng-container *ngIf="modelChoice === 'openai'">
-                <mat-card>
-                    Make sure you have a valid OpenAI API key in your environment variable before submitting.
-                </mat-card>
-            </ng-container>
-            <ng-container *ngIf="modelChoice === 'none'">
-                <mat-card>
-                    Enter your text below, copy the generated prompt, and paste it into a chatbot (e.g. ChatGPT) to 
-                    generate a quiz in JSON format. Then paste the JSON into the JSON input box below.
-                    <div class="input-container">
-                        <mat-form-field class="input-field" appearance="outline">
-                            <mat-label>Input the text the quiz should be based on</mat-label>
-                            <textarea matInput [(ngModel)]="reading" (input)="onSettingsChange()"></textarea>
+            <mat-tab-group [(selectedIndex)]="formChoiceIndex" (selectedIndexChange)="onTabChange($event)">
+                <mat-tab label="AI Model">
+                    <mat-card>
+                        <mat-card-content>
+                    <div class="model-selection">
+                        <h2>Model Choice</h2>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Model</mat-label>
+                            <mat-select [(value)]="modelChoice">
+                                <mat-option value="lm">LM Studio</mat-option>
+                                <mat-option value="openai">ChatGPT</mat-option>
+                                <mat-option value="none">No Model (JSON)</mat-option>
+                            </mat-select>
                         </mat-form-field>
                     </div>
-                    <label for="quiz-schema">Prompt Preview:</label>
-                    <mat-card>
-                        <pre id="quiz-schema">{{ prompt }}</pre>
-                    </mat-card>
-                    <button mat-flat-button color="primary" [cdkCopyToClipboard]="prompt">Copy Prompt to
-                        Clipboard</button>
+                
+                    <div class="response-settings">
+                        <h2>Quiz Options</h2>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Question language</mat-label>
+                            <mat-select [(value)]="questionLanguage" (selectionChange)="onSettingsChange()">
+                                <mat-option value="English">English</mat-option>
+                                <mat-option value="Japanese">Japanese</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Answer language</mat-label>
+                            <mat-select [(value)]="answerLanguage" (selectionChange)="onSettingsChange()">
+                                <mat-option value="English">English</mat-option>
+                                <mat-option value="Japanese">Japanese</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Number of questions</mat-label>
+                            <input matInput [(ngModel)]="numQuestions" (input)="onSettingsChange()" type="number" min="1" max="50">
+                        </mat-form-field>
+                
+                        <div class="model-info">
+                            <ng-container *ngIf="modelChoice === 'lm'">
+                                <mat-card>
+                                    Make sure you have a LM Studio server running before submitting.
+                                </mat-card>
+                            </ng-container>
+                            <ng-container *ngIf="modelChoice === 'openai'">
+                                <mat-card>
+                                    Make sure you have a valid OpenAI API key in your environment variable before submitting.
+                                </mat-card>
+                            </ng-container>
+                            <ng-container *ngIf="modelChoice === 'none'">
+                                <mat-card>
+                                    Enter your text below, copy the generated prompt, and paste it into a chatbot (e.g. ChatGPT) to 
+                                    generate a quiz in JSON format. Then paste the JSON into the JSON input box below.
+                                    <div class="input-container">
+                                        <mat-form-field class="input-field" appearance="outline">
+                                            <mat-label>Input the text the quiz should be based on</mat-label>
+                                            <textarea matInput [(ngModel)]="reading" (input)="onSettingsChange()"></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                    <label for="quiz-schema">Prompt Preview:</label>
+                                    <mat-card>
+                                        <pre id="quiz-schema">{{ prompt }}</pre>
+                                    </mat-card>
+                                    <button mat-flat-button color="primary" [cdkCopyToClipboard]="prompt">Copy Prompt to
+                                        Clipboard</button>
+                                </mat-card>
+                            </ng-container>
+                        </div>
+                    </div>
+                
+                    <h2>{{ modelChoice === 'none' ? 'JSON Input' : 'Model Input' }}</h2>
+                    <div class="input-container">
+                        <mat-form-field class="input-field" appearance="outline">
+                            <mat-label>{{ modelChoice === 'none' ? 'Input the quiz in JSON format' : 'Input the text the quiz should be
+                                based on' }}</mat-label>
+                            <textarea matInput #input></textarea>
+                        </mat-form-field>
+                        <button mat-flat-button color="primary" (click)="submitText(input.value)">{{ modelChoice === 'none' ? 'Submit
+                            JSON' : 'Submit Text' }}</button>
+                    </div>
+                </mat-card-content>
                 </mat-card>
-            </ng-container>
-        </div>
-    </div>
-
-    <h2>{{ modelChoice === 'none' ? 'JSON Input' : 'Model Input' }}</h2>
-    <div class="input-container">
-        <mat-form-field class="input-field" appearance="outline">
-            <mat-label>{{ modelChoice === 'none' ? 'Input the quiz in JSON format' : 'Input the text the quiz should be
-                based on' }}</mat-label>
-            <textarea matInput #input></textarea>
-        </mat-form-field>
-        <button mat-flat-button color="primary" (click)="submitText(input.value)">{{ modelChoice === 'none' ? 'Submit
-            JSON' : 'Submit Text' }}</button>
-    </div>
-</mat-card-content>
-</mat-card>
-
+                </mat-tab>
+                <mat-tab label="Manual">
+                    <app-quiz-form (submitQuiz)="onSubmitQuiz($event)"></app-quiz-form>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card-content>
+    </mat-card>
 </section>

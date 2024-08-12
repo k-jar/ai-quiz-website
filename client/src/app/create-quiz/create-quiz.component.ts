@@ -12,6 +12,10 @@ import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatTabsModule } from '@angular/material/tabs';
+import { QuizFormComponent } from '../quiz-form/quiz-form.component';
+import { Router } from '@angular/router';
+import { Quiz } from '../quiz';
 
 @Component({
   selector: 'app-create-quiz',
@@ -29,16 +33,20 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     MatSliderModule,
     FormsModule,
     ClipboardModule,
+    MatTabsModule,
+    QuizFormComponent
   ],
   templateUrl: './create-quiz.component.html',
   styleUrl: './create-quiz.component.css',
 })
 export class CreateQuizComponent {
+  formChoiceIndex = 0;
   modelChoice = 'none'; // Options: 'none', 'lm', 'openai'
   numQuestions = 5;
   questionLanguage = 'Japanese';
   answerLanguage = 'Japanese';
   quizService: QuizService = inject(QuizService);
+  router: Router = inject(Router);
   public prompt: string = '';
   public reading: string = '';
   public quizTemplate: string = `{
@@ -63,9 +71,28 @@ export class CreateQuizComponent {
     this.prompt = `Generate ${this.numQuestions} multiple choice quiz questions in ${this.questionLanguage} (answers in ${this.answerLanguage}) from the provided text: ${this.reading}, formatted in JSON with title, questions, options, and answers. The JSON schema should be as follows: ${this.quizTemplate}`;
   }
 
+  onTabChange(index: number){
+    this.formChoiceIndex = index;
+    this.modelChoice = index === 0 ? 'none' : 'lm';
+  }
+
   onSettingsChange() {
     this.updatePrompt();
   }
+
+  onSubmitQuiz(formValue: Quiz) {
+    this.quizService.addQuiz(formValue).subscribe(
+      () => {
+        alert('Quiz created successfully');
+        this.router.navigate(['/']);
+      },
+      (error) => {
+        console.error('Failed to create quiz:', error);
+        alert('Failed to create quiz');
+      }
+    );
+  }
+
 
   submitText(text: string) {
     console.log(
