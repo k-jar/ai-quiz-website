@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { QuizComponent } from './quiz.component';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { provideRouter } from '@angular/router';
+import { routes } from '../app.routes';
 
 describe('QuizComponent', () => {
   let component: QuizComponent;
@@ -16,12 +15,7 @@ describe('QuizComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({ id: 'testId' })
-          }
-        }
+        provideRouter(routes),
       ],
     })
     .compileComponents();

@@ -1,36 +1,39 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { AuthService } from '../auth.service';
 import { RegisterComponent } from './register.component';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { routes } from '../app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SnackbarService } from '../snackbar.service';
+import { of, throwError } from 'rxjs';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
-  let authService: AuthService;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let snackbarServiceSpy: jasmine.SpyObj<SnackbarService>;
 
   beforeEach(async () => {
-    const authServiceSpy = jasmine.createSpyObj('AuthService', ['register']);
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['register']);
+    snackbarServiceSpy = jasmine.createSpyObj('SnackbarService', ['show']);
 
     await TestBed.configureTestingModule({
       imports: [RegisterComponent, BrowserAnimationsModule],
       declarations: [],
       providers: [
         { provide: AuthService, useValue: authServiceSpy },
+        { provide: SnackbarService, useValue: snackbarServiceSpy },
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter(routes)
-        // ActivatedRoute
+        provideRouter(routes),
       ],
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
-    authService = TestBed.inject(AuthService);
     fixture.detectChanges();
   });
 
@@ -38,7 +41,53 @@ describe('RegisterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('form invalid when empty', () => {
+  it('should initialize the form with empty values', () => {
+    const form = component.registerForm;
+    expect(form).toBeDefined();
+    expect(form.get('username')?.value).toEqual('');
+    expect(form.get('password')?.value).toEqual('');
+  });
+
+  it('should make the form invalid if empty', () => {
     expect(component.registerForm.valid).toBeFalsy();
+  });
+
+  it('should make the form invalid if the username is too short', () => {
+    component.registerForm.setValue({ username: 'ab', password: 'password123' });
+    expect(component.registerForm.invalid).toBeTrue();
+  });
+
+  it('should make the form invalid if the password is too short', () => {
+    component.registerForm.setValue({ username: 'username', password: '12345' });
+    expect(component.registerForm.invalid).toBeTrue();
+  });
+
+  it('should make the form valid if the inputs meet the requirements', () => {
+    component.registerForm.setValue({ username: 'username', password: 'password123' });
+    expect(component.registerForm.valid).toBeTrue();
+  });
+
+  it('should call the register method on the AuthService when the form is submitted', () => {
+    authServiceSpy.register.and.returnValue(of({}));
+    component.registerForm.setValue({ username: 'username', password: 'password123' });
+    component.register();
+    expect(authServiceSpy.register).toHaveBeenCalled();
+  });
+
+  it('should show a success message and reset the form on successful registration', () => {
+    authServiceSpy.register.and.returnValue(of({}));
+    component.registerForm.setValue({ username: 'username', password: 'password123' });
+    component.register();
+    expect(authServiceSpy.register).toHaveBeenCalled();
+    expect(snackbarServiceSpy.show).toHaveBeenCalledWith('Registration successful. Please log in.');
+    expect(component.registerForm.value).toEqual({ username: null, password: null });
+  });
+
+  it('should show an error message if the username already exists', () => {
+    authServiceSpy.register.and.returnValue(throwError(() => new HttpErrorResponse({ status: 409 })));
+    component.registerForm.setValue({ username: 'username', password: 'password123' });
+    component.register();
+    expect(authServiceSpy.register).toHaveBeenCalled();
+    expect(snackbarServiceSpy.show).toHaveBeenCalledWith('Username already exists. Please choose another one.');
   });
 });

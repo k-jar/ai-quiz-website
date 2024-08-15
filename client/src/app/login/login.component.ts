@@ -59,14 +59,14 @@ export class LoginComponent {
 
   login(): void {
     if (this.loginForm.invalid) {
-      this.snackbarService.show('Please enter a valid username and password');
+      this.snackbarService.show('Please enter a valid username and password.');
       return; // Prevent submission if form is invalid
     }
 
     this.authService.login(this.loginForm.value).subscribe(
       (response) => {
         if (response.token) {
-          this.snackbarService.show('Logged in successfully');
+          this.snackbarService.show('Logged in successfully.');
           this.router.navigate(['/']);
         }
       },
