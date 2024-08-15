@@ -21,7 +21,7 @@ import { SnackbarService } from './snackbar.service';
     MatToolbarModule,
     MatSidenavModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatButtonModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
@@ -30,7 +30,7 @@ export class RegisterComponent {
   errorMessage: string = '';
   registerForm: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
+  constructor(private authService: AuthService, private fb: FormBuilder) {
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
