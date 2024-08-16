@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { lastValueFrom, switchMap } from 'rxjs';
 import { Quiz } from './quiz';
@@ -12,8 +12,8 @@ export class QuizService {
   quizUrl = 'http://localhost:3000/api/quizzes';
   generateUrl = 'http://localhost:3000/api/generate-quiz';
   authUrl = 'http://localhost:3000/api/auth';
-
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  http: HttpClient = inject(HttpClient);
+  authService: AuthService = inject(AuthService);
 
   private createAuthHeaders(): HttpHeaders {
     // Retrieve token from local storage

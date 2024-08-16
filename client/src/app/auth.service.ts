@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -8,10 +8,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class AuthService {
   private url = 'http://localhost:3000/api/auth';
-  private jwtHelper = new JwtHelperService();
+  private jwtHelper: JwtHelperService = new JwtHelperService();
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
-
-  constructor(private http: HttpClient) {}
+  http: HttpClient = inject(HttpClient);
 
   register(user: any): Observable<any> { 
     return this.http.post(`${this.url}/register`, user);

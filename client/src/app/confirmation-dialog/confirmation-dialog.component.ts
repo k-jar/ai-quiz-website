@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialogActions,
@@ -22,7 +22,7 @@ import {
   styleUrl: './confirmation-dialog.component.css'
 })
 export class ConfirmationDialogComponent {
-  constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>) { }
+  dialogRef: MatDialogRef<ConfirmationDialogComponent> = inject(MatDialogRef);
 
   onConfirm(): void {
     this.dialogRef.close(true);
