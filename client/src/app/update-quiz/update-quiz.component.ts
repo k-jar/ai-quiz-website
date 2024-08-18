@@ -31,28 +31,38 @@ export class UpdateQuizComponent {
 
   loadQuiz() {
     if (this.quizId) {
-      this.quizService.getQuizById(this.quizId).subscribe(
-        (quiz: Quiz) => {
+      this.quizService.getQuizById(this.quizId).subscribe({
+        next: (quiz: Quiz) => {
           this.quiz = quiz;
         },
-        (error) => {
+        error: (error) => {
           console.error('Failed to load quiz:', error);
           this.snackbarService.show('Failed to load quiz');
+        },
+        complete: () => {
+          console.log('Quiz loaded successfully');
         }
-      );
+      });
     }
-  }
+    else {
+      console.error('No quiz ID provided');
+      this.snackbarService.show('No quiz ID provided');
+    }
+  }  
 
   onSubmitQuiz(formValue: Quiz) {
-    this.quizService.updateQuiz(this.quizId, formValue).subscribe(
-      () => {
+    this.quizService.updateQuiz(this.quizId, formValue).subscribe({
+      next: () => {
         this.snackbarService.show('Quiz updated successfully');
         this.router.navigate(['/']);
       },
-      (error) => {
+      error: (error) => {
         console.error('Failed to update quiz:', error);
         this.snackbarService.show('Failed to update quiz');
+      },
+      complete: () => {
+        console.log('Quiz update operation completed.');
       }
-    );
+    });
   }
 }

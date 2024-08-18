@@ -4,15 +4,26 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
+import { AuthService } from './auth.service';
+import { SnackbarService } from './snackbar.service';
 
 describe('AppComponent', () => {
+  let authServiceMock: jasmine.SpyObj<AuthService>;
+  let snackbarServiceMock: jasmine.SpyObj<SnackbarService>;
+
+
   beforeEach(async () => {
+    authServiceMock = jasmine.createSpyObj('AuthService', ['logout']);
+    snackbarServiceMock = jasmine.createSpyObj('SnackbarService', ['show']);
+
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter(routes)
+        provideRouter(routes),
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: SnackbarService, useValue: snackbarServiceMock },
       ],
     }).compileComponents();
   });
@@ -23,16 +34,23 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'client' title`, () => {
+  it(`should have the 'quizzes' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('quizzes');
   });
 
-  // it('should render title', () => {
-  //   const fixture = TestBed.createComponent(AppComponent);
-  //   fixture.detectChanges();
-  //   const compiled = fixture.nativeElement as HTMLElement;
-  //   expect(compiled.querySelector('h1')?.textContent).toContain('Hello, client');
-  // });
+  it('should call logout on AuthService when logout is called', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    app.logout();
+    expect(authServiceMock.logout).toHaveBeenCalled();
+  });
+
+  it('should show snackbar message when logout is called', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    app.logout();
+    expect(snackbarServiceMock.show).toHaveBeenCalledWith('Logged out successfully');
+  });
 });
