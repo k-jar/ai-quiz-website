@@ -22,6 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { SnackbarService } from '../snackbar.service';
 
 @Component({
   selector: 'app-quiz-form',
@@ -46,14 +47,10 @@ export class QuizFormComponent {
 
   quizForm!: FormGroup;
   fb: FormBuilder = inject(FormBuilder);
+  snackbarService: SnackbarService = inject(SnackbarService);
 
   ngOnInit(): void {
-    this.quizForm = this.fb.group({
-      title: [this.quiz?.title || '', Validators.required],
-      reading: [this.quiz?.reading || '', Validators.required],
-      questions: this.fb.array([]),
-    });
-
+    this.initForm();
     if (this.quiz) {
       this.setQuestions(this.quiz.questions);
     }
@@ -67,11 +64,11 @@ export class QuizFormComponent {
 
   private initForm(): void {
     this.quizForm = this.fb.group({
-      title: [this.quiz?.title || '', Validators.required],
-      reading: [this.quiz?.reading || '', Validators.required],
-      questions: this.fb.array([]),
+      title: [this.quiz?.title || '', [Validators.required, Validators.minLength(1)]],
+      reading: [this.quiz?.reading || '', [Validators.required, Validators.minLength(1)]],
+      questions: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     });
-
+  
     if (this.quiz && this.quiz.questions) {
       this.setQuestions(this.quiz.questions);
     }
@@ -84,13 +81,13 @@ export class QuizFormComponent {
   setQuestions(questions: any[]) {
     const questionFGs = questions.map((question) =>
       this.fb.group({
-        question: [question.question, Validators.required],
+        question: [question.question, [Validators.required, Validators.minLength(1)]],
         options: this.fb.array(
           question.options.map((option: string) =>
-            this.fb.control(option, Validators.required)
+            this.fb.control(option, [Validators.required, Validators.minLength(1)])
           )
         ),
-        answer: [question.answer, Validators.required],
+        answer: [question.answer, [Validators.required, Validators.minLength(1)]],
       })
     );
     const questionFormArray = this.fb.array(questionFGs);
@@ -148,6 +145,9 @@ export class QuizFormComponent {
         answer: question.answer,
       }));
       this.submitQuiz.emit(formValue);
+    }
+    else {
+      this.snackbarService.show('Please fill out all required fields');
     }
   }
 }

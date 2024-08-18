@@ -117,15 +117,15 @@ export class CreateQuizComponent {
         this.answerLanguage,
         this.modelChoice
       )
-      .subscribe(
-        (quiz) => {
+      .subscribe({
+        next: (quiz) => {
           console.log('Quiz added:', quiz);
           this.snackbarService.show('Quiz created successfully');
         },
-        (error) => {
+        error: (error) => {
           console.error('Error:', error);
           this.snackbarService.show('Failed to create quiz');
         }
-      );
+      });
   }
 }
