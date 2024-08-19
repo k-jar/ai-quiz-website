@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -8,8 +8,8 @@ import { AuthService } from './auth.service';
 })
 export class QuizAttemptService {
   private baseUrl = 'http://localhost:3000/api/quiz-attempts';
-
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  http: HttpClient = inject(HttpClient);
+  authService: AuthService = inject(AuthService);
 
   createAttempt(attempt: any): Observable<any> {
     return this.http.post(`${this.baseUrl}`, attempt);

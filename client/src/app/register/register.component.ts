@@ -27,11 +27,13 @@ import { SnackbarService } from '../snackbar.service';
 export class RegisterComponent {
   username: string = '';
   password: string = '';
-  registerForm: FormGroup;
+  registerForm: FormGroup = new FormGroup({});
   snackbarService: SnackbarService = inject(SnackbarService)
   router: Router = inject(Router);
+  authService: AuthService = inject(AuthService);
+  fb: FormBuilder = inject(FormBuilder);
 
-  constructor(private authService: AuthService, private fb: FormBuilder) {
+  ngOnInit() { 
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]]

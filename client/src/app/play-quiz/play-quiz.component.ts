@@ -17,9 +17,16 @@ import { SnackbarService } from '../snackbar.service';
 @Component({
   selector: 'app-play-quiz',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, MatButtonModule, MatRadioModule, FormsModule, MatCardModule],
+  imports: [
+    CommonModule,
+    MatExpansionModule,
+    MatButtonModule,
+    MatRadioModule,
+    FormsModule,
+    MatCardModule,
+  ],
   templateUrl: './play-quiz.component.html',
-  styleUrl: './play-quiz.component.css'
+  styleUrl: './play-quiz.component.css',
 })
 export class PlayQuizComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
@@ -34,16 +41,18 @@ export class PlayQuizComponent {
   quizSubmitted: boolean = false;
   userId: string = '';
   quizId: string = '';
-
-  constructor(public dialog: MatDialog, private authService: AuthService) { };
+  dialog: MatDialog = inject(MatDialog);
+  authService: AuthService = inject(AuthService);
 
   ngOnInit() {
     this.quizId = this.route.snapshot.params['id'];
-    this.quizService.getQuizById(this.quizId).subscribe((quiz) => {
-      this.quiz = quiz;
-      if (quiz) {
-        this.userAnswers = new Array(quiz.questions.length).fill(null);
-      }
+    this.quizService.getQuizById(this.quizId).subscribe({
+      next: (quiz) => {
+        this.quiz = quiz;
+        if (quiz) {
+          this.userAnswers = new Array(quiz.questions.length).fill(null);
+        }
+      },
     });
   }
 
@@ -56,9 +65,11 @@ export class PlayQuizComponent {
       return;
     }
     this.quizSubmitted = true;
-    const correctAnswers = this.quiz.questions.map(q => q.answer);
-    this.questionResults = this.userAnswers.map((answer, index) => answer === correctAnswers[index]);
-    this.score = this.questionResults.filter(result => result).length;
+    const correctAnswers = this.quiz.questions.map((q) => q.answer);
+    this.questionResults = this.userAnswers.map(
+      (answer, index) => answer === correctAnswers[index]
+    );
+    this.score = this.questionResults.filter((result) => result).length;
 
     this.submitQuizAttempt();
   }
@@ -74,21 +85,26 @@ export class PlayQuizComponent {
       score: this.score,
     };
 
-    this.quizAttemptService.createAttempt(attempt).subscribe(response => {
-      this.snackbarService.show('Quiz attempt saved successfully');
-    }, error => {
-      console.error('Error saving quiz attempt', error);
-      this.snackbarService.show('Failed to save quiz attempt');
+    this.quizAttemptService.createAttempt(attempt).subscribe({
+      next: (response) => {
+        this.snackbarService.show('Quiz attempt saved successfully');
+      },
+      error: (error) => {
+        console.error('Error saving quiz attempt', error);
+        this.snackbarService.show('Failed to save quiz attempt');
+      },
     });
   }
 
   openConfirmationDialog() {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.submitQuiz();
-      }
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (result) {
+          this.submitQuiz();
+        }
+      },
     });
   }
 
@@ -98,5 +114,4 @@ export class PlayQuizComponent {
     this.score = 0;
     this.quizSubmitted = false;
   }
-
 }

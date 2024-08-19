@@ -63,8 +63,6 @@ export class CreateQuizComponent {
     ]
   }`;
 
-  constructor() {}
-
   ngOnInit() {
     this.prompt = `Generate ${this.numQuestions} multiple choice quiz questions in ${this.questionLanguage} (options should be in ${this.answerLanguage}) from the provided text, formatted in JSON with title, questions, options, and answers. The JSON schema should be as follows: ${this.quizTemplate}`;
   }

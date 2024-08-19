@@ -12,7 +12,7 @@ describe('LoginComponent', () => {
   let mockActivatedRoute: any = {
     snapshot: {
       paramMap: {
-        get: () => 'testId', // represents the 'id' parameter
+        get: () => 'testId',
       },
     },
   };

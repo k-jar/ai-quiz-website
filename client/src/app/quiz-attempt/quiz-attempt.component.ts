@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { QuizAttemptService } from '../quiz-attempt.service';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
@@ -18,8 +18,9 @@ import { forkJoin, map, tap } from 'rxjs';
 export class QuizAttemptComponent {
   attempts: any[] = [];
   userId: string = '';
-
-  constructor(private quizAttemptService: QuizAttemptService, private authService: AuthService, private quizService: QuizService) { }
+  quizAttemptService: QuizAttemptService = inject(QuizAttemptService);
+  authService: AuthService = inject(AuthService);
+  quizService: QuizService = inject(QuizService);
 
   ngOnInit() {
     const user = this.authService.getCurrentUser();
