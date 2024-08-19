@@ -44,29 +44,29 @@ export class QuizComponent {
   }
 
   getLatestAttempt() {
-    this.quizAttemptService.getLatestAttempt(this.quiz._id).subscribe(
-      attempt => {
+    this.quizAttemptService.getLatestAttempt(this.quiz._id).subscribe({
+      next: attempt => {
         this.attempt = attempt; // Assign the entire attempt to attempt
       },
-      error => {
+      error: error => {
         console.error(error);
       }
-    );
+    });
   }
 
   deleteQuiz(quizId: string) {
     if (confirm('Are you sure you want to delete this quiz?')) {
       const token = this.authService.getToken();
-      this.quizService.deleteQuiz(quizId).subscribe(
-        () => {
+      this.quizService.deleteQuiz(quizId).subscribe({
+        next: () => {
           this.quizEventsService.notifyQuizDeleted();
           this.snackbarService.show('Quiz deleted successfully');
         },
-        error => {
+        error: error => {
           console.error(error);
           this.snackbarService.show('Failed to delete quiz');
         }
-      );
+      });
     }
   }
 

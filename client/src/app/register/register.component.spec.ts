@@ -3,17 +3,23 @@ import { AuthService } from '../auth.service';
 import { RegisterComponent } from './register.component';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
-import { routes } from '../app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SnackbarService } from '../snackbar.service';
 import { of, throwError } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let snackbarServiceSpy: jasmine.SpyObj<SnackbarService>;
+  let mockActivatedRoute: any = {
+    snapshot: {
+      paramMap: {
+        get: () => 'testId',
+      },
+    },
+  };
 
   beforeEach(async () => {
     authServiceSpy = jasmine.createSpyObj('AuthService', ['register']);
@@ -27,7 +33,7 @@ describe('RegisterComponent', () => {
         { provide: SnackbarService, useValue: snackbarServiceSpy },
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter(routes),
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
       ],
     })
     .compileComponents();

@@ -4,12 +4,18 @@ import { LoginComponent } from './login.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { provideRouter } from '@angular/router';
-import { routes } from '../app.routes';
+import { ActivatedRoute } from '@angular/router';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let mockActivatedRoute: any = {
+    snapshot: {
+      paramMap: {
+        get: () => 'testId', // represents the 'id' parameter
+      },
+    },
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -17,7 +23,7 @@ describe('LoginComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter(routes)
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
       ],
     })
     .compileComponents();
