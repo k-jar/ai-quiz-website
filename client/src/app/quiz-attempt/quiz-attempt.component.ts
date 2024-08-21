@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { QuizService } from '../quiz.service';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { forkJoin, map, tap } from 'rxjs';
+import { forkJoin, map } from 'rxjs';
 
 @Component({
   selector: 'app-quiz-attempt',

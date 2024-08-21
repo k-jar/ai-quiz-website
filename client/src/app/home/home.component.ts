@@ -13,7 +13,7 @@ import { AuthService } from '../auth.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { QuizEventsService } from '../quiz-events.service';
 import { SnackbarService } from '../snackbar.service';
-import { forkJoin, switchMap, tap } from 'rxjs';
+import { forkJoin, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +24,8 @@ import { forkJoin, switchMap, tap } from 'rxjs';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  originalQuizList: Quiz[] = [];
+  originalMyQuizList: Quiz[] = [];
+  originalOtherQuizList: Quiz[] = [];
   myQuizList: Quiz[] = [];
   otherQuizList: Quiz[] = [];
   quizService: QuizService = inject(QuizService);
@@ -44,40 +45,6 @@ export class HomeComponent {
       this.loadQuizzes();
     });
   }
-
-  // loadQuizzes() {
-  //   this.quizService.getAllQuizzes().subscribe({
-  //     next: (quizList: Quiz[]) => {
-  //       const userIds = quizList.map(quiz => quiz.createdBy);
-  //       this.quizService.getUsernames(userIds).subscribe({
-  //         next: users => {
-  //           const userMap = new Map(users.map(user => [user._id, user.username]));
-  
-  //           const quizzesWithUsernames = quizList.map(quiz => ({
-  //             ...quiz,
-  //             username: userMap.get(quiz.createdBy)
-  //           }));
-  
-  //           if (this.user) {
-  //             this.myQuizList = quizzesWithUsernames.filter(quiz => quiz.createdBy === this.user.userId);
-  //             // this.otherQuizList = quizzesWithUsernames.filter(quiz => quiz.createdBy !== this.user.userId);
-  //           } else {
-  //             this.otherQuizList = quizzesWithUsernames;
-  //           }
-  
-  //           this.originalQuizList = [...this.otherQuizList]; // Keep the original list for filtering
-  //         },
-  //         error: error => {
-  //           console.error('Failed to fetch usernames:', error);
-  //         }
-  //       });
-  //     },
-  //     error: error => {
-  //       this.snackbarService.show('Failed to fetch quizzes');
-  //       console.error('Failed to fetch quizzes:', error);
-  //     }
-  //   });
-  // }
 
   loadQuizzes() {
     this.quizService.getAllQuizzes().pipe(
@@ -103,8 +70,9 @@ export class HomeComponent {
         } else {
           this.otherQuizList = quizzesWithUsernames;
         }
-  
-        this.originalQuizList = [...this.otherQuizList]; // Keep the original list for filtering
+        
+        this.originalMyQuizList = [...this.myQuizList]; // Keep the original list for filtering
+        this.originalOtherQuizList = [...this.otherQuizList];
       },
       error: (error) => {
         this.handleError(error);
@@ -119,18 +87,22 @@ export class HomeComponent {
 
   filterQuizzes(searchTerm: string) {
     if (!searchTerm) {
-      this.filteredQuizList = [...this.originalQuizList];
+      this.myQuizList = [...this.originalMyQuizList];
+      this.otherQuizList = [...this.originalOtherQuizList];
+      return;
+    }
+  
+    if (this.user) {
+      this.myQuizList = this.originalMyQuizList.filter(quiz =>
+        quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) && quiz.createdBy === this.user.userId
+      );
+      this.otherQuizList = this.originalOtherQuizList.filter(quiz =>
+        quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) && quiz.createdBy !== this.user.userId
+      );
     } else {
-      this.filteredQuizList = this.originalQuizList.filter(quiz =>
+      this.otherQuizList = this.originalOtherQuizList.filter(quiz =>
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
-    }
-
-    if (this.user) {
-      this.myQuizList = this.filteredQuizList.filter(quiz => quiz.createdBy === this.user.userId);
-      this.otherQuizList = this.filteredQuizList.filter(quiz => quiz.createdBy !== this.user.userId);
-    } else {
-      this.otherQuizList = this.filteredQuizList;
     }
   }
 }

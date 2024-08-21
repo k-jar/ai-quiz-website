@@ -8,15 +8,49 @@ import { AuthService } from '../auth.service';
 import { QuizEventsService } from '../quiz-events.service';
 import { QuizService } from '../quiz.service';
 import { SnackbarService } from '../snackbar.service';
-import { EMPTY, Subject, of, throwError } from 'rxjs';
-import { Quiz } from '../quiz';
-import { ActivatedRoute, provideRouter } from '@angular/router';
-import { routes } from '../app.routes';
-import { QuizComponent } from '../quiz/quiz.component';
+import { Subject, of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 let mockActivatedRoute = {
   queryParams: of({ reason: 'test-reason' }),
 };
+  
+const mockQuizzes = [
+  {
+    title: 'Quiz 1', createdBy: 'user1',
+    _id: '',
+    reading: '',
+    questions: [],
+    username: 'Username 1'
+  },
+  {
+    title: 'Quiz 2', createdBy: 'user1',
+    _id: '',
+    reading: '',
+    questions: [],
+    username: 'Username 1'
+  },
+  {
+    title: 'Quiz 3', createdBy: 'user2',
+    _id: '',
+    reading: '',
+    questions: [],
+    username: 'Username 2'
+  },
+  {
+    title: 'Quiz 4', createdBy: 'user2',
+    _id: '',
+    reading: '',
+    questions: [],
+    username: 'Username 2'
+  }
+];
+
+const users = [
+  { _id: 'user1', username: 'Username 1' },
+  { _id: 'user2', username: 'Username 2' },
+];
+
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -25,42 +59,6 @@ describe('HomeComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let quizEventsServiceSpy: jasmine.SpyObj<QuizEventsService>;
   let snackbarServiceSpy: jasmine.SpyObj<SnackbarService>;
-
-  const users = [
-    { _id: 'user1', username: 'User1' },
-    { _id: 'user2', username: 'User2' },
-  ];
-
-  const quizzes: Quiz[] = [
-    {
-      createdBy: 'user1', // createdBy is user id
-      _id: '1',
-      title: 'Test Quiz',
-      reading: 'Test Reading',
-      questions: [
-        {
-          question: 'Test Question',
-          options: ['A', 'B', 'C'],
-          answer: 1,
-        },
-      ],
-      username: 'User1',
-    },
-    {
-      createdBy: 'user2',
-      _id: '2',
-      title: 'Test Quiz 2',
-      reading: 'Test Reading 2',
-      questions: [
-        {
-          question: 'Test Question 2',
-          options: ['A', 'B', 'C'],
-          answer: 1,
-        },
-      ],
-      username: 'User2',
-    },
-  ];
 
   beforeEach(async () => {
     quizServiceSpy = jasmine.createSpyObj('QuizService', [
@@ -104,41 +102,53 @@ describe('HomeComponent', () => {
   });
 
   it('should load quizzes', () => {
-    const quizzesMock = [...quizzes];
-    const usersMock = [...users];
-    quizServiceSpy.getAllQuizzes.and.returnValue(of(quizzesMock));
-    quizServiceSpy.getUsernames.and.returnValue(of(usersMock));
+    quizServiceSpy.getAllQuizzes.and.returnValue(of(mockQuizzes));
+    quizServiceSpy.getUsernames.and.returnValue(of(users));
 
     component.loadQuizzes();
 
     expect(quizServiceSpy.getAllQuizzes).toHaveBeenCalled();
     expect(quizServiceSpy.getUsernames).toHaveBeenCalled();
     expect(component.myQuizList).toEqual(
-      quizzesMock.filter((quiz) => quiz.createdBy === 'user1')
+      mockQuizzes.filter((quiz) => quiz.createdBy === 'user1')
     );
     expect(component.otherQuizList).toEqual(
-      quizzesMock.filter((quiz) => quiz.createdBy !== 'user1')
+      mockQuizzes.filter((quiz) => quiz.createdBy !== 'user1')
     );
   });
 
-  it('should filter quizzes', () => {
-    const searchTerm = 'Test Quiz';
-    component.originalQuizList = [...quizzes];
-    component.filterQuizzes(searchTerm);
+  it('should filter myQuizList and otherQuizList when searchTerm is provided', () => {
+    component.originalMyQuizList = mockQuizzes.filter((quiz) => quiz.createdBy === 'user1');
+    component.originalOtherQuizList = mockQuizzes.filter((quiz) => quiz.createdBy === 'user2');
+    component.user = { userId: 'user1' };
 
-    expect(component.myQuizList).toEqual(
-      quizzes.filter(
-        (quiz) => quiz.title.includes(searchTerm) && quiz.createdBy === 'user1'
-      )
-    );
-    expect(component.otherQuizList).toEqual(
-      quizzes.filter(
-        (quiz) => quiz.title.includes(searchTerm) && quiz.createdBy !== 'user1'
-      )
-    );
+    component.filterQuizzes('Quiz 1');
+
+    expect(component.myQuizList).toEqual(mockQuizzes.filter((quiz) => quiz.title === 'Quiz 1'));
+    expect(component.otherQuizList).toEqual([]);
   });
 
-  it('should initialize', () => {
+  it('should reset myQuizList and otherQuizList when searchTerm is empty', () => {
+    component.originalMyQuizList = mockQuizzes.filter((quiz) => quiz.createdBy === 'user1');
+    component.originalOtherQuizList = mockQuizzes.filter((quiz) => quiz.createdBy === 'user2');
+    component.user = { userId: 'user1' };
+
+    component.filterQuizzes('');
+
+    expect(component.myQuizList).toEqual(component.originalMyQuizList);
+    expect(component.otherQuizList).toEqual(component.originalOtherQuizList);
+  });
+
+  it('should filter otherQuizList when searchTerm is provided and user is not defined', () => {
+    component.originalOtherQuizList = mockQuizzes.filter((quiz) => quiz.createdBy === 'user2');
+    component.user = null;
+
+    component.filterQuizzes('Quiz 3');
+
+    expect(component.otherQuizList).toEqual(mockQuizzes.filter((quiz) => quiz.title === 'Quiz 3'));
+  });
+
+  it('should call loadQuizzes and subscribe to quizDeleted$ on initialization', () => {
     const loadQuizzesSpy = spyOn(component, 'loadQuizzes');
     const quizDeletedSubscriptionSpy = spyOn(
       quizEventsServiceSpy.quizDeleted$,
