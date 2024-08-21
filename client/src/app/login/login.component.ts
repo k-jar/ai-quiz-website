@@ -63,19 +63,19 @@ export class LoginComponent {
       return; // Prevent submission if form is invalid
     }
 
-    this.authService.login(this.loginForm.value).subscribe(
-      (response) => {
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (response) => {
         if (response.token) {
           this.snackbarService.show('Logged in successfully.');
           this.router.navigate(['/']);
         }
       },
-      (error) => {
+      error: (error) => {
         console.error('Login error:', error);
         this.snackbarService.show(
           'Login failed. Please check your username and password.'
         );
       }
-    );
+    });
   }
 }
