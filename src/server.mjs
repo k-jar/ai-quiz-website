@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import quizzesRouter from './routes/quizRoutes.mjs';
 import authRouter from './routes/authRoutes.mjs';
 import quizAttemptRouter from './routes/quizAttemptRoutes.mjs';
+import ankiRouter from './routes/ankiRoutes.mjs';
 
 import { config } from 'dotenv';
 config();
@@ -19,6 +20,7 @@ server.use(express.json());
 server.use("/api", quizzesRouter);
 server.use("/api/auth", authRouter);
 server.use("/api/quiz-attempts", quizAttemptRouter);
+server.use("/api/anki", ankiRouter);
 
 mongoose.connect(DATABASE_URL);
 const db = mongoose.connection;
