@@ -1,8 +1,8 @@
 import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { UpdateQuizComponent } from './update-quiz.component';
-import { QuizService } from '../quiz.service';
+import { QuizService } from '../services/quiz.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { SnackbarService } from '../snackbar.service';
+import { SnackbarService } from '../services/snackbar.service';
 import { EMPTY, of, throwError } from 'rxjs';
 import { Quiz } from '../quiz';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

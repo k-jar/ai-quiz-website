@@ -6,10 +6,10 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { Quiz } from '../quiz';
-import { QuizService } from '../quiz.service';
+import { QuizService } from '../services/quiz.service';
 import { of } from 'rxjs';
-import { AuthService } from '../auth.service';
-import { QuizAttemptService } from '../quiz-attempt.service';
+import { AuthService } from '../services/auth.service';
+import { QuizAttemptService } from '../services/quiz-attempt.service';
 
 describe('PlayQuizComponent', () => {
   let component: PlayQuizComponent;

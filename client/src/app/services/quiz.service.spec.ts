@@ -3,7 +3,7 @@ import { QuizService } from './quiz.service';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { AuthService } from './auth.service';
-import { Quiz } from './quiz';
+import { Quiz } from '../quiz';
 
 describe('QuizService', () => {
   let service: QuizService;

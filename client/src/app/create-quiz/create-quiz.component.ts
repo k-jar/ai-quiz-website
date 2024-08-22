@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
-import { QuizService } from '../quiz.service';
+import { QuizService } from '../services/quiz.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { QuizFormComponent } from '../quiz-form/quiz-form.component';
 import { Router } from '@angular/router';
 import { Quiz } from '../quiz';
-import { SnackbarService } from '../snackbar.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-create-quiz',

@@ -6,8 +6,8 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { AuthService } from '../auth.service';
-import { SnackbarService } from '../snackbar.service';
+import { AuthService } from '../services/auth.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;

@@ -4,11 +4,11 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { QuizAttemptService } from '../quiz-attempt.service';
-import { AuthService } from '../auth.service';
-import { QuizService } from '../quiz.service';
-import { QuizEventsService } from '../quiz-events.service';
-import { SnackbarService } from '../snackbar.service';
+import { QuizAttemptService } from '../services/quiz-attempt.service';
+import { AuthService } from '../services/auth.service';
+import { QuizService } from '../services/quiz.service';
+import { QuizEventsService } from '../services/quiz-events.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-quiz',

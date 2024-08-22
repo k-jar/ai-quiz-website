@@ -5,7 +5,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Quiz } from '../quiz';
 import { of } from 'rxjs';
-import { QuizService } from '../quiz.service';
+import { QuizService } from '../services/quiz.service';
 import { Router } from '@angular/router';
 
 describe('CreateQuizComponent', () => {

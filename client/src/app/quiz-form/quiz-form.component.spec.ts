@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { QuizFormComponent } from './quiz-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SimpleChange } from '@angular/core';
-import { SnackbarService } from '../snackbar.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 describe('QuizFormComponent', () => {
   let component: QuizFormComponent;

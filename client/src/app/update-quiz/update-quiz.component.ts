@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { QuizService } from '../quiz.service';
+import { QuizService } from '../services/quiz.service';
 import { Quiz } from '../quiz';
 import { CommonModule } from '@angular/common';
 import { QuizFormComponent } from '../quiz-form/quiz-form.component';
-import { SnackbarService } from '../snackbar.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-update-quiz',

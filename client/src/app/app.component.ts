@@ -7,8 +7,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from './auth.service';
-import { SnackbarService } from './snackbar.service';
+import { AuthService } from './services/auth.service';
+import { SnackbarService } from './services/snackbar.service';
 
 @Component({
   selector: 'app-root',

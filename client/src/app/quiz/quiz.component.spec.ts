@@ -4,11 +4,11 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { AuthService } from '../auth.service';
-import { QuizAttemptService } from '../quiz-attempt.service';
-import { QuizEventsService } from '../quiz-events.service';
-import { QuizService } from '../quiz.service';
-import { SnackbarService } from '../snackbar.service';
+import { AuthService } from '../services/auth.service';
+import { QuizAttemptService } from '../services/quiz-attempt.service';
+import { QuizEventsService } from '../services/quiz-events.service';
+import { QuizService } from '../services/quiz.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 describe('QuizComponent', () => {
   let component: QuizComponent;

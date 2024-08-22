@@ -6,7 +6,7 @@ import {
   provideProtractorTestingSupport,
 } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { tokenInterceptor } from './token.interceptor';
 import { provideHttpClient, withFetch } from '@angular/common/http';

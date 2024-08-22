@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { RegisterComponent } from './register.component';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SnackbarService } from '../snackbar.service';
+import { SnackbarService } from '../services/snackbar.service';
 import { of, throwError } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { QuizService } from '../quiz.service';
+import { QuizService } from '../services/quiz.service';
 import { Quiz } from '../quiz';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,9 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { MatCardModule } from '@angular/material/card';
-import { QuizAttemptService } from '../quiz-attempt.service';
-import { AuthService } from '../auth.service';
-import { SnackbarService } from '../snackbar.service';
+import { QuizAttemptService } from '../services/quiz-attempt.service';
+import { AuthService } from '../services/auth.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-play-quiz',

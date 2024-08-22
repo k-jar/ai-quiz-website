@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { QuizAttemptService } from '../quiz-attempt.service';
-import { AuthService } from '../auth.service';
+import { QuizAttemptService } from '../services/quiz-attempt.service';
+import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { QuizService } from '../quiz.service';
+import { QuizService } from '../services/quiz.service';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { forkJoin, map } from 'rxjs';

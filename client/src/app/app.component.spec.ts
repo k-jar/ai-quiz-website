@@ -4,8 +4,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import { AuthService } from './auth.service';
-import { SnackbarService } from './snackbar.service';
+import { AuthService } from './services/auth.service';
+import { SnackbarService } from './services/snackbar.service';
 
 describe('AppComponent', () => {
   let authServiceMock: jasmine.SpyObj<AuthService>;

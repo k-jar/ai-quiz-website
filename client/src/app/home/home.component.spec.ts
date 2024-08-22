@@ -4,10 +4,10 @@ import { HomeComponent } from './home.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AuthService } from '../auth.service';
-import { QuizEventsService } from '../quiz-events.service';
-import { QuizService } from '../quiz.service';
-import { SnackbarService } from '../snackbar.service';
+import { AuthService } from '../services/auth.service';
+import { QuizEventsService } from '../services/quiz-events.service';
+import { QuizService } from '../services/quiz.service';
+import { SnackbarService } from '../services/snackbar.service';
 import { Subject, of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 

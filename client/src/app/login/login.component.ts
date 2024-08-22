@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormBuilder,
@@ -14,7 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormField } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SnackbarService } from '../snackbar.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-login',

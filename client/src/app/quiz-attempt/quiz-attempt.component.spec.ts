@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { QuizAttemptComponent } from './quiz-attempt.component';
-import { QuizAttemptService } from '../quiz-attempt.service';
+import { QuizAttemptService } from '../services/quiz-attempt.service';
 import { of } from 'rxjs';
-import { AuthService } from '../auth.service';
-import { QuizService } from '../quiz.service';
+import { AuthService } from '../services/auth.service';
+import { QuizService } from '../services/quiz.service';
 import { Quiz } from '../quiz';
 import { ActivatedRoute } from '@angular/router';
 

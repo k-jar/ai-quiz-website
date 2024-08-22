@@ -2,17 +2,17 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuizComponent } from '../quiz/quiz.component';
 import { Quiz } from '../quiz';
-import { QuizService } from '../quiz.service';
+import { QuizService } from '../services/quiz.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { QuizEventsService } from '../quiz-events.service';
-import { SnackbarService } from '../snackbar.service';
+import { QuizEventsService } from '../services/quiz-events.service';
+import { SnackbarService } from '../services/snackbar.service';
 import { forkJoin, switchMap } from 'rxjs';
 
 @Component({
