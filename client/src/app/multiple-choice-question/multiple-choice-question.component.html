@@ -1,0 +1,15 @@
+<h1>Multiple choice</h1>
+<div>
+  <mat-radio-group
+    [(ngModel)]="userAnswer"
+    [disabled]="disabled"
+    (ngModelChange)="onAnswerSelected($event)"
+  >
+    <mat-radio-button
+      *ngFor="let option of question.options; let j = index"
+      [value]="j"
+    >
+      {{ option }}
+    </mat-radio-button>
+  </mat-radio-group>
+</div>

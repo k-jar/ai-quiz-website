@@ -68,6 +68,7 @@ export const mockQuizzes = [
         "reading": "Test reading",
         "questions": [
           {
+            "type" : "multiple-choice",
             "question": "Test question",
             "options": ["A", "B", "C"],
             "answer": 0
@@ -79,16 +80,19 @@ export const mockQuizzes = [
       "reading": "Placeholder reading",
       "questions": [
         {
+          "type" : "multiple-choice",
           "question": "What is the capital of France?",
           "options": ["Paris", "London", "Berlin", "Madrid"],
           "answer": 0
         },
         {
+          "type" : "multiple-choice",
           "question": "Which planet is known as the Red Planet?",
           "options": ["Earth", "Mars", "Jupiter", "Venus"],
           "answer": 1
         },
         {
+          "type" : "multiple-choice",
           "question": "Who wrote 'Romeo and Juliet'?",
           "options": ["William Shakespeare", "Charles Dickens", "J.K. Rowling", "Ernest Hemingway"],
           "answer": 0
@@ -100,86 +104,26 @@ export const mockQuizzes = [
       "reading": "Placeholder reading",
       "questions": [
         {
+          "type" : "multiple-choice",
           "question": "What is the chemical symbol for water?",
           "options": ["H2O", "O2", "CO2", "NaCl"],
           "answer": 0
         },
         {
+          "type" : "multiple-choice",
           "question": "What planet is known as the Earth's twin?",
           "options": ["Mars", "Venus", "Jupiter", "Saturn"],
           "answer": 1
         },
         {
+          "type" : "multiple-choice",
           "question": "What gas do plants absorb from the atmosphere?",
           "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
           "answer": 2
         }
       ]
-    },
-    {
-      "title": "History Quiz",
-      "reading": "Placeholder reading",
-      "questions": [
-        {
-          "question": "Who was the first President of the United States?",
-          "options": ["George Washington", "Abraham Lincoln", "Thomas Jefferson", "John Adams"],
-          "answer": 0
-        },
-        {
-          "question": "In which year did World War II end?",
-          "options": ["1945", "1939", "1965", "1918"],
-          "answer": 0
-        },
-        {
-          "question": "What ancient civilization built the pyramids?",
-          "options": ["Romans", "Greeks", "Egyptians", "Mayans"],
-          "answer": 2
-        }
-      ]
-    },
-    {
-      "title": "Math Quiz",
-      "reading": "Placeholder reading",
-      "questions": [
-        {
-          "question": "What is the value of Pi (π) rounded to two decimal places?",
-          "options": ["3.14", "2.72", "1.62", "1.41"],
-          "answer": 0
-        },
-        {
-          "question": "What is 9 multiplied by 8?",
-          "options": ["72", "64", "81", "56"],
-          "answer": 0
-        },
-        {
-          "question": "What is the square root of 144?",
-          "options": ["10", "12", "14", "16"],
-          "answer": 1
-        }
-      ]
-    },
-    {
-      "title": "Geography Quiz",
-      "reading": "Placeholder reading",
-      "questions": [
-        {
-          "question": "Which is the longest river in the world?",
-          "options": ["Amazon", "Nile", "Yangtze", "Mississippi"],
-          "answer": 1
-        },
-        {
-          "question": "Which continent is the Sahara Desert located in?",
-          "options": ["Asia", "Africa", "Australia", "North America"],
-          "answer": 1
-        },
-        {
-          "question": "What is the largest ocean on Earth?",
-          "options": ["Atlantic", "Indian", "Arctic", "Pacific"],
-          "answer": 3
-        }
-      ]
     }
-  ]
+];
   
 export const mockUsers = [
     {
