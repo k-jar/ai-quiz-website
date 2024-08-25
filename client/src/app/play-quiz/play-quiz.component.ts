@@ -62,6 +62,7 @@ export class PlayQuizComponent {
   authService: AuthService = inject(AuthService);
   questionComponents: any[] = [];
   componentRefs: ComponentRef<any>[] = [];
+  showAnswer: boolean = false;
 
   ngOnInit() {
     this.quizId = this.route.snapshot.params['id'];
@@ -89,6 +90,16 @@ export class PlayQuizComponent {
         });
       }
     }, 0);
+  }
+
+  showAnswers() {
+    // Update the local showAnswer property
+    this.showAnswer = true;
+
+    // Update the showAnswer property for each dynamic component
+    this.componentRefs.forEach((ref) => {
+      ref.instance.showAnswer = this.showAnswer;
+    });
   }
 
   onAnswerChange(index: number, answer: any) {
@@ -123,6 +134,7 @@ export class PlayQuizComponent {
       componentRef.setInput('question', question);
       componentRef.setInput('userAnswer', this.userAnswers[index]);
       componentRef.setInput('disabled', this.quizSubmitted);
+      componentRef.setInput('showAnswer', this.showAnswer);
 
       componentRef.instance.answerChange.subscribe(
         (answer: any) => (this.userAnswers[index] = answer)
@@ -199,6 +211,7 @@ export class PlayQuizComponent {
     this.score = 0;
     this.quizSubmitted = false;
     this.showQuestions = false;
+    this.showAnswer = false;
 
     // Clear the ViewContainerRef for each dynamic component and reset disabled property
     this.componentRefs.forEach((ref) => {

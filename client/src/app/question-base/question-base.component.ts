@@ -11,6 +11,7 @@ export abstract class QuestionBaseComponent {
   @Input() question: any;
   @Input() userAnswer: any;
   @Input() disabled: boolean = false; // Disable input when the quiz is submitted
+  @Input() showAnswer: boolean = false;
 
   @Output() answerChange = new EventEmitter<any>();
 

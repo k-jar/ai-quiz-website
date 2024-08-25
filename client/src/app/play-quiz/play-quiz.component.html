@@ -21,13 +21,7 @@
 
   <section class="questions" *ngIf="showQuestions">
     <ng-container *ngFor="let question of quiz?.questions; let i = index">
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>{{ question.question }}</mat-panel-title>
-        </mat-expansion-panel-header>
-  
         <ng-container #container></ng-container> <!-- Placeholder for dynamic component, note this is within ngIf -->
-      </mat-expansion-panel>
     </ng-container>
     <button mat-raised-button color="accent" (click)="submitQuiz()" *ngIf="!quizSubmitted">Submit Quiz</button>
   </section>
@@ -41,6 +35,9 @@
         </p>
         <button mat-raised-button color="primary" (click)="resetQuiz()">
           Retry
+        </button>
+        <button mat-raised-button color="primary" (click)="showAnswers()" *ngIf="quizSubmitted && !showAnswer">
+          Show Answers
         </button>
       </mat-card-content>
     </mat-card>

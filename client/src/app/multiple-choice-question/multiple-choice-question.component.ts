@@ -3,6 +3,7 @@ import { QuestionBaseComponent } from '../question-base/question-base.component'
 import { CommonModule } from '@angular/common';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-multiple-choice-question',
@@ -10,7 +11,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     MatRadioModule,
-    FormsModule
+    FormsModule,
+    MatExpansionModule
   ],
   templateUrl: './multiple-choice-question.component.html',
   styleUrl: './multiple-choice-question.component.css'
