@@ -48,14 +48,9 @@ export const addQuizSchema = {
                 if (options.length < 2 || options.length > 5) {
                     throw new Error('Options must have between 2 and 5 items');
                 }
-                return options.every(option => 
-                    typeof option === 'object' && 
-                    typeof option.id === 'number' && 
-                    typeof option.text === 'string' && 
-                    option.text.length >= 1
-                );
+                return options.every(option => typeof option === 'string');
             },
-            errorMessage: 'There must be 2 to 5 options, each option being an object with an id (number) and text (string with at least 1 character)',
+            errorMessage: 'There must be 2 to 5 options, each option being a string',
         },
     },
     'questions.*.answer': {

@@ -32,6 +32,16 @@
                 />
               </mat-form-field>
 
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Question Type</mat-label>
+                <mat-select formControlName="type">
+                  <mat-option value="multiple-choice">
+                    Multiple Choice
+                  </mat-option>
+                  <mat-option value="ordering">Ordering</mat-option>
+                </mat-select>
+              </mat-form-field>
+
               <div formArrayName="options">
                 <div
                   *ngFor="
@@ -64,34 +74,73 @@
                 >
                   Add Option
                 </button>
-                <button
-                  mat-raised-button
-                  color="warn"
-                  type="button"
-                  (click)="removeQuestion(qIndex)"
-                >
-                  Delete Question
-                </button>
               </div>
 
-              <div class="answer-selection">
-                <mat-label>Correct Answer</mat-label>
-                <mat-radio-group formControlName="answer">
-                  <mat-radio-button
-                    *ngFor="
-                      let option of getOptions(qIndex).controls;
-                      let oIndex = index
-                    "
-                    [value]="oIndex"
-                  >
-                    Option {{ oIndex + 1 }}
-                  </mat-radio-button>
-                  <mat-error *ngIf="questions.at(qIndex).get('answer')?.hasError('required')">
-                    You must select a correct answer.
-                  </mat-error>
-                </mat-radio-group>
+              <div *ngIf="questions.at(qIndex).get('type')?.value === 'multiple-choice'">
+                <div class="answer-selection">
+                  <mat-label>Correct Answer</mat-label>
+                  <mat-radio-group formControlName="answer">
+                    <mat-radio-button
+                      *ngFor="
+                        let option of getOptions(qIndex).controls;
+                        let oIndex = index
+                      "
+                      [value]="oIndex"
+                    >
+                      Option {{ oIndex + 1 }}
+                    </mat-radio-button>
+                    <mat-error
+                      *ngIf="questions
+                        .at(qIndex)
+                        .get('answer')
+                        ?.hasError('required')"
+                    >
+                      You must select a correct answer.
+                    </mat-error>
+                  </mat-radio-group>
+                </div>
               </div>
+
+              <!-- <div *ngIf="questions.at(qIndex).get('type')?.value === 'ordering'">
+                <div class="answer-selection">
+                  <mat-label>Correct Order</mat-label>
+                  <ol>
+                    <li
+                      *ngFor="
+                        let option of getOptions(qIndex).controls;
+                        let oIndex = index
+                      "
+                    >
+                      Option {{ oIndex + 1 }}
+                    </li>
+                 ```html
+                  </ol>
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Enter Correct Order (comma-separated indices)</mat-label>
+                    <input
+                      matInput
+                      formControlName="answer"
+                      placeholder="e.g., 1,3,2,0"
+                      type="text"
+                    />
+                    <mat-error *ngIf="questions.at(qIndex).get('answer')?.hasError('required')">
+                      You must specify the correct order.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div> -->
+
             </mat-card-content>
+            <mat-card-actions>
+              <button
+                mat-raised-button
+                color="warn"
+                type="button"
+                (click)="removeQuestion(qIndex)"
+              >
+                Delete Question
+              </button>
+            </mat-card-actions>
           </mat-card>
         </div>
       </ng-container>
