@@ -19,8 +19,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 })
 export class MultipleChoiceQuestionComponent extends QuestionBaseComponent{
   isAnswerCorrect(): boolean {
-    console.log(this.userAnswer);
-    console.log(this.question);
     return this.userAnswer === this.question.answer;
   }
 }

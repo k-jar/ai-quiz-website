@@ -6,6 +6,9 @@
 >
   <mat-expansion-panel-header>
     <mat-panel-title>{{ question.question }}</mat-panel-title>
+    <mat-panel-description *ngIf="showAnswer && !isAnswerCorrect()">
+      <p>Correct Order: {{question.options}}</p>
+    </mat-panel-description>
   </mat-expansion-panel-header>
   <div class="ordering-question">
     <div
