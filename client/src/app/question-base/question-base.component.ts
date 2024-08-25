@@ -25,5 +25,6 @@ export abstract class QuestionBaseComponent {
   reset() {
     this.userAnswer = null;
     this.disabled = false;
+    this.showAnswer = false;
   }
 }

@@ -1,1 +1,22 @@
-<h3>Ordering question</h3>
+<mat-expansion-panel
+  [ngClass]="{
+    'correct-answer': showAnswer && isAnswerCorrect(),
+    'wrong-answer': showAnswer && !isAnswerCorrect()
+  }"
+>
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{ question.question }}</mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="ordering-question">
+    <div
+      class="drag-drop-list"
+      cdkDropList
+      [cdkDropListData]="userAnswer"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="drag-drop-item" *ngFor="let index of userAnswer" cdkDrag>
+        {{ getOptionText(index) }}
+      </div>
+    </div>
+  </div>
+</mat-expansion-panel>

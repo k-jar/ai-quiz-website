@@ -63,71 +63,92 @@ type QuizSchema = {
 `;
 
 export const mockQuizzes = [
-    {
-        "title": "Test Quiz",
-        "reading": "Test reading",
-        "questions": [
-          {
-            "type" : "multiple-choice",
-            "question": "Test question",
-            "options": ["A", "B", "C"],
-            "answer": 0
-          }
-        ],
+  {
+    title: "Test Quiz",
+    reading: "Test reading",
+    questions: [
+      {
+        type: "multiple-choice",
+        question: "Test question",
+        options: ["A", "B", "C"],
+        answer: 0,
       },
-    {
-      "title": "General Knowledge Quiz",
-      "reading": "Placeholder reading",
-      "questions": [
-        {
-          "type" : "multiple-choice",
-          "question": "What is the capital of France?",
-          "options": ["Paris", "London", "Berlin", "Madrid"],
-          "answer": 0
-        },
-        {
-          "type" : "multiple-choice",
-          "question": "Which planet is known as the Red Planet?",
-          "options": ["Earth", "Mars", "Jupiter", "Venus"],
-          "answer": 1
-        },
-        {
-          "type" : "multiple-choice",
-          "question": "Who wrote 'Romeo and Juliet'?",
-          "options": ["William Shakespeare", "Charles Dickens", "J.K. Rowling", "Ernest Hemingway"],
-          "answer": 0
-        }
-      ]
-    },
-    {
-      "title": "Science Quiz",
-      "reading": "Placeholder reading",
-      "questions": [
-        {
-          "type" : "multiple-choice",
-          "question": "What is the chemical symbol for water?",
-          "options": ["H2O", "O2", "CO2", "NaCl"],
-          "answer": 0
-        },
-        {
-          "type" : "multiple-choice",
-          "question": "What planet is known as the Earth's twin?",
-          "options": ["Mars", "Venus", "Jupiter", "Saturn"],
-          "answer": 1
-        },
-        {
-          "type" : "multiple-choice",
-          "question": "What gas do plants absorb from the atmosphere?",
-          "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
-          "answer": 2
-        }
-      ]
-    }
+    ],
+  },
+  {
+    title: "General Knowledge Quiz",
+    reading: "Placeholder reading",
+    questions: [
+      {
+        type: "multiple-choice",
+        question: "What is the capital of France?",
+        options: ["Paris", "London", "Berlin", "Madrid"],
+        answer: 0,
+      },
+      {
+        type: "multiple-choice",
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Mars", "Jupiter", "Venus"],
+        answer: 1,
+      },
+      {
+        type: "multiple-choice",
+        question: "Who wrote 'Romeo and Juliet'?",
+        options: [
+          "William Shakespeare",
+          "Charles Dickens",
+          "J.K. Rowling",
+          "Ernest Hemingway",
+        ],
+        answer: 0,
+      },
+    ],
+  },
+  {
+    title: "Science Quiz",
+    reading: "Placeholder reading",
+    questions: [
+      {
+        type: "multiple-choice",
+        question: "What is the chemical symbol for water?",
+        options: ["H2O", "O2", "CO2", "NaCl"],
+        answer: 0,
+      },
+      {
+        type: "multiple-choice",
+        question: "What planet is known as the Earth's twin?",
+        options: ["Mars", "Venus", "Jupiter", "Saturn"],
+        answer: 1,
+      },
+      {
+        type: "multiple-choice",
+        question: "What gas do plants absorb from the atmosphere?",
+        options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+        answer: 2,
+      },
+    ],
+  },
+  {
+    title: "Ordering Quiz",
+    reading: "Placeholder reading",
+    questions: [
+      {
+        type: "ordering",
+        question: "Order the numbers in ascending order",
+        options: ["1", "2", "3", "4"],
+      },
+      {
+        type: "ordering",
+        question: "Order the letters in alphabetical order",
+        options: ["A", "B", "C", "D"],
+      },
+    ],
+  },
 ];
-  
+
 export const mockUsers = [
-    {
-        "username": "admin",
-        "password": "password",
-    },
-]
+  {
+    username: "admin",
+    password: "password",
+  },
+];

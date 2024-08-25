@@ -15,7 +15,7 @@ const questionSchema = new mongoose.Schema({
     },
     answer: {
         type: Number,
-        required: true,
+        required: false, // Not required for ordering questions
     },
 });
 
