@@ -1,0 +1,48 @@
+<H3>MULTIPLE CHOICE</H3>
+<div [formGroup]="questionForm">
+  <div formArrayName="options">
+    <div
+      *ngFor="let option of options.controls; let oIndex = index"
+      class="option-item"
+    >
+      <div class="option-container">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Option {{ oIndex + 1 }}</mat-label>
+          <input matInput [formControlName]="oIndex" type="text" />
+        </mat-form-field>
+        <button
+          matSuffix
+          mat-icon-button
+          color="warn"
+          type="button"
+          (click)="removeOption(oIndex)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="addOption()"
+    >
+      Add Option
+    </button>
+  </div>
+
+  <div class="answer-selection">
+    <mat-label>Correct Answer</mat-label>
+    <mat-radio-group formControlName="answer">
+      <mat-radio-button
+        *ngFor="let option of options.controls; let oIndex = index"
+        [value]="oIndex"
+      >
+        Option {{ oIndex + 1 }}
+      </mat-radio-button>
+      <mat-error *ngIf="questionForm.get('answer')?.hasError('required')">
+        You must select a correct answer.
+      </mat-error>
+    </mat-radio-group>
+  </div>
+</div>

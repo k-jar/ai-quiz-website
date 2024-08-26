@@ -1,0 +1,28 @@
+<H3>ORDERING</H3>
+<div [formGroup]="questionForm">
+<div formArrayName="options">
+  <div
+    *ngFor="let option of options.controls; let oIndex = index"
+    class="option-item"
+  >
+    <div class="option-container">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Item {{ oIndex + 1 }}</mat-label>
+        <input matInput [formControlName]="oIndex" type="text" />
+      </mat-form-field>
+      <button
+        matSuffix
+        mat-icon-button
+        color="warn"
+        type="button"
+        (click)="removeOption(oIndex)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+  <button mat-raised-button color="primary" type="button" (click)="addOption()">
+    Add Item
+  </button>
+</div>
+</div>

@@ -24,6 +24,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { SnackbarService } from '../services/snackbar.service';
 import { MatSelectModule } from '@angular/material/select';
+import { MultipleChoiceQuestionFormComponent } from '../multiple-choice-question-form/multiple-choice-question-form.component';
+import { OrderingQuestionFormComponent } from '../ordering-question-form/ordering-question-form.component';
 
 @Component({
   selector: 'app-quiz-form',
@@ -38,7 +40,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatButtonModule,
     MatRadioModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MultipleChoiceQuestionFormComponent,
+    OrderingQuestionFormComponent
   ],
   templateUrl: './quiz-form.component.html',
   styleUrl: './quiz-form.component.css',
@@ -90,11 +94,21 @@ export class QuizFormComponent {
             this.fb.control(option, [Validators.required, Validators.minLength(1)])
           )
         ),
-        answer: question.type === 'multiple-choice' ? this.fb.control(question.answer) : null,
+        answer: this.getAnswerControl(question),
       })
     );
     const questionFormArray = this.fb.array(questionFGs);
     this.quizForm.setControl('questions', questionFormArray);
+  }
+  
+  getAnswerControl(question: any) {
+    if (question.type === 'multiple-choice') {
+      return this.fb.control(question.answer);
+    } else if (question.type === 'ordering') {
+      return this.fb.array([]);
+    } else {
+      return null;
+    }
   }
 
   addQuestion() {
@@ -116,31 +130,35 @@ export class QuizFormComponent {
     this.questions.removeAt(index);
   }
 
-  addOption(questionIndex: number) {
-    const options = this.questions
-      .at(questionIndex)
-      .get('options') as FormArray;
-    options.push(this.fb.control('', Validators.required));
-  }
+  // addOption(questionIndex: number) {
+  //   const options = this.questions
+  //     .at(questionIndex)
+  //     .get('options') as FormArray;
+  //   options.push(this.fb.control('', Validators.required));
+  // }
 
-  removeOption(questionIndex: number, optionIndex: number) {
-    const options = this.questions
-      .at(questionIndex)
-      .get('options') as FormArray;
-    options.removeAt(optionIndex);
+  // removeOption(questionIndex: number, optionIndex: number) {
+  //   const options = this.questions
+  //     .at(questionIndex)
+  //     .get('options') as FormArray;
+  //   options.removeAt(optionIndex);
 
-    const answerControl = this.questions.at(questionIndex).get('answer');
-    if (answerControl !== null && Array.isArray(answerControl.value)) {
-      answerControl.setValue(answerControl.value.filter((val: number) => val !== optionIndex));
-    } else if (answerControl !== null && answerControl.value === optionIndex) {
-      answerControl.setValue(null);
-    } else if (answerControl !== null && answerControl.value > optionIndex) {
-      answerControl.setValue(answerControl.value - 1);
-    }
-  }
+  //   const answerControl = this.questions.at(questionIndex).get('answer');
+  //   if (answerControl !== null && Array.isArray(answerControl.value)) {
+  //     answerControl.setValue(answerControl.value.filter((val: number) => val !== optionIndex));
+  //   } else if (answerControl !== null && answerControl.value === optionIndex) {
+  //     answerControl.setValue(null);
+  //   } else if (answerControl !== null && answerControl.value > optionIndex) {
+  //     answerControl.setValue(answerControl.value - 1);
+  //   }
+  // }
 
-  getOptions(questionIndex: number): FormArray {
-    return this.questions.at(questionIndex).get('options') as FormArray;
+  // getOptions(questionIndex: number): FormArray {
+  //   return this.questions.at(questionIndex).get('options') as FormArray;
+  // }
+
+  getQuestionFormGroup(index: number): FormGroup {
+    return this.questions.at(index) as FormGroup;
   }
 
   onSubmit() {
@@ -154,6 +172,8 @@ export class QuizFormComponent {
         }
         return question;
       });
+      console.log("quizForm Value", this.quizForm);
+      console.log("Form Value", formValue);
       this.submitQuiz.emit(formValue);
     }
     else {
