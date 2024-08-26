@@ -105,7 +105,7 @@ export class QuizFormComponent {
     if (question.type === 'multiple-choice') {
       return this.fb.control(question.answer);
     } else if (question.type === 'ordering') {
-      return this.fb.array([]);
+      return null;
     } else {
       return null;
     }
