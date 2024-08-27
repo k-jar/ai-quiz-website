@@ -34,14 +34,14 @@ async function generateQuiz(text, numQuestions = 5, questionLanguage = "jp", ans
                 console.log("Using OpenAI model");
                 return parseQuizOpenAI(await generateQuizWithOpenAI(text, numQuestions, questionLanguage, answerLanguage));
                 
-            case "none":
-                // Directly take user-provided JSON
-                try {
-                    return JSON.parse(text);
-                } catch (e) {
-                    console.error("Error parsing user-provided JSON:", e);
-                    throw new Error("Invalid JSON provided by user");
-                }
+            // case "none":
+            //     // Directly take user-provided JSON
+            //     try {
+            //         return JSON.parse(text);
+            //     } catch (e) {
+            //         console.error("Error parsing user-provided JSON:", e);
+            //         throw new Error("Invalid JSON provided by user");
+            //     }
                 
             default:
                 console.warn("Unknown modelChoice, defaulting to LM model");

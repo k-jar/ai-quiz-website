@@ -57,7 +57,7 @@
                                     <div class="input-container">
                                         <mat-form-field class="input-field" appearance="outline">
                                             <mat-label>Input the text the quiz should be based on</mat-label>
-                                            <textarea matInput [(ngModel)]="reading" (input)="onSettingsChange()"></textarea>
+                                            <textarea matInput [formControl]="readingControl" (input)="onSettingsChange()"></textarea>
                                         </mat-form-field>
                                     </div>
                                     <label for="quiz-schema">Prompt Preview:</label>
@@ -78,7 +78,7 @@
                                 based on' }}</mat-label>
                             <textarea matInput #input></textarea>
                         </mat-form-field>
-                        <button mat-flat-button color="primary" (click)="submitText(input.value)">{{ modelChoice === 'none' ? 'Submit
+                        <button mat-flat-button color="primary" [disabled]="readingControl.invalid" (click)="submitText(input.value)">{{ modelChoice === 'none' ? 'Submit
                             JSON' : 'Submit Text' }}</button>
                     </div>
                 </mat-card-content>

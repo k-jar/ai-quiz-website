@@ -9,7 +9,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { QuizService } from '../services/quiz.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -35,7 +35,8 @@ import { SnackbarService } from '../services/snackbar.service';
     FormsModule,
     ClipboardModule,
     MatTabsModule,
-    QuizFormComponent
+    QuizFormComponent,
+    ReactiveFormsModule
   ],
   templateUrl: './create-quiz.component.html',
   styleUrl: './create-quiz.component.css',
@@ -49,11 +50,11 @@ export class CreateQuizComponent {
   quizService: QuizService = inject(QuizService);
   router: Router = inject(Router);
   snackbarService: SnackbarService = inject(SnackbarService);
+  readingControl = new FormControl('', Validators.required);
   public prompt: string = '';
-  public reading: string = '';
+  // public reading: string = '';
   public quizTemplate: string = `{
     "title": "",
-    "reading": "",
     "questions": [
       {
         "question": "",
@@ -68,10 +69,10 @@ export class CreateQuizComponent {
   }
 
   updatePrompt() {
-    this.prompt = `Generate ${this.numQuestions} multiple choice quiz questions in ${this.questionLanguage} (answers in ${this.answerLanguage}) from the provided text: ${this.reading}, formatted in JSON with title, questions, options, and answers. The JSON schema should be as follows: ${this.quizTemplate}`;
+    this.prompt = `Generate ${this.numQuestions} multiple choice quiz questions in ${this.questionLanguage} (answers in ${this.answerLanguage}) from the provided text: ${this.readingControl.value}, formatted in JSON with title, questions, options, and answers. The JSON schema should be as follows: ${this.quizTemplate}`;
   }
 
-  onTabChange(index: number){
+  onTabChange(index: number) {
     this.formChoiceIndex = index;
     this.modelChoice = index === 0 ? 'none' : 'lm';
   }
@@ -93,37 +94,59 @@ export class CreateQuizComponent {
     );
   }
 
-
   submitText(text: string) {
-    console.log(
-      'Text:',
-      text,
-      'NumQ:',
-      this.numQuestions,
-      'Qlang:',
-      this.questionLanguage,
-      'Alang:',
-      this.answerLanguage,
-      'Model:',
-      this.modelChoice
-    );
-    this.quizService
-      .generateAndAddQuiz(
-        text,
-        this.numQuestions,
-        this.questionLanguage,
-        this.answerLanguage,
-        this.modelChoice
-      )
-      .subscribe({
-        next: (quiz) => {
-          console.log('Quiz added:', quiz);
-          this.snackbarService.show('Quiz created successfully');
-        },
-        error: (error) => {
-          console.error('Error:', error);
-          this.snackbarService.show('Failed to create quiz');
-        }
-      });
+    // console.log(
+    //   'Text:',
+    //   text,
+    //   'NumQ:',
+    //   this.numQuestions,
+    //   'Qlang:',
+    //   this.questionLanguage,
+    //   'Alang:',
+    //   this.answerLanguage,
+    //   'Model:',
+    //   this.modelChoice
+    // );
+    if (this.modelChoice === 'none') {
+      try {
+        const quiz: Quiz = JSON.parse(text);
+        quiz.reading = this.readingControl.value ?? '';
+        // Add type to questions, temporary fix
+        quiz.questions.forEach((question) => {
+          question.type = 'multiple-choice';
+        });
+        this.quizService.addQuiz(quiz).subscribe(
+          () => {
+            this.snackbarService.show('Quiz created successfully');
+          },
+          (error) => {
+            console.error('Failed to create quiz:', error);
+            this.snackbarService.show('Failed to create quiz');
+          }
+        );
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+        this.snackbarService.show('Failed to parse JSON');
+      }
+    } else {
+      this.quizService
+        .generateAndAddQuiz(
+          text,
+          this.numQuestions,
+          this.questionLanguage,
+          this.answerLanguage,
+          this.modelChoice
+        )
+        .subscribe({
+          next: (quiz) => {
+            console.log('Quiz added:', quiz);
+            this.snackbarService.show('Quiz created successfully');
+          },
+          error: (error) => {
+            console.error('Error:', error);
+            this.snackbarService.show('Failed to create quiz');
+          },
+        });
+    }
   }
 }
