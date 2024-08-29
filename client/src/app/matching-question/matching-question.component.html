@@ -1,0 +1,38 @@
+<mat-expansion-panel
+  [ngClass]="{
+    'correct-answer': showAnswer && isAnswerCorrect(),
+    'wrong-answer': showAnswer && !isAnswerCorrect()
+  }"
+>
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{ question.question }}</mat-panel-title>
+    <mat-panel-description *ngIf="showAnswer && !isAnswerCorrect()">
+      <p>Correct answer: </p>
+      <ul>
+        <li *ngFor="let pair of question.pairs">
+          {{ pair.left }} -> {{ pair.right }}
+        </li>
+      </ul>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+<div class="matching">
+    <div class="pairs-container">
+      <div class="left-side">
+        <div *ngFor="let pair of question.pairs; let i = index">
+          <button mat-raised-button [disabled]="disabled || isMatched(pair.left)" (click)="selectLeft(pair.left)">
+            {{ pair.left }} <span *ngIf="isMatched(pair.left)">({{ getMatchNumber(pair.left) }})</span>
+          </button>
+        </div>
+      </div>
+      <div class="right-side">
+        <div *ngFor="let pair of question.pairs; let i = index">
+          <button mat-raised-button [disabled]="disabled || isMatched(pair.right)" (click)="selectRight(pair.right)">
+            {{ pair.right }} <span *ngIf="isMatched(pair.right)">({{ getMatchNumber(pair.right) }})</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button mat-raised-button [disabled]="disabled" color="warn" (click)="localReset()">Reset Matches</button>
+  </div>
+  
+</mat-expansion-panel>

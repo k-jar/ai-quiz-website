@@ -2,7 +2,7 @@ export interface Quiz {
     _id: string;
     title: string;
     reading: string;
-    questions: (MultipleChoiceQuestion | OrderingQuestion)[];
+    questions: (MultipleChoiceQuestion | OrderingQuestion | MatchingQuestion )[];
     createdBy: any;
     username: string;
 }
@@ -18,4 +18,8 @@ interface MultipleChoiceQuestion extends Question {
 }
 
 interface OrderingQuestion extends Question {
+}
+
+interface MatchingQuestion extends Question {
+    pairs: { left: string, right: string }[];
 }

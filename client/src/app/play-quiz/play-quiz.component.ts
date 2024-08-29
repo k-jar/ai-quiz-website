@@ -24,6 +24,7 @@ import { SnackbarService } from '../services/snackbar.service';
 import { MultipleChoiceQuestionComponent } from '../multiple-choice-question/multiple-choice-question.component';
 import { OrderingQuestionComponent } from '../ordering-question/ordering-question.component';
 import { QuestionBaseComponent } from '../question-base/question-base.component';
+import { MatchingQuestionComponent } from '../matching-question/matching-question.component';
 
 @Component({
   selector: 'app-play-quiz',
@@ -37,6 +38,7 @@ import { QuestionBaseComponent } from '../question-base/question-base.component'
     MatCardModule,
     MultipleChoiceQuestionComponent,
     OrderingQuestionComponent,
+    MatchingQuestionComponent,
   ],
   templateUrl: './play-quiz.component.html',
   styleUrl: './play-quiz.component.css',
@@ -122,6 +124,9 @@ export class PlayQuizComponent {
           break;
         case 'ordering':
           componentType = OrderingQuestionComponent;
+          break;
+        case 'matching':
+          componentType = MatchingQuestionComponent;
           break;
         default:
           throw new Error('Unknown question type');

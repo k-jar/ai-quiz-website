@@ -53,6 +53,20 @@ export const addQuizSchema = {
             errorMessage: 'There must be 2 to 5 options, each option being a string',
         },
     },
+    'questions.*.pairs': {
+        optional: {
+            options: { nullable: true, checkFalsy: true },
+        },
+        custom: {
+            options: (pairs) => {
+                if (!Array.isArray(pairs)) {
+                    throw new Error('Pairs must be an array');
+                }
+                return pairs.every(pair => typeof pair === 'object' && pair !== null && 'left' in pair && 'right' in pair);
+            },
+            errorMessage: 'Pairs must be an array of objects with left and right properties',
+        },
+    },
     'questions.*.answer': {
         optional: {
             options: { nullable: true, checkFalsy: true },

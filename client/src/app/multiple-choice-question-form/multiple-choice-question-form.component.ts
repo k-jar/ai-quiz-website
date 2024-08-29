@@ -9,7 +9,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { OrderingQuestionFormComponent } from '../ordering-question-form/ordering-question-form.component';
 
 @Component({
   selector: 'app-multiple-choice-question-form',
@@ -26,7 +25,6 @@ import { OrderingQuestionFormComponent } from '../ordering-question-form/orderin
     MatIconModule,
     MatSelectModule,
     MultipleChoiceQuestionFormComponent,
-    OrderingQuestionFormComponent,
   ],
   templateUrl: './multiple-choice-question-form.component.html',
   styleUrl: './multiple-choice-question-form.component.css',

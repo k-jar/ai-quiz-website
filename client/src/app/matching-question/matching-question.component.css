@@ -1,0 +1,46 @@
+.matching {
+  text-align: center;
+}
+
+.pairs-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.left-side,
+.right-side {
+  width: 45%;
+}
+
+.left-side button,
+.right-side button {
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.selected-pairs {
+  margin-top: 20px;
+}
+
+.submitted-pairs {
+  margin-top: 20px;
+}
+
+.submitted-pairs ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.submitted-pairs li {
+  margin-bottom: 10px;
+}
+
+.correct-answer {
+  background-color: turquoise;
+}
+
+.wrong-answer {
+  background-color: #ff6961;
+}

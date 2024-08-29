@@ -1,5 +1,16 @@
 import mongoose from 'mongoose';
 
+const matchingPairSchema = new mongoose.Schema({
+    left: {
+        type: String,
+        required: true,
+    },
+    right: {
+        type: String,
+        required: true,
+    },
+}, { _id: false });
+
 const questionSchema = new mongoose.Schema({
     type: {
         type: String,
@@ -12,6 +23,10 @@ const questionSchema = new mongoose.Schema({
     options: {
         type: [String],
         required: true,
+    },
+    pairs: {
+        type: [matchingPairSchema],
+        required: false,
     },
     answer: {
         type: Number,

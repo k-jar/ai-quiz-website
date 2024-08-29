@@ -144,6 +144,21 @@ export const mockQuizzes = [
       },
     ],
   },
+  {
+    title: "Matching quiz",
+    reading: "Placeholder reading",
+    questions: [
+      {
+        type: "matching",
+        question: "Match the countries with their capitals",
+        pairs: [
+          { left: "France", right: "Paris" },
+          { left: "Germany", right: "Berlin" },
+          { left: "Spain", right: "Madrid" },
+        ],
+      },
+    ],
+  }
 ];
 
 export const mockUsers = [
