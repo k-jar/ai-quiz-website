@@ -16,9 +16,34 @@ export class MatchingQuestionComponent extends QuestionBaseComponent {
   selectedPairs: { left: string, right: string }[] = [];
   selectedLeft: string | null = null;
   selectedRight: string | null = null;
+  shuffledPairs: { left: string, right: string }[] = [];
 
   constructor() {
     super();
+  }
+
+  ngOnInit() {
+    const leftSide = this.question.pairs.map((pair: { left: string, right: string }) => pair.left);
+    const rightSide = this.question.pairs.map((pair: { left: string, right: string }) => pair.right);
+  
+    this.shuffle(leftSide);
+    this.shuffle(rightSide);
+  
+    this.shuffledPairs = leftSide.map((left : string, index : number) => ({ left, right: rightSide[index] }));
+  }
+
+  shuffle(array: any[]) {
+    let currentIndex = array.length, randomIndex;
+  
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
   }
 
   selectLeft(left: string) {

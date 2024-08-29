@@ -18,14 +18,14 @@
 <div class="matching">
     <div class="pairs-container">
       <div class="left-side">
-        <div *ngFor="let pair of question.pairs; let i = index">
+        <div *ngFor="let pair of shuffledPairs; let i = index">
           <button mat-raised-button [disabled]="disabled || isMatched(pair.left)" (click)="selectLeft(pair.left)">
             {{ pair.left }} <span *ngIf="isMatched(pair.left)">({{ getMatchNumber(pair.left) }})</span>
           </button>
         </div>
       </div>
       <div class="right-side">
-        <div *ngFor="let pair of question.pairs; let i = index">
+        <div *ngFor="let pair of shuffledPairs; let i = index">
           <button mat-raised-button [disabled]="disabled || isMatched(pair.right)" (click)="selectRight(pair.right)">
             {{ pair.right }} <span *ngIf="isMatched(pair.right)">({{ getMatchNumber(pair.right) }})</span>
           </button>
