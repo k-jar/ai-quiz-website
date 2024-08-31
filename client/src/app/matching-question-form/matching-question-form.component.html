@@ -1,0 +1,37 @@
+<H3>MATCHING</H3>
+<div [formGroup]="questionForm">
+  <div formArrayName="pairs">
+    <div
+      *ngFor="let pair of pairs.controls; let pIndex = index"
+      class="pair-item"
+    >
+      <div class="pair-container">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Pair {{ pIndex + 1 }} Left</mat-label>
+          <input matInput [formControlName]="pIndex" type="text" placeholder="Left item" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Pair {{ pIndex + 1 }} Right</mat-label>
+          <input matInput [formControlName]="pIndex" type="text" placeholder="Right item" />
+        </mat-form-field>
+        <button
+          matSuffix
+          mat-icon-button
+          color="warn"
+          type="button"
+          (click)="removePair(pIndex)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="addPair()"
+    >
+      Add Pair
+    </button>
+  </div>
+</div>

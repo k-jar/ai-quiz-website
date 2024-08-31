@@ -51,7 +51,9 @@ export class UpdateQuizComponent {
   }  
 
   onSubmitQuiz(formValue: Quiz) {
-    this.quizService.updateQuiz(this.quizId, formValue).subscribe({
+    const updatedQuiz = {...this.quiz, ...formValue};
+  
+    this.quizService.updateQuiz(this.quizId, updatedQuiz).subscribe({
       next: () => {
         this.snackbarService.show('Quiz updated successfully');
         this.router.navigate(['/']);

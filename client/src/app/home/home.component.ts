@@ -37,7 +37,6 @@ export class HomeComponent {
 
   ngOnInit() {
     this.user = this.authService.getCurrentUser();
-    console.log("user",this.user);
     this.loadQuizzes();
 
     // Subscribe to the quizDeleted event

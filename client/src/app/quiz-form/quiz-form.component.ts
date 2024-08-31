@@ -168,11 +168,10 @@ export class QuizFormComponent {
         console.log(question);
         if (question.type === 'multiple-choice' && !question.answer) {
           this.snackbarService.show('Please provide an answer for all multiple choice questions');
-          return;
         }
         return question;
       });
-      console.log("quizForm Value", this.quizForm);
+      console.log("quizForm Value", this.quizForm.value);
       console.log("Form Value", formValue);
       this.submitQuiz.emit(formValue);
     }
