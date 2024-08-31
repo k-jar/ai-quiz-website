@@ -87,6 +87,7 @@ export class QuizService {
       modelChoice
     ).pipe(
       switchMap((quiz) => {
+        quiz.reading = text;
         return this.addQuiz(quiz);
       })
     );
