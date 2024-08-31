@@ -9,12 +9,16 @@ const openai = new OpenAI({
   
 export async function generateQuizWithOpenAI(text, numQuestions, questionLanguage, answerLanguage) {
 try {
+  // const basePrompt = `Create ${numQuestions} quiz questions in ${questionLanguage} (options in ${answerLanguage}).`;
+  // const details = `Based on the text, choose appropriate question types (multiple-choice, matching, ordering).`;
+  // const prompt = `${basePrompt} ${details} Format in JSON based on this schema:`;
+
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
       {
         "role": "system",
-        "content": `Generate ${numQuestions} multiple choice quiz questions in ${questionLanguage} (answers in ${answerLanguage}) from the provided text, formatted in JSON with title, questions, options, and answers. The JSON schmema should be as follows: ${quizSchema}`
+        "content": prompt
       },
       {
         "role": "user",

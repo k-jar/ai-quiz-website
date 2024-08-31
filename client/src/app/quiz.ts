@@ -10,7 +10,7 @@ export interface Quiz {
 interface Question {
     type: string;
     question: string;
-    options: string[];
+    options: string[] | { left: string, right: string }[];
 }
 
 interface MultipleChoiceQuestion extends Question {
@@ -21,5 +21,4 @@ interface OrderingQuestion extends Question {
 }
 
 interface MatchingQuestion extends Question {
-    pairs: { left: string, right: string }[];
 }

@@ -91,24 +91,31 @@ export class QuizFormComponent {
       this.fb.group({
         type: [question.type || 'multiple-choice', Validators.required],
         question: [question.question, [Validators.required, Validators.minLength(1)]],
-        pairs: question.type === 'matching' ? this.fb.array(
-          question.pairs.map((pair: any) =>
-            this.fb.group({
-              left: [pair.left, Validators.required],
-              right: [pair.right, Validators.required]
-            })
-          )
-        ) : this.fb.array([]),
-        options: question.type === 'multiple-choice' ? this.fb.array(
-          question.options.map((option: string) =>
-            this.fb.control(option, [Validators.required, Validators.minLength(1)])
-          )
-        ) : this.fb.array([]),
+        options: this.createOptionsControl(question),
         answer: this.getAnswerControl(question),
       })
     );
     const questionFormArray = this.fb.array(questionFGs);
     this.quizForm.setControl('questions', questionFormArray);
+  }
+  
+  createOptionsControl(question: any): FormArray {
+    if (question.type === 'matching') {
+      return this.fb.array(
+        question.options.map((pair: any) =>
+          this.fb.group({
+            left: [pair.left, Validators.required],
+            right: [pair.right, Validators.required]
+          })
+        )
+      );
+    } else { // 'multiple-choice'
+      return this.fb.array(
+        question.options.map((option: string) =>
+          this.fb.control(option, [Validators.required, Validators.minLength(1)])
+        )
+      );
+    }
   }
   
   

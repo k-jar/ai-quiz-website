@@ -52,24 +52,47 @@ export class CreateQuizComponent {
   snackbarService: SnackbarService = inject(SnackbarService);
   readingControl = new FormControl('', Validators.required);
   public prompt: string = '';
-  // public reading: string = '';
-  public quizTemplate: string = `{
+  
+  private readonly quizTemplate: string = `{
     "title": "",
     "questions": [
       {
+        "type": "multiple-choice",
         "question": "",
         "options": ["", "", "", ""],
-        "answer": number // index of correct answer in options
+        "answer": 0
+      },
+      {
+        "type": "matching",
+        "question": "",
+        "options": [
+          { "left": "", "right": "" },
+          { "left": "", "right": "" }
+        ]
+      },
+      {
+        "type": "ordering",
+        "question": "",
+        "options": ["", "", ""]
       }
     ]
   }`;
 
+
   ngOnInit() {
-    this.prompt = `Generate ${this.numQuestions} multiple choice quiz questions in ${this.questionLanguage} (options should be in ${this.answerLanguage}) from the provided text, formatted in JSON with title, questions, options, and answers. The JSON schema should be as follows: ${this.quizTemplate}`;
+    this.updatePrompt(); // Initialize the prompt on load
+  }
+
+  private generatePrompt(): string {
+    const basePrompt = `Create ${this.numQuestions} quiz questions in ${this.questionLanguage} (options in ${this.answerLanguage}).`;
+    const textSource = this.readingControl.value ? ` Text: "${this.readingControl.value}".` : '';
+    const details = `Based on the text, choose appropriate question types (multiple-choice, matching, ordering).`;
+  
+    return `${basePrompt}${textSource} ${details} Format in JSON based on this schema: ${this.quizTemplate}`;
   }
 
   updatePrompt() {
-    this.prompt = `Generate ${this.numQuestions} multiple choice quiz questions in ${this.questionLanguage} (answers in ${this.answerLanguage}) from the provided text: ${this.readingControl.value}, formatted in JSON with title, questions, options, and answers. The JSON schema should be as follows: ${this.quizTemplate}`;
+    this.prompt = this.generatePrompt();
   }
 
   onTabChange(index: number) {
@@ -111,10 +134,6 @@ export class CreateQuizComponent {
       try {
         const quiz: Quiz = JSON.parse(text);
         quiz.reading = this.readingControl.value ?? '';
-        // Add type to questions, temporary fix
-        quiz.questions.forEach((question) => {
-          question.type = 'multiple-choice';
-        });
         this.quizService.addQuiz(quiz).subscribe(
           () => {
             this.snackbarService.show('Quiz created successfully');

@@ -51,16 +51,30 @@ so it is not included in the quizSchema.
 // };
 
 // Compacter version of the schema
-export const quizSchema = `
-type QuizSchema = {
-    title?: string;
-    questions: {
-        question: string;
-        options: string[];
-        answer: number; // Index of the correct answer in the options array
-    }[];
-};
-`;
+export const quizSchema = `{
+  "title": "",
+  "questions": [
+    {
+      "type": "multiple-choice",
+      "question": "",
+      "options": ["", "", "", ""],
+      "answer": 0
+    },
+    {
+      "type": "matching",
+      "question": "",
+      "options": [
+        { "left": "", "right": "" },
+        { "left": "", "right": "" }
+      ]
+    },
+    {
+      "type": "ordering",
+      "question": "",
+      "options": ["", "", ""]
+    }
+  ]
+}`;
 
 export const mockQuizzes = [
   {
@@ -151,14 +165,14 @@ export const mockQuizzes = [
       {
         type: "matching",
         question: "Match the countries with their capitals",
-        pairs: [
+        options: [
           { left: "France", right: "Paris" },
           { left: "Germany", right: "Berlin" },
           { left: "Spain", right: "Madrid" },
         ],
       },
     ],
-  }
+  },
 ];
 
 export const mockUsers = [

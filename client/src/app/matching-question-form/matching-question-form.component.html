@@ -1,7 +1,7 @@
 <H3>MATCHING</H3>
 <div [formGroup]="questionForm">
-  <div formArrayName="pairs">
-    <div *ngFor="let pair of pairs.controls; let pIndex = index" [formGroupName]="pIndex" class="pair-item">
+  <div formArrayName="options">
+    <div *ngFor="let pair of options.controls; let pIndex = index" [formGroupName]="pIndex" class="pair-item">
       <div class="pair-container">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Left Item {{ pIndex + 1 }}</mat-label>

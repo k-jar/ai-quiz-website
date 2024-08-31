@@ -23,8 +23,8 @@ export class MatchingQuestionComponent extends QuestionBaseComponent {
   }
 
   ngOnInit() {
-    const leftSide = this.question.pairs.map((pair: { left: string, right: string }) => pair.left);
-    const rightSide = this.question.pairs.map((pair: { left: string, right: string }) => pair.right);
+    const leftSide = this.question.options.map((pair: { left: string, right: string }) => pair.left);
+    const rightSide = this.question.options.map((pair: { left: string, right: string }) => pair.right);
   
     this.shuffle(leftSide);
     this.shuffle(rightSide);
@@ -76,7 +76,7 @@ export class MatchingQuestionComponent extends QuestionBaseComponent {
     }
 
     return this.userAnswer.every((pair: any) => {
-      return this.question.pairs.some((qPair: any) => {
+      return this.question.options.some((qPair: any) => {
         return qPair.left === pair.left && qPair.right === pair.right;
       });
     });

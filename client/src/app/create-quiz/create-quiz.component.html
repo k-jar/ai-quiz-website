@@ -78,8 +78,9 @@
                                 based on' }}</mat-label>
                             <textarea matInput #input></textarea>
                         </mat-form-field>
-                        <button mat-flat-button color="primary" [disabled]="readingControl.invalid" (click)="submitText(input.value)">{{ modelChoice === 'none' ? 'Submit
-                            JSON' : 'Submit Text' }}</button>
+                        <button mat-flat-button color="primary" [disabled]="(modelChoice === 'none' && readingControl.invalid) || !input.value" (click)="submitText(input.value)">{{ modelChoice === 'none' ? 'Submit
+                            JSON' : 'Submit Text' }}
+                        </button>
                     </div>
                 </mat-card-content>
                 </mat-card>

@@ -48,23 +48,19 @@ export const addQuizSchema = {
                 if (options.length < 2 || options.length > 5) {
                     throw new Error('Options must have between 2 and 5 items');
                 }
-                return options.every(option => typeof option === 'string');
+                return options.every(option => {
+                    // Check if option is a string (for multiple-choice questions)
+                    if (typeof option === 'string') {
+                        return true;
+                    }
+                    // Check if option is an object with left and right properties (for matching questions)
+                    if (typeof option === 'object' && option !== null && 'left' in option && 'right' in option) {
+                        return true;
+                    }
+                    return false;
+                });
             },
-            errorMessage: 'There must be 2 to 5 options, each option being a string',
-        },
-    },
-    'questions.*.pairs': {
-        optional: {
-            options: { nullable: true, checkFalsy: true },
-        },
-        custom: {
-            options: (pairs) => {
-                if (!Array.isArray(pairs)) {
-                    throw new Error('Pairs must be an array');
-                }
-                return pairs.every(pair => typeof pair === 'object' && pair !== null && 'left' in pair && 'right' in pair);
-            },
-            errorMessage: 'Pairs must be an array of objects with left and right properties',
+            errorMessage: 'There must be 2 to 5 options. Each option must be a string or an object with left and right properties',
         },
     },
     'questions.*.answer': {
