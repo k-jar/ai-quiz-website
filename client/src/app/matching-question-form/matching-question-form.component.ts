@@ -33,35 +33,18 @@ export class MatchingQuestionFormComponent extends QuestionFormBaseComponent {
     super(fb);
   }
 
-  // ngOnInit() {
-  //   if (this.question) {
-  //     this.initForm();
-  //   }
-  // }
-  // initForm() {
-  //   console.log("matchinginitform");
-  //   this.questionForm.addControl('pairs', this.fb.array(
-  //     this.question?.pairs?.map((pair: any) =>
-  //       this.fb.group({
-  //         left: [pair?.left || '', Validators.required],
-  //         right: [pair?.right || '', Validators.required],
-  //       })
-  //     ) || []
-  //   ));
-  // }
+  addPair() {
+    this.pairs.push(this.fb.group({
+      left: ['', Validators.required],
+      right: ['', Validators.required]
+    }));
+  }
 
-  // get pairs(): FormArray {
-  //   return this.questionForm.get('pairs') as FormArray;
-  // }
+  removePair(index: number) {
+    this.pairs.removeAt(index);
+  }
 
-  // addPair() {
-  //   this.pairs.push(this.fb.group({
-  //     left: ['', Validators.required],
-  //     right: ['', Validators.required]
-  //   }));
-  // }
-
-  // removePair(index: number) {
-  //   this.pairs.removeAt(index);
-  // }
+  get pairs(): FormArray {
+    return this.questionForm.get('pairs') as FormArray;
+  }
 }

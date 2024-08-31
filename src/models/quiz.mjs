@@ -15,6 +15,7 @@ const questionSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true,
+        enum: ['multiple-choice', 'matching', 'ordering']
     },
     question: {
         type: String,
@@ -22,15 +23,19 @@ const questionSchema = new mongoose.Schema({
     },
     options: {
         type: [String],
-        required: true,
+        required: function() {
+            return this.type === 'multiple-choice';
+        },
     },
     pairs: {
         type: [matchingPairSchema],
-        required: false,
+        required: function() {
+            return this.type === 'matching';
+        },
     },
     answer: {
-        type: Number,
-        required: false, // Not required for ordering questions
+        type: mongoose.Schema.Types.Mixed, // Changed to handle different types of answers
+        required: false, // Or conditionally required based on type
     },
 });
 

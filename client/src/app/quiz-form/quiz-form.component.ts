@@ -26,6 +26,7 @@ import { SnackbarService } from '../services/snackbar.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MultipleChoiceQuestionFormComponent } from '../multiple-choice-question-form/multiple-choice-question-form.component';
 import { OrderingQuestionFormComponent } from '../ordering-question-form/ordering-question-form.component';
+import { MatchingQuestionFormComponent } from '../matching-question-form/matching-question-form.component';
 
 @Component({
   selector: 'app-quiz-form',
@@ -42,7 +43,8 @@ import { OrderingQuestionFormComponent } from '../ordering-question-form/orderin
     MatIconModule,
     MatSelectModule,
     MultipleChoiceQuestionFormComponent,
-    OrderingQuestionFormComponent
+    OrderingQuestionFormComponent,
+    MatchingQuestionFormComponent
   ],
   templateUrl: './quiz-form.component.html',
   styleUrl: './quiz-form.component.css',
@@ -89,11 +91,19 @@ export class QuizFormComponent {
       this.fb.group({
         type: [question.type || 'multiple-choice', Validators.required],
         question: [question.question, [Validators.required, Validators.minLength(1)]],
-        options: this.fb.array(
+        pairs: question.type === 'matching' ? this.fb.array(
+          question.pairs.map((pair: any) =>
+            this.fb.group({
+              left: [pair.left, Validators.required],
+              right: [pair.right, Validators.required]
+            })
+          )
+        ) : this.fb.array([]),
+        options: question.type === 'multiple-choice' ? this.fb.array(
           question.options.map((option: string) =>
             this.fb.control(option, [Validators.required, Validators.minLength(1)])
           )
-        ),
+        ) : this.fb.array([]),
         answer: this.getAnswerControl(question),
       })
     );
@@ -101,10 +111,13 @@ export class QuizFormComponent {
     this.quizForm.setControl('questions', questionFormArray);
   }
   
+  
   getAnswerControl(question: any) {
     if (question.type === 'multiple-choice') {
       return this.fb.control(question.answer);
     } else if (question.type === 'ordering') {
+      return null;
+    } else if (question.type === 'matching') {
       return null;
     } else {
       return null;

@@ -39,6 +39,7 @@
                     >Multiple Choice</mat-option
                   >
                   <mat-option value="ordering">Ordering</mat-option>
+                  <mat-option value="matching">Matching</mat-option>
                 </mat-select>
               </mat-form-field>
 
@@ -60,6 +61,15 @@
                   [questionForm]="getQuestionFormGroup(qIndex)"
                   (remove)="removeQuestion(qIndex)"
                 ></app-ordering-question-form>
+              </ng-container>
+
+              <ng-container
+                *ngIf="questions.at(qIndex).get('type')?.value === 'matching'"
+              >
+                <app-matching-question-form
+                  [questionForm]="getQuestionFormGroup(qIndex)"
+                  (remove)="removeQuestion(qIndex)"
+                ></app-matching-question-form>
               </ng-container>
             </mat-card-content>
             <mat-card-actions>
