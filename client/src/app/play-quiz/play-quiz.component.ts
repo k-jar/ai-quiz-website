@@ -193,7 +193,12 @@ export class PlayQuizComponent {
       },
       error: (error) => {
         console.error('Error saving quiz attempt', error);
-        this.snackbarService.show('Failed to save quiz attempt');
+        if (error.error && error.error.error === 'userId not provided'){
+          this.snackbarService.show('Please log in to save quiz attempt');
+        }
+        else{
+          this.snackbarService.show('Failed to save quiz attempt');
+        }
       },
     });
   }

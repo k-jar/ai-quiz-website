@@ -5,10 +5,19 @@ import Quiz from '../models/Quiz.mjs';
 export async function createQuizAttempt(req, res) {
     const { userId, quizId, score } = req.body;
     try {
+        if (!userId){
+            return res.status(400).json({ error: 'userId not provided' });
+        }
+        if (!quizId || !score) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
         const user = await User.findById(userId);
         const quiz = await Quiz.findById(quizId);
-        if (!user || !quiz) {
-            return res.status(404).json({ error: 'User or quiz not found' });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        if (!quiz) {
+            return res.status(404).json({ error: 'Quiz not found' });
         }
 
         const quizAttempt = new QuizAttempt({ user, quiz, score });
